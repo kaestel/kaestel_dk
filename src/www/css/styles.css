@@ -1,0 +1,29 @@
+body {
+	background-color: #adb7c1;
+	font-family: verdana;
+	font-size: 10px;
+	color: #5a6e82;
+	margin: 0;
+}
+
+h1 {
+	
+}
+p {
+	
+}
+a {
+	color: #5a6e82;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+#page {
+	height: 100%;
+	text-align: center;
+}
+#inner {
+	margin: 100px auto 0 auto;
+	width: 250px;
+	text-align: left;
+}
