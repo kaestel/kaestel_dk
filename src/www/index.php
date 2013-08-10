@@ -28,7 +28,7 @@
 	<div id="inner">
 		<h1>kaestel.dk</h1>
 		<p>Har du set at der findes en <a href="http://www.facebook.com/group.php?gid=54354123274">&quot;k&aelig;stel&quot;-gruppe p&aring; facebook</a>?</p>
-		<p>Hvis du hedder k&aelig;stel og er interesseret i en kaestel-email (dit navn @ kaestel.dk), s&aring; skriv til <script language="javascript" type="text/javascript">Util.otliam(&#x27;martin&#x27;, &#x27;kaestel.dk&#x27;)</script>. Hvis vi ikke bruger/skal bruge adressen laver vi gerne en gratis konto til dig.</p>
+		<p>Hvis du hedder k&aelig;stel og er interesseret i en kaestel-email (dit navn @ kaestel.dk), s&aring; skriv til <a href="mailto:martin@kaestel.dk">martin@kaestel.dk</a>. Hvis vi ikke bruger/skal bruge adressen laver vi gerne en gratis konto til dig.</p>
 		<p>Der er ogs&aring; mulighed for subdomains og lignende hvis det skulle v&aelig;re interessant (dog uden hosting), og hvis du har ideer til siden her, s&aring; lad mig endelig h&oslash;re fra dig.</p>
 		<p><em>Martin K&aelig;stel Nielsen</em></p>
 	</div>
