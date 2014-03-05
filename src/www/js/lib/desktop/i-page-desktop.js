@@ -22,15 +22,6 @@ Util.Objects["page"] = new function() {
 			// move li to #header .servicenavigation
 			page.fN.service = u.qs(".servicenavigation", page.fN);
 
-			// move service navigation items to appropriate node
-			u.ae(page.fN.service, u.qs("li.contact", page.hN.service));
-
-			var pix = u.qs("li.pix", page.nN);
-			u.ie(page.hN.service, pix);
-			page.pix_user_id = u.cv(pix, "user_id");
-
-			u.ie(page.nN, page.hN.service);
-
 
 			// global resize handler 
 			page.resized = function() {
@@ -38,22 +29,11 @@ Util.Objects["page"] = new function() {
 				// forward resize event to current scene
 				if(page.cN && page.cN.scene) {
 
-					// adjust content height
-					var content_height = u.browserH() - page.nN.offsetHeight - page.fN.offsetHeight;
-					if(page.cN.scene.offsetHeight < content_height) {
-						u.as(page.cN, "height", content_height+"px", false);
-					}
-					else {
-						u.as(page.cN, "height", "auto", false);
-					}
-
 					if(typeof(page.cN.scene.resized) == "function") {
 						page.cN.scene.resized();
 					}
 
 				}
-
-
 
 			}
 

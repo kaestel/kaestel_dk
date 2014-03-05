@@ -1,4 +1,4 @@
-Util.Objects["serie"] = new function() {
+Util.Objects["generic"] = new function() {
 	this.init = function(scene) {
 //		u.bug("scene init:" + u.nodeId(scene))
 		
@@ -21,9 +21,6 @@ Util.Objects["serie"] = new function() {
 //			u.bug("scene.ready:" + u.nodeId(this));
 
 
-			// register scene
-			page.cN.scene = this;
-			page.resized();
 		}
 
 		
