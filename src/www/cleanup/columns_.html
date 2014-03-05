@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da">
+<head>
+	<!-- (c) & (p) think.dk 2009 / columns 2009 //-->
+	<!-- All material protected by copyrightlaws //-->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>columns - think.dk</title>
+	<style type="text/css">
+		* {
+			font-family: verdana;
+			font-size: 10px;
+			color: #666666;
+		}
+		html {
+			height: 100%;
+		}
+		body {
+			height: 100%;
+			margin: 0;
+			text-align: center;
+		}
+		.pageWidth {}
+
+		#page {
+			margin: 0 auto;
+			position: relative;
+			overflow: hidden;
+			height: 100%;
+		}
+		#column {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+
+			background: #cccccc;
+			opacity: 0.5;
+		}
+		#column div {}
+
+		#line {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 100%;
+
+			display: none;
+		}
+		#line div {}
+		.lineheight #line {
+			display: block;
+		}
+		.lineheight #input .lineheight {
+			opacity: 1;
+		}
+		#input .lineheight {
+			opacity: 0.2;
+		}
+		#input {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 10;
+			background: #ffffff;
+		}
+		#input * {
+			visibility: visible;
+		}
+		.hide_input #input.hidden {
+			background: transparent;
+		}
+		.hide_input #input.hidden * {
+			visibility: hidden;
+		}
+		.hide_input #input .hide {
+			opacity: 0.2;
+		}
+		input {
+			float: left;
+			width: 28px;
+			padding: 0 2px;
+			height: 14px;
+			margin: 3px 0;
+			font-size: 10px;
+			border: 1px solid #999999;
+		}
+		input.disabled {
+			border-color: #cccccc;
+			color: #cccccc;
+		}
+		form, fieldset {
+			margin: 0;
+			padding: 0;
+			border: 0;
+			float: left;
+			overflow: hidden;
+		}
+		span,
+		span span,
+		form span,
+		a,
+		h2,
+		label {
+			margin: 0;
+			float: left;
+			font-size: 10px;
+			line-height: 18px;
+			padding: 3px 5px 0 10px;
+		}
+		a {
+			padding: 3px 0 0 5px;
+		}
+		.preset {
+			float: left;
+		}
+		.preset span {
+			padding: 2px 0 0 5px;
+		}
+		h2 {
+			padding-right: 0;
+		}
+
+		span,
+		form span {
+			height: 20px;
+			padding: 2px 0px 0 10px;
+			color: #dddddd;
+		}
+		
+		div.help {
+			display: none;
+		}
+		.help .help {
+			float: left;
+			display: block;
+			text-align: left;
+			border-top: 1px solid #cccccc;
+			padding-top: 10px;
+		}
+		div.help h2 {
+			font-size: 11px;
+		}
+
+		div.help h2,
+		div.help a {
+			float: none;
+		}
+		div.help h2,
+		div.help h3,
+		div.help p {
+			margin: 0;
+			padding: 0 10px 5px;
+		}
+	</style>
+	<script type="text/javascript" language="JavaScript" src="/js/seg_desktop.js"></script>
+	<script type="text/javascript" language="JavaScript" src="/js/framework/util_basic.js"></script>
+	<script type="text/javascript" language="JavaScript" src="/js/framework/util_position.js"></script>
+	<script type="text/javascript" language="JavaScript" src="/js/framework/util_event.js"></script>
+
+	<script type="text/javascript" language="JavaScript">
+		Util.modifyClass = function(class_name, css) {
+			var style_sheets = new Array();
+			// w3c : ie6
+			style_sheets = document.styleSheets[0].cssRules ? document.styleSheets[0].cssRules : document.styleSheets[0].rules;
+			for(i = 0; style_sheet = style_sheets[i]; i++) {
+				if(style_sheet.selectorText == class_name) {
+					style_sheet.style.cssText = css;
+				}
+			}
+		}
+
+		Util.keyEvent = function(event, input) {
+
+			event = event ? event : window.event;
+			var pressed_key = String.fromCharCode(event.keyCode);
+
+			var page_width = document.columnMaker.page_width;
+			var column_width = document.columnMaker.column_width;
+
+			var columns = document.columnMaker.columns;
+			var column_padding = document.columnMaker.column_padding;
+
+			var line_height = document.columnMaker.line_height;
+
+			page_width.value = parseInt(page_width.value) ? parseInt(page_width.value) : 0;
+			column_width.value = parseInt(column_width.value);
+			columns.value = parseInt(columns.value);
+			column_padding.value = parseInt(column_padding.value);
+
+//			alert("Key: " + pressed_key + "\nKeyCode: " + event.keyCode + "\nCtrl:"  + event.ctrlKey + "\nMeta:"  + event.metaKey);
+
+			if(event.keyCode == 38) {
+				if(input == page_width) {
+					input.value = (++column_width.value) * columns.value;
+				}
+				else {
+					input.value++;
+				}
+			}
+			else if(event.keyCode == 40) {
+				input.value--;
+			}
+			else if(event.keyCode == 0) {
+				
+				if(input == page_width) {
+					Util.removeClass('disabled', page_width);
+					Util.addClass('disabled', column_width);
+				}
+				else if(input == column_width) {
+					Util.addClass('disabled', page_width);
+					Util.removeClass('disabled', column_width);
+				}
+				else if(input == line_height) {
+					Util.toggleClass('lineheight', document.body);
+					Util.nonClick(event);
+					return false;
+				}
+				else {
+					Util.nonClick(event);
+					return false;
+				}
+			}
+			else if(event.keyCode != 9 && !event.metaKey){
+				Util.nonClick(event);
+				return false;
+			}
+			
+			
+
+			// setting page width
+			// calculates and updates column width
+			// calculates and updates page width
+			if(input == page_width) {
+
+				column_width.value = parseInt(page_width.value / columns.value);
+				page_width.value = column_width.value * columns.value;
+				Util.setColumnWidth(column_width.value, column_padding.value, columns.value);
+			}
+			// setting column width
+			// calculates and updates column width
+			// calculates and updates page width
+			else if(input == column_width) {
+
+				page_width.value = column_width.value * columns.value;
+				Util.setColumnWidth(column_width.value, column_padding.value, columns.value);
+			}
+			// updating columns
+			// rewrites columns
+			// calculates and updates column width
+			// calculates and updates page width
+			// sets new column width
+			else if(input == columns) {
+				
+				Util.columnMaker(columns.value);
+				if(page_width.className.match(/disabled/g)) {
+					page_width.value = column_width.value * columns.value;
+					
+				}
+				else {
+					column_width.value = parseInt(page_width.value / columns.value);
+				}
+				Util.setColumnWidth(column_width.value, column_padding.value, columns.value);
+			}
+			// update padding
+			else if(input == column_padding) {
+
+				Util.setPadding(column_padding.value, column_width.value);
+			}
+			// update line height
+			else if(input == line_height) {
+
+				Util.heightMaker(line_height.value);
+			}
+
+		}
+		// update pageWidth class to maintain line_height width
+		// update column width and margin (because visual padding is css-margin)
+		Util.setColumnWidth = function(column_width, column_padding, columns) {
+			Util.modifyClass(".pageWidth", "width:" + (column_width * columns) + "px;");
+			Util.modifyClass("#column div", "width:" + (column_width - (column_padding * 2)) + "px; margin: 0 " + column_padding + "px; height: 100%; background: #aaaaaa; float: left;");
+		}
+
+		// update column width and margin (because visual padding is css-margin)
+		Util.setPadding = function(column_padding, column_width) {
+
+			Util.modifyClass("#column div", "width:" + (column_width - (column_padding * 2)) + "px; margin: 0 "+column_padding + "px; height: 100%; background: #aaaaaa; float: left;");
+		}
+
+		// removes all elements from column and adds new set
+		Util.columnMaker = function(columns) {
+			var i, column;
+			var column = document.getElementById("column");
+			for(i = 0; column_child = column.childNodes[i]; i) {
+				column.removeChild(column_child);
+			}
+			for(i = 0; i < columns; i++) {
+				column.appendChild(document.createElement("div"));
+			}
+		}
+
+		// removes all elements from line and adds new set
+		Util.heightMaker = function(line_height) {
+			var i, line;
+			var line = document.getElementById("line");
+			for(i = 0; line_child = line.childNodes[i]; i) {
+				line.removeChild(line_child);
+			}
+			var lines = parseInt(Util.docHeight() / line_height);
+			for(i = 0; i < lines; i++) {
+				line.appendChild(document.createElement("div"));
+			}
+			Util.modifyClass("#line div", "height:" + line_height + "px; border-bottom: 1px solid #dddddd;");
+		}
+
+		Util.preset = function(page_width, columns, column_padding, line_height) {
+
+			document.columnMaker.page_width.value = page_width;
+			document.columnMaker.column_width.value = page_width / columns;
+			document.columnMaker.columns.value = columns;
+			document.columnMaker.column_padding.value = column_padding;
+			document.columnMaker.line_height.value = line_height;
+
+			Util.removeClass('disabled', document.getElementById('page_width'));
+			Util.addClass('disabled', document.getElementById('column_width'));
+			
+			Util.columnMaker(columns);
+			Util.setColumnWidth(page_width / columns, column_padding, columns);
+			Util.heightMaker(line_height);
+		}
+
+		Util.Onload.addAction("Util.preset(960, 12, 10, 14);");
+	</script>
+</head>
+
+<body class="lineheight">
+
+<div id="page" class="pageWidth">
+
+	<div id="input" class="pageWidth" onmouseover="Util.removeClass('hidden', this);" onmouseout="Util.addClass('hidden', this);">
+		<form name="columnMaker" id="columnMaker" action="#" method="post">
+			<fieldset>
+				<label for="page_width">Page width:</label>
+				<input type="input" name="page_width" id="page_width" readonly="readonly" value=""
+					onkeypress="Util.keyEvent(event, this);"
+					onclick="
+						Util.removeClass('disabled', document.getElementById('page_width'));
+						Util.addClass('disabled', document.getElementById('column_width'));
+					"
+				/>
+				<label for="column_width">Column width:</label>
+				<input type="input" name="column_width" id="column_width" readonly="readonly" value="" 
+					onkeypress="Util.keyEvent(event, this);"
+					onclick="
+						Util.addClass('disabled', document.getElementById('page_width'));
+						Util.removeClass('disabled', document.getElementById('column_width'));
+					"
+				/>
+			</fieldset>
+			<span>|</span>
+			<fieldset>
+				<label for="columns">Number of columns:</label>
+				<input type="input" name="columns" id="columns" readonly="readonly" value=""
+					onkeypress="Util.keyEvent(event, this);"
+				 />
+				<label for="column_padding">Column-padding:</label>
+				<input type="input" name="column_padding" id="column_padding" readonly="readonly" value=""
+					onkeypress="Util.keyEvent(event, this);"
+				/>
+			</fieldset>
+			<span>|</span>
+			<fieldset class="lineheight">
+				<label for="line_height" title="click to toggle line visibility"
+					onclick="Util.toggleClass('lineheight', document.body);
+				">Line-height:</label>
+				<input type="input" name="line_height" id="line_height" readonly="readonly" value=""
+					onkeypress="Util.keyEvent(event, this);"
+				/>
+			</fieldset>
+		</form>
+
+		<span>|</span>
+		<div class="preset">
+			<h2>Presets:</h2>
+			<a href="javascript:Util.preset(960, 3, 10, 14);" title="w:960px, cols:3, pad:10px, line-height:14px">960/3</a>
+			<span>/</span>
+			<a href="javascript:Util.preset(960, 6, 10, 14);" title="w:960px, cols:6, pad:10px, line-height:14px">960/6</a>
+			<span>/</span>
+			<a href="javascript:Util.preset(960, 12, 10, 14);" title="w:960px, cols:12, pad:10px, line-height:14px">960/12</a>
+			<span>/</span>
+			<a href="javascript:Util.preset(960, 16, 10, 14);" title="w:960px, cols:16, pad:10px, line-height:14px">960/16</a>
+			<span>/</span>
+			<a href="javascript:Util.toggleClass('help', document.body);">?</a>
+			<span>/</span>
+			<a href="javascript:Util.toggleClass('hide_input', document.body);" class="hide" title="Auto-hide (on/off)">X</a>
+		</div>
+		<div class="help pageWidth">
+			<h2>User instructions</h2>
+			<h3>User your keyboard</h3>
+			<p>After you have selected the desired input, use</p>
+			<p>&uarr; (Arrow-up) - to increase value</p>
+			<p>&darr; (Arrow-down) - to decrease value</p>
+
+			<h3>Page width / Column width</h3>
+			<p>Either Page width og Column width must be prioritized, making this value fixed when changing column setting.</p>
+			<p>Prioritization can be achived by pressing SPACE-BAR while input is selected. The same can be achieved by clicking on the input.</p>
+
+			<h3>Toggle line-height visibility</h3>
+			<p>Pressing SPACE-BAR while line-height input is selected will toggle line-height visibility. The same can be achieved by clicking on the Line-height label.</p> 
+
+			<h3>Toggle toolbar visibility</h3>
+			<p>Clicking the X will toggle Auto-hiding of the toolbar.</p> 
+
+		</div>
+	</div>
+
+	<div id="column" class="pageWidth"></div>
+	<div id="line" class="pageWidth"></div>
+
+</div>
+
+</body>
+</html>

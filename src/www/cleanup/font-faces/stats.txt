@@ -1,0 +1,58 @@
+Mac 		Arial 	96.62% 	96.62% 	Sample 	Image
+Windows 	Arial 	97.13% 	97.13% 	Sample 	Image
+
+Mac 		Arial Black 	95.78% 	95.78% 	Sample 	Image
+Windows 	Arial Black 	97.82% 	97.82% 	Sample 	Image
+
+Mac 		Arial Narrow 	90.44% 	90.44% 	Sample 	Image
+Windows 	Arial Narrow 	87.24% 	87.24% 	Sample 	Image
+
+Mac 		Verdana 	94.37% 	94.37% 	Sample 	Image
+Windows 	Verdana 	97.54% 	97.54% 	Sample 	Image
+
+Mac 		Courier New 	92.12% 	92.12% 	Sample 	Image
+Windows 	Courier New 	96.96% 	96.96% 	Sample 	Image
+
+Mac 		Comic Sans MS 	91.42% 	91.42% 	Sample 	Image
+Windows 	Comic Sans MS 	96.83% 	96.83% 	Sample 	Image
+
+Mac 		Georgia 	93.53% 	93.53% 	Sample 	Image
+Windows 	Georgia 	92.97% 	92.97% 	Sample 	Image
+
+Mac 		Times New Roman 	90.58% 	90.58% 	Sample 	Image
+Windows 	Times New Roman 	87.99% 	87.99% 	Sample 	Image
+
+Mac 		Impact 	88.05% 	88.05% 	Sample 	Image
+Windows 	Impact 	96.49% 	96.49% 	Sample 	Image
+
+Mac 		Trebuchet MS 	92.69% 	92.69% 	Sample 	Image
+Windows 	Trebuchet MS 	95.97% 	95.97% 	Sample 	Image
+
+
+Mac 		Monaco 	96.91% 	96.91% 	Sample 	Image
+Windows 	Tahoma 	96.79% 	96.79% 	Sample 	Image
+
+Windows 	Lucida Sans Unicode 	94.34% 	94.34% 	Sample 	Image
+Windows 	Lucida Console 	96.76% 	96.76% 	Sample 	Image
+Mac 		Lucida Grande 	90.01% 	90.01% 	Sample 	Image
+
+Windows		Microsoft Sans Serif 	99.61% 	99.61% 	Sample 	Image
+Windows 	Franklin Gothic Medium 	97.58% 	97.58% 	Sample 	Image
+Windows 	Palatino Linotype 	97.54% 	97.54% 	Sample 	Image
+Windows 	Sylfaen 	95.00% 	95.00% 	Sample 	 
+Mac 		Helvetica Neue 	93.07% 	93.07% 	Sample 	Image
+
+Mac 		Geneva 	92.41% 	92.41% 	Sample 	Image
+Mac 		Futura 	89.73% 	89.73% 	Sample 	Image
+Mac 		Gill Sans 	91.58% 	91.58% 	Sample 	Image
+Mac 		Apple Chancery 	90.15% 	90.15% 	Sample 	Image
+Mac 		Skia 	90.15% 	90.15% 	Sample 	Image
+Mac 		Hoefler Text
+	
+
+***
+
+Mac 		Courier 	96.48% 	96.48% 	Sample 	Image
+	
+Mac 		Helvetica 	96.48% 	96.48% 	Sample 	Image
+Windows 	Helvetica 	7.27% 	7.27% 	Sample 	 

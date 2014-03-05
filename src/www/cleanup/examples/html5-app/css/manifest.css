@@ -1,0 +1,8 @@
+body, html {height: 100%;}
+#manifest {background: white url(../img/icon.png) no-repeat center center; height: 100%;}
+
+#test_c {background: transparent url(../img/9300.jpg) no-repeat center center; height: 100%;}
+/*
+#test_a {background: transparent url(/img/manifest/3300.jpg) no-repeat center center; height: 100%;}
+#test_b {background: transparent url(/img/manifest/6500.jpg) no-repeat center center; height: 100%;}
+*/

@@ -1,0 +1,82 @@
+#content {position: relative; width: 500px; padding: 50px 0 50px; background: #ffffff;}
+
+#content .scene {position: relative;}
+#content .scene .link {cursor: pointer;}
+#content .scene a {text-decoration: underline; color: #a63400;}
+#content .scene .note {padding-top: 5px; font-style: italic; color: #777777;}
+#content .scene .price {padding-top: 5px; font-style: italic; font-size: 16px;}
+
+#content .scene hr {border: none; border-top: 1px solid #a63400; margin: 15px 15px 20px; padding: 0;}
+#content .scene hr.dashed {border: none; border-top: 1px dashed #cccccc; margin: 15px 15px 20px; padding: 0;}
+
+
+/* FRONT */
+
+#content .scene.front {}
+#content .scene.front .actions {position: static; text-align: right; padding: 0 30px 15px; margin-top: -10px;}
+#content .scene.front .actions li {font-size: 12px; color: #a63400;}
+#content .scene.front .actions li a {text-decoration: underline;}
+
+#content .scene.front .associations {display: block; text-align: center; padding: 20px 0;}
+#content .scene.front .associations li {display: inline-block; vertical-align: top; text-indent: -9999px;}
+#content .scene.front .associations li.horesta {width: 70px; height: 76px; background: transparent url(/img/gx_horesta.png) no-repeat center center;}
+#content .scene.front .associations li.smalldanish {width: 280px; height: 76px; background: transparent url(/img/gx_smalldanishhotels.png) no-repeat center center;}
+
+#content .scene div.events {position: relative;}
+#content .scene div.events .actions {position: absolute; top: 4px; right: 15px; margin: 0; padding: 0 15px 15px;}
+#content .scene div.events ul.events > li {border-top: 1px dashed #cccccc; padding: 20px 0 0; display: block;}
+#content .scene div.events ul.events > li .actions {position: static; text-align: right; margin-top: -10px;}
+
+
+
+/* HOTEL */
+#content .scene.hotel {}
+#content .scene.hotel ul {padding: 0 20px;}
+#content .scene.hotel ul li {padding: 0 50px 10px 0;}
+
+#content .scene.local ul.toc {}
+#content .scene.local ul.toc li {display: block; padding: 0 15px 10px;}
+
+#content .scene.local ul.links {padding-bottom: 30px; padding-left: 30px;}
+
+#content .scene.local ul.actions {text-align: right; padding-bottom: 20px; padding-right: 30px;}
+
+/* GOLF */
+#content .scene.golf ul {padding-bottom: 20px;}
+#content .scene.golf ul li {display: block; padding: 0 30px 10px;}
+
+
+/* OFFERS */
+#content .scene.offers ul {padding-bottom: 20px;}
+#content .scene.offers ul li {display: block; padding: 0 30px 10px;}
+
+
+/* PRICES */
+#content .scene.prices h2 {padding-top: 20px;}
+#content .scene.prices table {width: 440px; margin: 0 26px; padding: 0; border-spacing: 0; border-collapse: collapse;}
+#content .scene.prices table.prices td {text-align: right; white-space: nowrap; padding: 2px 0 6px 4px; font-size: 13px; vertical-align: top;}
+
+#content .scene.prices table.prices td.item,
+#content .scene.prices table.prices td.max {width: 100%; padding-left: 4px; text-align: left;}
+
+
+/* TERMS */
+#content .scene.terms {}
+#content .scene.terms ul li {padding: 0 15px 10px;}
+
+
+/* CONTACT */
+#content .scene.contact ul {padding-bottom: 20px;}
+#content .scene.contact ul li {display: block; padding: 0 15px 10px;}
+
+#content .scene.contact .vcard {padding: 0 30px 30px;}
+#content .scene.contact .vcard * {font-size: 13px;}
+
+
+/* REVY */
+#content .scene.revy ul {padding-bottom: 20px;}
+#content .scene.revy ul li {display: block; padding: 0 30px 10px;}
+
+
+.openhouse #page ul.photos .photo {height: 270px; background-size: 480px auto; display: block; padding: 1px 0; background-repeat: no-repeat; background-position: 0 1px;}
+
