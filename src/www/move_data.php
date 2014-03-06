@@ -22,7 +22,7 @@ $fs = new FileSystem();
 // make sure folder exist
 $fs->makeDirRecursively(PRIVATE_FILE_PATH);
 
-$run_as_test = true;
+$run_as_test = false;
 
 $from_db = "`think_dk`";
 $to_db = "`kaestel_dk`";
