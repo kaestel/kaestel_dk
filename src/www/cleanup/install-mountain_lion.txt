@@ -1,0 +1,81 @@
+// Install MacPorts first. http://www.macports.org/
+
+// update macports
+sudo port -d selfupdate
+
+// set xcode
+sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer/
+
+// install a bunch of stuff
+sudo port install perl5
+
+sudo port install php5 +apache2 +mysql5-server +pear
+sudo port install php5-mysql
+sudo port install php5-gd
+sudo port install php5-http
+sudo port install php5-iconv
+sudo port install php5-openssl
+sudo port install php5-mbstring
+sudo port install php5-curl
+sudo port install php5-zip
+
+
+sudo port install git-core
+
+
+
+
+// preparations for MySQL
+sudo mkdir /opt/local/var/run
+sudo mkdir /opt/local/var/run/mysql5
+sudo mkdir /opt/local/var/db/mysql5
+
+sudo chown -R mysql:mysql /opt/local/var/db/mysql5
+sudo chown -R mysql:mysql /opt/local/var/run/mysql5
+
+
+// setup MySQL
+sudo /opt/local/lib/mysql5/bin/mysql_install_db --user=mysql
+
+// autostart apache on boot
+sudo port load apache2
+
+
+// install mysql server
+sudo port install mysql5-server
+sudo -u _mysql mysql_install_db5
+sudo port load mysql5-server
+sudo /opt/local/lib/mysql5/bin/mysqladmin -u root password '__PASSWORD__'
+
+
+// install ffmpeg
+sudo port install ffmpeg +nonfree
+
+
+// update name and email for git
+git config --global core.editor "coda -w"
+git config --global user.name "__USERNAME__"
+git config --global user.email "__EMAIL__"
+
+git config --global push.default simple
+git config --global credential.helper osxkeychain
+
+
+// setup root path
+sudo mkdir /srv
+sudo ln -s ~/Sites /srv/sites
+
+
+// copy base configuration
+sudo cp ~/Dropbox/e-Types/_Tech/_setup/_conf/httpd.conf /opt/local/apache2/conf/httpd.conf
+sudo cp ~/Dropbox/e-Types/_Tech/_setup/_conf/httpd-vhosts.conf /opt/local/apache2/conf/extra/httpd-vhosts.conf
+
+// copy php.ini
+sudo cp ~/Dropbox/e-Types/_Tech/_setup/_conf/php.ini /opt/local/etc/php5/php.ini 
+
+// create accessible base conf
+sudo mkdir /srv/sites/apache
+sudo cp ~/Dropbox/e-Types/_Tech/_setup/_conf/apache.conf /srv/sites/apache/apache.conf
+
+
+

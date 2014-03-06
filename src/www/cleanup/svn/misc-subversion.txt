@@ -1,0 +1,26 @@
+
+
+No Auth:
+
+<Location /svn>
+  DAV svn
+   SVNParentPath //Volumes/FIREWIRE200/repositories
+</Location>
+
+HTTP Basic Auth:
+
+<Location /svn>
+   DAV svn
+   SVNParentPath //Volumes/FIREWIRE200/repositories
+   AuthType Basic
+   AuthName "Subversion repository"
+   AuthUserFile //Volumes/FIREWIRE40/svn-auth-file
+   Require valid-user
+</Location>
+
+Create httpasswd:
+htpasswd -cm //Volumes/FIREWIRE40/svn-auth-file__USERNAME__
+
+htpasswd -cm /usr/local/apache-auth-file__USERNAME__
+
+htpasswd -m /usr/local/apache-auth-file__USERNAME__

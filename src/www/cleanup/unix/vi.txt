@@ -1,0 +1,20 @@
+vi commands
+
+w - next word
+b - rev word
+
+ctrl+f - next page
+ctrl+b - prev page
+
+i - insert before cursor
+a - append after cursor
+x - delete under cursor
+dd - delete current line
+
+u - undo
+
+yy - copy line
+p - paste line
+
+/search-string search forward
+?search-sting search backward

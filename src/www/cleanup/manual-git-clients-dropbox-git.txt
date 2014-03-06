@@ -1,0 +1,16 @@
+
+
+// to push back to github, create repos on github and change origin master
+
+git remote rm origin
+git remote add origin https://github.com/hvadhedderde/demo_br_gakgak.git
+git push -u origin master
+
+
+
+// set local path
+
+git remote rm origin
+git remote add origin ~/Dropbox/hvadhedderde/git/yousee_onfone.git
+git push -u origin master
+

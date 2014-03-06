@@ -1,0 +1,7 @@
+ab -n 10 -c 1 -r http://devices.dearapi.com/?ua=Mozilla%2F5.0%20(Macintosh%3B%20Intel%20Mac%20OS%20X%2010.6%3B%20rv%3A19.0)%20Gecko%2F20100101%20Firefox%2F19.0
+
+
+ab -n 1000 -c 20 -r http://devices.dearapi.com/?ua=rv%3A17.0%20Gecko%2F20100101%20Firefox%2F17.0
+
+
+ab -n 1000 -c 20 -r http://devices.dearapi.com/test.php

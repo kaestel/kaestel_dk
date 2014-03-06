@@ -1,0 +1,28 @@
+// mysql access
+mysql -u root -p
+
+
+
+# Set for phpmyadmin
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '__PASSWORD__' WITH GRANT OPTION;
+
+
+# Locally, open all
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED BY '__PASSWORD__' WITH GRANT OPTION;
+
+Change password
+
+mysqladmin -u root -p __PASSWORD__
+
+
+Mysqldump:
+mysqldump -u __USERNAME__ -p database --single-transaction
+
+mysqldump -u __USERNAME__ -p database -r file.sql
+mysqldump -u __USERNAME__ -p --all-databases -r file.sql
+
+
+Restore (from dumpfile):
+
+mysql -u __USERNAME__ -p database < file.sql
+mysql -u __USERNAME__ -p < file.sql (not tested)

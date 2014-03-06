@@ -1,0 +1,5 @@
+// make
+tar -cvvf file.tar myfile.txt
+
+// extract
+tar -xvvf myfile.tar

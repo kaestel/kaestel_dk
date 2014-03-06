@@ -1,0 +1,10 @@
+INSTALL wkhtmltopdf on server
+
+sudo aptitude install wkhtmltopdf
+
+wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.0/wkhtmltox-linux-amd64_0.12.0-03c001d.tar.xz
+tar -xvf wkhtmltox-linux-amd64_0.12.0-03c001d.tar.xz 
+
+sudo cp wkhtmltox/bin/wkhtmltoimage /usr/bin/static_wkhtmltoimage
+sudo cp wkhtmltox/bin/wkhtmltopdf /usr/bin/static_wkhtmltopdf
+

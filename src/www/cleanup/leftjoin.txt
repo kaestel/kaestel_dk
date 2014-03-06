@@ -1,0 +1,48 @@
+SELECT table1.*
+
+
+FROM table1
+LEFT JOIN table2 ON table2.name=table1.name
+LEFT JOIN table3 ON table3.name=table1.name
+WHERE table2.name IS NULL AND table3.name IS NULL
+
+
+
+SELECT items.id, items.sindex, items.status, items.published_at 
+FROM devices_dearapi_com.items as items
+
+LEFT JOIN devices_dearapi_com.item_device as device ON device.item_id = items.id
+LEFT JOIN devices_dearapi_com.device_useragents as ua ON ua.item_id = items.id
+
+WHERE items.itemtype = 'device' 
+AND 
+(device.name LIKE '%firefox%' OR device.description LIKE '%firefox%' OR ua.useragent LIKE '%firefox%')
+
+ GROUP BY items.id ORDER BY items.published_at DESC
+ 
+ 
+ 
+ 
+  SELECT items.id, items.sindex, items.status, items.published_at FROM devices_dearapi_com.items as items, devices_dearapi_com.item_device as device, devices_dearapi_com.device_useragents as ua WHERE items.itemtype = 'device' AND items.id = device.item_id AND (device.name LIKE '%firefox%' OR device.description LIKE '%firefox%' OR ((ua.useragent LIKE '%firefox%' AND items.id = ua.item_id))) GROUP BY items.id ORDER BY items.published_at DESC
+  
+  
+  
+SELECT items.id, items.sindex, items.status, items.published_at 
+FROM devices_dearapi_com.items as items
+
+LEFT JOIN devices_dearapi_com.item_device as device ON device.item_id = items.id
+LEFT JOIN devices_dearapi_com.device_useragents as ua ON ua.item_id = items.id
+
+LEFT JOIN devices_dearapi_com.taggings as taggings ON taggings.item_id = items.id
+LEFT JOIN devices_dearapi_com.tags as tags ON tags.id = taggings.tag_id
+
+WHERE items.itemtype = 'device' 
+
+AND tags.context = 'brand' AND tags.value = 'Mozilla'
+	 
+AND 
+	(device.name LIKE '%firefox%' OR device.description LIKE '%firefox%' OR ua.useragent LIKE '%firefox%') 
+ 
+GROUP BY items.id 
+ 
+ORDER BY items.published_at DESC

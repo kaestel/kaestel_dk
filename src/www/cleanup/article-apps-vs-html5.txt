@@ -1,0 +1,60 @@
+Hej alle,
+så er det vist på tide, at der kommer en teknisk vinkel på debatten :)
+
+For nærværende er der en udbredt opfattelse af, at en App vejen til brugernes mobiler.
+
+Jeg er voldsomt uenig. Altså ret meget uenig :)
+
+Jeg har lavet mobil-relateret internet de sidste 5 år. Før det, internationale branding kampagner i lige så lang tid. Og selvom mit fokus helt sikkert handler om brugerne og teknikken, mener jeg bestemt at have den nødvendige forståelse for brandingperspektivet og den rene markedsføringsmæssige værdi. Men jeg vil alene argumentere for brugerne og teknikken nu ... resten er der jo nok der argumenterer for.
+
+Selvfølgelig synes jeg, at det er useriøst at lave mobilløsninger der overprioriterer en mulig markedsføringsmæssig værdi, på bekostning af brugerne - og derfor er det en svær tid i øjeblikket, hvor det lader til at det eneste det handler om, er at kunne annoncere med en iPhone App. Wtf?
+Efter min mening, svarer det lidt til at have en eksklusiv konceptforretning (websitet), og så lave et produkt der kun kan sælges i Magasin, kun til kunder med Magasin-kort. Med en kæmpe kampagne for at få folk til at gå i Magasin og købe ens varer, som iøvrigt står lige ved siden af konkurrentens. Hmmm. Apple er vist de eneste der ekselerer i markedsføring i denne sammenhæng.
+
+;)
+
+
+Jeg siger glem de der Apps. Glem dem.
+
+
+
+Fra mit perspektiv er det ret fjollet, for det dér mobile internet er slet ikke så svært længere.
+
+Den mobile browser er blevet voksen med Webkit. Webkit er den motor der ligger inde i desktop browserne fra Apple og Google (Safari og Chrome), men er også motoren i browsere der følger med devices som bl.a. iPad, iPhone, Android, Symbian og Blackberry. Omkring 80% af de mobiltelefoner der blev solgt i 2010 bruger webkit motoren. Morsomt nok sælges der faktisk langt flere webkit baserede systemer end Windows baserede, og hvis man tager i betragtning hvor meget, man normalt gør sig umage med Internet Explorer, er der vel ingen god forklaring på hvorfor det samme ikke gør sig gældende med webkit. Webkit er tilmed meget lettere at udvikle til, end Internet Explorer.
+
+
+Jeg arbejder med en markup model, der tillader forskellige grænseflader til forskellige devices, baseret på HTML5, CSS3 og JavaScript. Efter højeste fællesnævner i stedet for laveste. Leveret fra kundens eget CMS. På kundens eget hoved-domain. Offline. Gps. Accelerometer. Nummeridentifikation. WebSockets. 100% tilpasset design med alle de animationer og transitioner der traditionelt kendetegner en App.
+
+Med andre ord: Ét system, ét site, flere designs, alle devices. Du beholder kontrollen
+
+
+HTML5 er Flash til iPhone/iPad ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Faktisk er langt de fleste Apps også webkit-baserede, og for at 
+
+
+Webkit har understøttelse for gps, accelerometer, gyroscope, websockets og hardware acceleret animation.
+
+
+
+
+
+
+
+
+

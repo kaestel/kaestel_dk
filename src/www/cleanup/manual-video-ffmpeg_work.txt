@@ -1,0 +1,342 @@
+Working lines:
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 2048k -vf crop=1280:640:0:3 Webintro_SL-pass1.mp4
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 2048k -vf crop=1280:640:0:3 Webintro_SL-pass1.ogv
+
+ffmpeg -y -i Webintro_SL-pass1.mp4 -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 600k -s 960x480 Webintro_SL-done.mp4
+ffmpeg -y -i Webintro_SL-pass1.ogv -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 960x480 Webintro_SL-done.ogv
+
+add 3gp + mov
+
+
+
+ffmpeg -y -i Webintro_JL.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 2048k -vf crop=1280:640:0:3 Webintro_JL-pass1.mp4
+ffmpeg -y -i Webintro_JL.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 2048k -vf crop=1280:640:0:3 Webintro_JL-pass1.ogv
+
+ffmpeg -y -i Webintro_JL-pass1.mp4 -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 600k -s 960x480 Webintro_JL-done.mp4
+ffmpeg -y -i Webintro_JL-pass1.ogv -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 960x480 Webintro_JL-done.ogv
+
+
+
+
+sudo port install ffmpeg +nonfree
+
+
+ffmpeg -y -i input_file.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -sameq output_file.mp4
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 960x480 output_file.mp4
+
+// error - not cropping
+ffmpeg -y -i Webintro_SL.mov -vf crop=1280:640:0:3 output_crop_only.mov
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 960x200 output_file_no_crop.mp4
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 960x200 -vf crop=1280:266:0:190 output_file_crop.mp4
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -vf crop=960:484:0:2 -s 960x480 output_file_crop.mp4
+
+
+// good - mp4 - crop same quality
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -sameq -vf crop=1280:640:0:3 output_file_crop_sameq.mp4
+
+// good - ogv - crop high quality
+ffmpeg -y -i Webintro_SL.mov -f ogg -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 2048k -vf crop=1280:640:0:3 output_file_crop_sameq.ogv
+
+
+// good - compress and crop
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -vf crop=1280:640:0:3 output_file_crop_no_resize.mp4
+
+
+// good - compress and scale
+ffmpeg -y -i output_file_crop_sameq.mp4 -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 960x480 output_file_resize_no_crop.mp4
+ffmpeg -y -i output_file_crop_sameq.ogv -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 960x480 output_file_resize_no_crop.ogv
+
+
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 2000k -vf crop=1280:640:0:3 output_file_crop_sameq.ogv
+ffmpeg -y -i output_file_crop_sameq.ogv -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 1200k -s 960x480 -flags +loop -cmp +chroma -partitions +parti4x4+partp8x8+partb8x8 output_file_resize_no_crop.ogv
+
+
+
+ffmpeg -y -i Webintro_SL.mov -acodec libfaac -vcodec libx264 output_file.mp4
+
+
+ffmpeg -y -i Webintro_JL.mov -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600000 -s 960x480 -pass 2 output_file.mp4
+
+
+ffmpeg -i Webintro_SL.mov -f ogg -vcodec libtheora -b 800k -g 300 -acodec libvorbis -ab 128k outputfile.ogv
+
+
+crop=100:100
+
+
+ffmpeg -y 
+	-i input.mov 
+	-acodec libfaac 
+	-ar 48000 
+	-ab 160k 
+	-vcodec libx264 
+	-level 41 
+	-crf 20 
+	-bufsize 20000k 
+	-maxrate 25000k 
+	-g 250 
+	-r 20 
+	-s 960x480 
+	-coder 1 
+	-flags +loop -cmp +chroma -partitions +parti4x4+partp8x8+partb8x8 -flags2 +brdo+dct8x8+bpyramid -me umh -subq 7 -me_range 16 -keyint_min 25 -sc_threshold 40 -i_qfactor 0.71 -rc_eq 'blurCplx^(1-qComp)' -bf 16 -b_strategy 1 -bidir_refine 1 -refs 6 -deblockalpha 0 -deblockbeta 0 output.mp4
+
+
+ffmpeg -y -i Webintro_JL.mov -acodec libfaac -ar 48000 -ab 160k -coder ac -me full -me_range 16 -subq 5 -sc_threshold 40 -vcodec libx264 -s 960x480 -b 600k -cmp +chroma -partitions +parti4x4+partp8x8+partb8x8 -i_qfactor 0.71 -keyint_min 25 -b_strategy 1 -g 250 -r 20 test.mp4
+
+
+ffmpeg -y -i test.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 512x288 result.mp4
+ffmpeg -y -i test.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 160k -vcodec libx264 -b 600k -s 960x540 result_960x540.mp4
+ffmpeg -y -i test.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 512x288 result.ogv
+
+
+ffmpeg -y -i test.mp4 -ss 0 -t 5 -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 600k -s 960x540 short.mp4
+
+ffmpeg -y -i test.mp4 -ss 0 -t 5 -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 960x480 short.ogv
+
+
+ffmpeg -y -i showreel.mp4 -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 600k -s 1474x829 showreel_comp.mp4
+
+ffmpeg -y -i showreel.mp4 -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 160k -vcodec libtheora -b 600k -s 1474x829 showreel_comp.ogv
+
+
+try these
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 128k -vcodec libx264   -b 1200k showreel_comp.mp4
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 128k -vcodec libx264   -b 800k -s 876x494 showreel_comp_med.mp4
+
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 128k -vcodec libx264   -b 400k -s 480x270 showreel_comp_small.mp4
+
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov  -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 2000k showreel_comp.ogv
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 800k -s 876x494 showreel_comp_med.ogv
+
+ffmpeg -y -i Showreel_Final_1474x829_rettet.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 400k -s 480x270 showreel_comp_small.ogv
+
+
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libfaac -ab 128k -vcodec libx264 -b 1200k -s 1474x830 wdp_1474x830.mp4
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libfaac -ab 128k -vcodec libx264 -b 800k -s 876x494 wdp_876x494.mp4
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libfaac -ab 128k -vcodec libx264 -b 400k -s 480x270 wdp_480x270.mp4
+
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libvorbis -ab 128k -vcodec libtheora -b 2000k -s 1474x830 wdp_1474x830-2000.ogv
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libvorbis -ab 128k -vcodec libtheora -b 1400k -s 876x494 wdp_876x494.ogv
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libvorbis -ab 128k -vcodec libtheora -b 800k -s 480x270 wdp_480x270.ogv
+
+ffmpeg -i showreel.mp4 -global_quality "10*QP2LAMBDA" -vcodec libtheora -acodec libvorbis -aq 5 -b 1000k test.ogv
+
+
+
+All formats basic:
+ffmpeg -i test.mp4 -ss 00:00:05.000 -t 00:00:03.000 -vcodec h264 -acodec libfaac video.mp4
+
+ffmpeg -i test.mp4 -vcodec libvpx -acodec libvorbis video.webm
+ffmpeg -i test.mp4 -s qcif -vcodec h263 -acodec libfaac video.3gp
+ffmpeg -i test.mp4 -vcodec libtheora -acodec libvorbis video.ogv
+ffmpeg -i test.mp4 -vcodec h264 -acodec libfaac video.m4v
+ffmpeg -i test.mp4 -s qcif -vcodec rawvideo -pix_fmt uyvy422 -b 10k video.mov 
+ffmpeg -i test.mp3 -acodec libvorbis audio.ogg
+
+
+
+// uncompressed mov?
+ffmpeg -i input.mov -vcodec rawvideo -pix_fmt uyvy422 -vtag 2vuy  uncompressed.mov 
+
+
+
+// extract audio
+ffmpeg -i POLAR_EXPRESS_DISC_1-en.m4v -vn -acodec libfaac -ar 44100 -ab 160k polar_english.m4a
+
+// add audio to video with existing audio
+ffmpeg -i POLAR_EXPRESS_DISC_1-da.m4v -i polar_english.m4a -map 0:v -vcodec copy -map 0:a:0 -acodec copy -map 1:a:0 -acodec copy POLAR_EXPRESS-MUL.m4v
+
+
+
+
+sudo ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/188/clip/mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 516k -vpre fast -vf crop=498:280:1:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/188/clip/512x288.mp4
+
+
+
+sudo ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/442/clip/mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 516k -vpre slow -vf crop=498:280:1:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/442/clip/512x288.mp4
+
+sudo ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/188/clip/mov -r 600  -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 516k -vpre fast -vf crop=498:280:1:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/188/clip/512x288.mp4
+
+
+
+
+ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/461/clip/mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 774k -vf crop=1280:720:0:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/461/clip/512x288.ogv
+ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/461/clip/mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 774k -vf crop=1280:720:0:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/461/clip/512x288.ogv
+
+ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/461/clip/mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 774k -s 512x288 /projects/www/clients/supersonic_v1/library/public/461/clip/512x288.ogv
+
+sudo /opt/local/bin/ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/189/clip/mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 516k -preset slow -vf crop=498:280:1:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/189/clip/512x288.mp4
+
+sudo ffmpeg -y -i /projects/www/clients/supersonic_v1/library/private/189/clip/mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 516k -vf crop=498:280:1:0 -s 512x288 /projects/www/clients/supersonic_v1/library/public/189/clip/512x288.mp4
+
+
+/opt/local/bin/ffmpeg -y -i Tune_05.aif -acodec libmp3lame -ar 48000 -ab 128k Tune_05.mp3
+
+
+
+
+// wdp - reprocess
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 1000k -s 1474x830 wdp_1474x830.mp4
+ffmpeg -y -i Showreel_Cuttet_uden_klovn_5000.mp4 -acodec libfaac -ab 128k -vcodec libx264 -b 1200k -s 1474x830 wdp_1474x830.mp4
+
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 2000k -s 1474x830 wdp_1474x830.ogv
+
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 800k -preset slow -s 876x494 wdp_876x494.mp4
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 1500k -s 876x494 wdp_876x494.ogv
+
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 500k -preset slow -s 420x270 wdp_420x270.mp4
+ffmpeg -y -i Showreel_Cuttet_uden_klovn.mov -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 800k -s 420x270 wdp_420x270.ogv
+
+
+
+Supersonic audio sync
+ffmpeg -y -i 195.mov -acodec libfaac -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-no-ar.mp4
+ffmpeg -y -i 195.mov -acodec libvorbis -ab 128k -vcodec libtheora -b 2000k -s 512x288 195-no-ar.ogv
+
+ffmpeg -y -i 195.mov -acodec libfaac -ar 44100 -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-ar-44100.mp4
+ffmpeg -y -i 195.mov -acodec libvorbis -ar 44100 -ab 128k -vcodec libtheora -b 2000k -s 512x288 195-ar-44100.ogv
+
+ffmpeg -y -i 195.mov -r 24.97 -acodec libfaac -ar 44100 -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-ar-44100-24-97.mp4
+ffmpeg -y -i 195.mov -r 24.97 -acodec libvorbis -ar 44100 -ab 128k -vcodec libtheora -b 2000k -s 512x288 195-ar-44100-24-97.ogv
+
+
+ffmpeg -y -i 195.mov -r 24.97 -acodec libfaac -ar 44100 -ab 128k -async 44100 -vcodec libx264 -b 1000k -s 512x288 195-ar-44100-24-97-async44100.mp4
+ffmpeg -y -i 195.mov -acodec libfaac -async 1 -vcodec libx264 -b 1000k -s 512x288 195-async1.mp4
+
+ffmpeg -y -i 195.mov -t 00:00:29.500 -acodec libfaac -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-500ms.mp4
+
+ffmpeg -y -i 195.mov -ss 0 -async 1 -vsync 1 -acodec libfaac -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-500ms.mp4
+
+
+WORKS: ffmpeg -y -i 195.mov -t 00:00:30.04 -acodec libfaac -ab 128k -vcodec libx264 -b 1000k -s 512x288 195-30_04s.mp4
+
+
+ffmpeg -y -i 195.mov -r 24.97 -acodec libvorbis -ar 44100 -ab 128k -vcodec libtheora -b 2000k -s 512x288 195-ar-44100-24-97.ogv
+
+
+
+
+ffmpeg -y -i Webintro_SL.mov -r 20 -g 40 -acodec libfaac   -ar 48000 -ab 160k -vcodec libx264   -b 2048k -vf crop=1280:640:0:3 Webintro_SL-pass1.mp4
+
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 600k -s 1120x630 compressed.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 1000k -s 1120x630 compressed.mp4
+
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -acodec libfaac -ar 48000 -ab 128k -vcodec libx264 -b 1400k -s 1120x630 compressed-1400.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -vcodec libx264 -b 1400k -s 1120x630 compressed-1400.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -vcodec libx264 -b 1800k -s 1120x630 compressed-1800.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -vcodec libx264 -b 2200k -s 1120x630 compressed-2200.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -vcodec libx264 -b 2600k -s 1120x630 compressed-2600.mp4
+
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 30 -crf 30 -vcodec libx264 -b:v 400k -s 1120x630 compressed-400-q-10-30-30.mp4
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 35 -crf 30 -vcodec libx264 -b:v 400k -s 1120x630 compressed-400-q-10-35-30.mp4 - 3.2mb
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 1120x630 compressed-400-q-10-40-30.mp4 - 2.5mb
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libvpx -b:v 400k -s 1120x630 compressed-400-q-10-40-30.webm
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 35 -vcodec libx264 -b:v 400k -s 1120x630 compressed-400-q-10-40-35.mp4 - 1.8mb
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -qmin 10 -qmax 50 -crf 35 -vcodec libx264 -b:v 400k -s 1120x630 compressed-400-q-10-50-35.mp4 - 1.4mb
+
+ffmpeg -y -i sanoma.mov -r 20 -g 40 -vcodec libvpx -b 1400k -s 1120x630 compressed-1400.webm
+
+
+
+1120x630
+
+1920x1080
+
+
+
+VIDEO QMAX - very efficient on video where there is just be a short period of hi-speed video and a lot of "regular" video.
+
+
+ffmpeg -y -i sanoma-2.mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 1120x630 compressed-2-400-q-10-40-30.mp4
+
+ffmpeg -y -i sanoma-2.mov -r 20 -g 40 -qmin 10 -qmax 30 -crf 30 -vcodec libx264 -b:v 400k -s 1120x630 compressed-2-400-q-10-30-30.mp4
+
+ffmpeg -y -i sanoma-2.mov -r 20 -g 40 -vcodec libx264 -b 800k -s 1120x630 compressed-2-800.mp4
+
+ffmpeg -y -i sanoma-2.mov -r 20 -g 40 -vcodec libvpx -b 800k -s 1120x630 compressed-2-800.webm
+
+ffmpeg -y -i sanoma-2.mov -r 20 -g 40 -vcodec libtheora -b 1200k -s 1120x630 compressed-2-800.ogv
+
+
+
+
+ffmpeg -y -i tangloppen_tage.mp4 -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 718x480 tangloppen_tage-2-400-q-10-40-30.mp4
+
+ffmpeg -y -i tangloppen_tage.m4v -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 480x272 tangloppen_tage-2-400-q-10-40-30.m4v
+
+ffmpeg -y -i tangloppen_tage.m4v -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 600k -s 480x272 tangloppen_tage-2-400-q-10-40-30.ogv
+
+
+ffmpeg -y -i venner_er_gode_at_have.mp4 -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 718x480 venner_er_gode_at_have-2-400-q-10-40-30.mp4
+
+ffmpeg -y -i venner_er_gode_at_have.m4v -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 480x272 venner_er_gode_at_have-2-400-q-10-40-30.m4v
+
+
+ffmpeg -y -i venner_er_gode_at_have.m4v -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 600k -s 480x272 venner_er_gode_at_have-2-400-q-10-40-30.ogv
+
+
+ffmpeg -y -i bamse_kommer_til_danmark.mp4 -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 718x480 bamse_kommer_til_danmark-2-400-q-10-40-30.mp4
+
+ffmpeg -y -i bamse_kommer_til_danmark.m4v -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 480x272 bamse_kommer_til_danmark-2-400-q-10-40-30.m4v
+
+ffmpeg -y -i bamse_kommer_til_danmark.m4v -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 600k -s 480x272 bamse_kommer_til_danmark-2-400-q-10-40-30.ogv
+
+
+ffmpeg -y -i skille_skildpadde.mp4 -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 718x480 skille_skildpadde-2-400-q-10-40-30.mp4
+
+ffmpeg -y -i skille_skildpadde.m4v -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 480x272 skille_skildpadde-2-400-q-10-40-30.m4v
+
+ffmpeg -y -i skille_skildpadde.m4v -r 20 -g 40 -acodec libvorbis -ar 48000 -ab 128k -vcodec libtheora -b 600k -s 480x272 skille_skildpadde-2-400-q-10-40-30.ogv
+
+
+
+ffmpeg -y -i private/1/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 1.mp4
+
+ffmpeg -y -i private/2/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 2.mp4
+
+ffmpeg -y -i private/3/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 3.mp4
+
+ffmpeg -y -i private/4/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 4.mp4
+
+ffmpeg -y -i private/6/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 6.mp4
+
+ffmpeg -y -i private/7/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 7.mp4
+
+ffmpeg -y -i private/8/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 8.mp4
+
+ffmpeg -y -i private/9/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 9.mp4
+
+
+ffmpeg -y -i private/10/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 10.mp4
+
+
+ffmpeg -y -i private/11/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 11.mp4
+
+ffmpeg -y -i private/16/mov -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 16.mp4
+
+
+// cut out piece of movie - without recompression
+ffmpeg -i ParaNorman.mp4 -ss 00:00:28.100 -t 01:28:05.500 -vcodec libx264 -b:v 1000k -acodec libfaac ParaNorman-cut.mp4

@@ -1,0 +1,3 @@
+sudo openssl req -x509 -nodes -days 3650 -newkey rsa:1024 -keyout /etc/ssl/certs/thinkdk.pem -out /etc/ssl/certs/thinkdk.pem
+sudo openssl req -x509 -nodes -days 3650 -newkey rsa:1024 -keyout /etc/ssl/certs/wiresdk.pem -out /etc/ssl/certs/wiresdk.pem
+

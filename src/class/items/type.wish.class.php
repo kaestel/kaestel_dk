@@ -74,28 +74,41 @@ class TypeWish extends Model {
 		));
 
 
-
 		parent::__construct();
 	}
 
 
-	function reserve($item_id) {
-		$query = new Query();
-		$sql = "UPDATE ".$this->db." SET reserved = 1 WHERE item_id = ".$item_id;
-		if($query->sql($sql)) {
-			return true;
+	// used for frontend communication
+	// reserve wish
+	function reserve($action) {
+
+		if(count($action) == 2) {
+
+			$query = new Query();
+			$sql = "UPDATE ".$this->db." SET reserved = 1 WHERE item_id = ".$action[1];
+			if($query->sql($sql)) {
+				return true;
+			}
+
 		}
 		return false;
 	}
 
-	function unreserve($item_id) {
-		$query = new Query();
-		$sql = "UPDATE ".$this->db." SET reserved = 0 WHERE item_id = ".$item_id;
-		if($query->sql($sql)) {
-			return true;
+	// un-reserve wish
+	function unreserve($action) {
+
+		if(count($action) == 2) {
+
+			$query = new Query();
+			$sql = "UPDATE ".$this->db." SET reserved = 0 WHERE item_id = ".$action[1];
+			if($query->sql($sql)) {
+				return true;
+			}
+
 		}
 		return false;
 	}
+
 // 
 // 	/**
 // 	* Get item

@@ -1,1 +1,0 @@
-<?php header("Location: 2012_birthday.php") ?>

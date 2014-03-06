@@ -1,0 +1,30 @@
+
+
+
+NO SOUND COMPRESSION
+
+MP4
+ffmpeg -y -i #input_file# -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 #output_file#.mp4
+
+OGV:
+ffmpeg -y -i #input_file# -r 20 -g 40 -vcodec libtheora -b 600k -s 960x540 #output_file#.ogv
+
+
+
+STRIP AUDIO
+-an (strip audio)
+
+EXAMPLES:
+
+ffmpeg -y -i soulland-prelaunch-cut.mov -an -r 20 -g 40 -qmin 10 -qmax 40 -crf 30 -vcodec libx264 -b:v 400k -s 960x540 soulland-prelaunch.mp4
+
+ffmpeg -y -i soulland-prelaunch-cut.mov -an -r 20 -g 40 -vcodec libtheora -b 600k -s 960x540 soulland-prelaunch.ogv
+
+
+
+
+
+
+
+
+

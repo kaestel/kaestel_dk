@@ -1,0 +1,50 @@
+./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-pthreads --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-x11grab
+
+
+
+
+
+
+
+
+wget http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz
+tar xvf yasm-1.2.0.tar.gz
+
+sudo checkinstall --fstrans=no --install=yes --pkgname=yasm --pkgversion "1:0.svn`date +%Y%m%d`-0.0ubuntu1" --backup=no --default
+
+
+sudo checkinstall --pkgname=x264 --pkgversion="3:$(./version.sh | awk -F'[" ]' '/POINT/{print $4"+git"$5}')" --backup=no --deldoc=yes --fstrans=no --default
+sudo checkinstall --fstrans=no --install=yes --pkgname=libx264 --pkgversion "1:0.svn`date +%Y%m%d`-0.0ubuntu1" --backup=no --default
+
+
+ffmpeg - ubuntu 9
+
+wget http://www.ffmpeg.org/releases/ffmpeg-1.1.2.tar.gz
+tar xvf ffmpeg-1.1.2.tar.gz
+
+./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-pthreads --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-x11grab
+
+sudo checkinstall --fstrans=no --install=yes --pkgname=ffmpeg --pkgversion "3:0.svn`date +%Y%m%d`-12ubuntu3" --backup=no --default
+
+
+hash x264 ffmpeg ffplay
+
+
+####
+
+ffmpeg ubuntu 12
+
+
+sudo aptitude install build-essential checkinstall yasm texi2html libfaac-dev libfaad-dev libmp3lame-dev libopencore-amrnb-dev libopencore-amrwb-dev libtheora-dev libvorbis-dev libvpx-dev libx11-dev libxfixes-dev libxvidcore-dev zlib1g-dev libx264-dev x264 libsdl1.2-dev
+
+wget http://www.ffmpeg.org/releases/ffmpeg-1.1.2.tar.gz
+tar xvf ffmpeg-1.1.2.tar.gz
+
+cd ffmpeg-1.1.2
+
+./configure --enable-gpl --enable-version3 --enable-nonfree --enable-postproc --enable-pthreads --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-x11grab --enable-libvpx
+
+sudo checkinstall --fstrans=no --install=yes --pkgname=ffmpeg --pkgversion "3:0.svn`date +%Y%m%d`-12ubuntu3" --backup=no --default
+
+
+hash x264 ffmpeg ffplay

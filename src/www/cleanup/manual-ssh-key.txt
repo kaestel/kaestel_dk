@@ -1,0 +1,5 @@
+ssh-keygen -t rsa -C "__EMAIL__"
+# Creates a new ssh key, using the provided email as a label
+
+
+chmod 700 /home/__USERNAME__/.ssh

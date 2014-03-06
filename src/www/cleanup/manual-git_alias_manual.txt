@@ -1,0 +1,32 @@
+
+# Create new Git repo in dropbox from non-git folder in /srv/sites
+
+git_new_dropbox #folder#/#repo#
+
+Example:
+git_new_dropbox clients/test
+Will turn /srv/sites/clients/test into a GIT repo and push origin to ~/Dropbox/hvadhedderde/git/test.git
+
+git_new_dropbox hvadhedderde/fish
+Will turn /srv/sites/hvadhedderde/fish into a GIT repo and push origin to ~/Dropbox/hvadhedderde/git/fish.git
+
+
+
+
+# Move GIT repo from dropbox to GitHub
+
+git_dropbox2github #folder#/#repo#
+
+Example:
+git_dropbox2github clients/test
+Moves test-repo to GitHub, push origin master and delete Dropbox version
+
+
+
+# Move GIT repo from GitHub to Dropbox
+
+git_github2dropbox #folder#/#repo#
+
+Example:
+git_github2dropbox clients/test
+Moves test-repo to Dropbox, push origin master and delete GitHub version

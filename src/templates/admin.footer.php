@@ -2,7 +2,9 @@
 
 	<div id="navigation">
 		<ul>
-			<li><a href="/admin/wishes/list">Wishes</a></li>
+			<li class="wish"><a href="/admin/wish/list">Wishes</a></li>
+			<li class="wishlist"><a href="/admin/wishlist/list">Wishlists</a></li>
+			<li class="tags"><a href="/admin/tag/list">Tags</a></li>
 		</ul>
 	</div>
 

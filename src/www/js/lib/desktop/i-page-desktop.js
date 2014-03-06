@@ -8,12 +8,19 @@ Util.Objects["page"] = new function() {
 			// header reference
 			page.hN = u.qs("#header");
 			page.hN.service = u.qs(".servicenavigation", page.hN);
-			
+
+			// add logo to navigation
+			page.logo = u.ie(page.hN, "div", {"class":"logo", "html":"Kæstel"});
+			u.ce(page.logo);
+			page.logo.clicked = function(event) {
+				location.href = '/';
+			}
+
 			// content reference
-			page.cN = u.qs("#content");
+			page.cN = u.qs("#content", page);
 
 			// navigation reference
-			page.nN = u.qs("#navigation");
+			page.nN = u.qs("#navigation", page);
 			page.nN.list = u.qs("ul", page.nN);
 			page.nN = u.ie(page.hN, page.nN);
 
@@ -25,6 +32,19 @@ Util.Objects["page"] = new function() {
 
 			// global resize handler 
 			page.resized = function() {
+
+				// adjust content height
+				var calc_height = u.browserH();
+				var available_height = calc_height - page.hN.offsetHeight - page.fN.offsetHeight;
+				u.as(page.cN, "height", "auto", false);
+
+				u.bug(available_height + "; " + page.cN.offsetHeight + ";" + calc_height + ", " + u.nodeId(page.cN))
+				if(available_height >= page.cN.offsetHeight) {
+					u.as(page.cN, "height", available_height+"px", false);
+				}
+				else {
+				}
+
 
 				// forward resize event to current scene
 				if(page.cN && page.cN.scene) {
@@ -121,12 +141,6 @@ Util.Objects["page"] = new function() {
 			// initialize navigation elements
 			page.initNavigation = function() {
 
-				// add logo to navigation
-				page.logo = u.ie(page.nN, "div", {"class":"logo"});
-				u.ce(page.logo);
-				page.logo.clicked = function(event) {
-					window.location.href = '/';
-				}
 
 				this.hN.org_height = this.hN.offsetHeight;
 
@@ -169,163 +183,6 @@ Util.Objects["page"] = new function() {
 				}
 
 
-				// inject simple search field on click
-				this.hN.li_search = u.qs("li.search", this.hN.service);
-				u.ce(this.hN.li_search);
-				this.hN.li_search.clicked = function() {
-
-					// close navigation elements
-					page.closeNav();
-
-					if(!this.is_open) {
-
-						this.is_open = true;
-
-						if(!this.topmenu) {
-							this.topmenu = u.ie(page, "div", {"class":"search"});
-							this.form_search = u.ae(this.topmenu, "form", {"method":"post", "action":this.url});
-							this.input_search = u.ae(this.form_search, "input", {"type":"text", "name":"sss"});
-							this.bn_search = u.ae(this.form_search, "input", {"type":"submit", "value":u.txt["search"]});
-					
-							u.a.translate(this.topmenu, 0, -1000);
-							u.as(this.topmenu, "display", "block");
-							this.topmenu.org_height = this.topmenu.offsetHeight;
-							u.a.setHeight(this.topmenu, 0);
-							u.a.translate(this.topmenu, 0, 0);
-						}
-
-						u.as(this.topmenu, "zIndex", 50);
-
-						// close mypix link in case it is open
-						if(page.hN.li_mypix.topmenu) {
-							u.as(page.hN.li_mypix.topmenu, "zIndex", 40);
-							u.a.setHeight(page.hN.li_mypix.topmenu, 0);
-
-							// align current menu with open space
-							u.a.transition(this.topmenu, "none");
-							u.a.setHeight(this.topmenu, page.hN.li_mypix.topmenu.org_height);
-						}
-						page.hN.li_mypix.is_open = false;
-
-						// show search
-						u.a.transition(page.hN, "all 0.3s ease-in-out");
-						u.a.transition(this.topmenu, "all 0.25s ease-in-out");
-
-						u.a.setHeight(this.topmenu, this.topmenu.org_height);
-						u.a.translate(page.hN, 0, this.topmenu.org_height);
-					}
-
-					// close
-					else {
-						this.is_open = false;
-
-						u.a.transition(page.hN, "all 0.3s ease-in-out");
-						u.a.transition(this.topmenu, "all 0.35s ease-in-out");
-
-						u.a.translate(page.hN, 0, 0);
-						u.a.setHeight(this.topmenu, 0);
-					}
-				}
-
-
-				// if user is not already logged in, clicking will display login form
-				this.hN.li_mypix = u.qs("li.pix", this.hN.service);
-				u.ce(this.hN.li_mypix);
-				this.hN.li_mypix.clicked = function() {
-
-					page.closeNav();
-
-					// user is already logged in
-					if(u.hc(this, "logged_in")) {
-					
-						location.href = this.url;
-					
-					}
-					else {
-					
-						if(!this.is_open) {
-
-							this.is_open = true;
-
-							// if login form does not already exist
-							if(!this.topmenu) {
-
-								// request login page
-								this.response = function(response) {
-
-									this.topmenu = u.qs(".scene div.login", response);
-									// got login element
-									if(this.topmenu) {
-
-										// inject login and initialize
-										this.topmenu = u.ie(page, this.topmenu);
-										this.topmenu._form = u.qs("form", this.topmenu);
-										this.topmenu._whatis = u.qs("div.whatismypix", this.topmenu);
-
-										var section = u.ae(this.topmenu, "div", {"class":"section"});
-										u.ae(section, this.topmenu._form);
-										u.ae(section, this.topmenu._whatis);
-
-										u.f.init(this.topmenu._form);
-
-										u.a.translate(this.topmenu, 0, -1000);
-										u.as(this.topmenu, "display", "block");
-										this.topmenu.org_height = this.topmenu.offsetHeight;
-										u.a.setHeight(this.topmenu, 0);
-										u.a.translate(this.topmenu, 0, 0);
-
-										// opening login box
-										this.topmenu.openLogin = function() {
-
-											u.as(this, "zIndex", 50);
-
-											// close search in case it is open
-											if(page.hN.li_search.topmenu) {
-												u.as(page.hN.li_search.topmenu, "zIndex", 40);
-												u.a.setHeight(page.hN.li_search.topmenu, 0);
-
-												// align current menu with open space
-												u.a.transition(this, "none");
-												u.a.setHeight(this, page.hN.li_search.topmenu.org_height);
-											}
-											page.hN.li_search.is_open = false;
-
-											// open mypix login box
-											u.a.transition(page.hN, "all 0.3s ease-in-out");
-											u.a.transition(this, "all 0.25s ease-in-out");
-
-											u.a.translate(page.hN, 0, this.org_height);
-											u.a.setHeight(this, this.org_height);
-										}
-										this.topmenu.openLogin();
-									}
-									// if unexpected response - redirect to mypix page
-									else {
-										location.href = this.url;
-									}
-								}
-
-								u.request(this, this.url);
-
-							}
-							// login box available, just show it
-							else {
-								this.topmenu.openLogin();
-							}
-						}
-						// close login form
-						else {
-							this.is_open = false;
-
-							u.a.transition(page.hN, "all 0.3s ease-in-out");
-							u.a.transition(this.topmenu, "all 0.35s ease-in-out");
-
-							u.a.translate(page.hN, 0, 0);
-							u.a.setHeight(this.topmenu, 0);
-
-						}
-					}
-				}
 			}
 
 

@@ -1,0 +1,25 @@
+curl -i -u __USERNAME__ -d '{"scopes": ["repo"]}' https://api.github.com/authorizations
+
+
+
+
+curl -i -H 'Authorization: token _TOKEN_FROM_GITHUB_' https://api.github.com/user
+
+curl -i -H 'Authorization: token _TOKEN_FROM_GITHUB_' https://api.github.com/repos/hvadhedderde/demo_br_gakgak
+
+
+curl -i -H 'Authorization: token _TOKEN_FROM_GITHUB_' -d '{"name": "test-blog", "private": true}' https://api.github.com/orgs/hvadhedderde/repos
+
+
+
+
+curl -i -X DELETE -H 'Authorization: token _TOKEN_FROM_GITHUB_' -d '{"scopes": ["delete_repo"]}' https://api.github.com/repos/hvadhedderde/demo_br_gakgak
+
+
+
+curl -u __USERNAME__ https://api.github.com/authorizations
+
+curl -u __USERNAME__ -X PATCH https://api.github.com/authorizations/_AUTH_ID_ -H "Content-Type: application/json" -d '{"add_scopes":["delete_repo"]}'
+
+
+

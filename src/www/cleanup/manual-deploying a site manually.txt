@@ -1,0 +1,15 @@
+Deploying a site manually on dev/live server
+
+
+Clone site to folder on server
+
+submodule init
+submodule update
+
+
+Add library + private/public folder if needed
+
+Add connect_db+mail if needed
+Create database and grant user access if needed
+
+

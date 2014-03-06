@@ -1,0 +1,9 @@
+// Secure copy
+
+
+scp -P __PORT__ local_file __USERNAME__@__IP__:/home/__USERNAME__
+
+
+
+
+
