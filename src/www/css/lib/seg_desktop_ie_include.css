@@ -1,22 +1,15 @@
 @import url(/css/lib/s-fonts.css);
 
-@import url(/css/lib/desktop/s-typography-desktop.css);
 @import url(/css/lib/desktop/s-page-desktop.css);
 @import url(/css/lib/desktop/s-header-desktop.css);
+@import url(/css/lib/desktop/s-footer-desktop.css);
+
 
 @import url(/css/lib/desktop/s-content-desktop.css);
+@import url(/css/lib/desktop/s-form-desktop.css);
 
 @import url(/css/lib/desktop/s-front-desktop.css);
-@import url(/css/lib/desktop/s-contact-desktop.css);
-@import url(/css/lib/desktop/s-news-desktop.css);
-@import url(/css/lib/desktop/s-article-desktop.css);
+@import url(/css/lib/desktop/s-wishlist-desktop.css);
 
-@import url(/css/lib/desktop/s-about-desktop.css);
-@import url(/css/lib/desktop/s-competences-desktop.css);
+@import url(/css/lib/desktop/s-hovers-desktop.css);
 
-@import url(/css/lib/desktop/s-aboutdaily-desktop.css);
-@import url(/css/lib/desktop/s-services-desktop.css);
-
-@import url(/css/lib/desktop/s-playtype-desktop.css);
-
-@import url(/css/lib/desktop/s-filters-desktop.css);
