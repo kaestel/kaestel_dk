@@ -36,11 +36,11 @@ if($query->sql("SELECT * FROM $from_db.`item_wish`")) {
 	foreach($results as $result) {
 //		print_r($result);
 
-		print "# " . $result["id"] ." - " . $result["name"] . " - " . $result["description"] . " - " . $result["link"] . " - " . $result["price"] . " - " . $result["reserved"] . " - " . $result["files"] . "<br>";
+		print "# " . $result["item_id"] ." - " . $result["name"] . " - " . $result["description"] . " - " . $result["link"] . " - " . $result["price"] . " - " . $result["reserved"] . " - " . $result["files"] . "<br>";
 
 
 		// WISH
-		$existing_id = $result["id"];
+		$existing_id = $result["item_id"];
 		$name = $result["name"];
 		$description = $result["description"];
 		$link = $result["link"];
