@@ -1,12 +1,8 @@
 <?php
-
-$action = $this->actions();
-
-$IC = new Item();
-$itemtype = "wishlist";
-
-$model = $IC->typeObject($itemtype);
-
+global $action;
+global $IC;
+global $model;
+global $itemtype;
 ?>
 <div class="scene defaultNew">
 	<h1>New wishlist</h1>

@@ -1,11 +1,8 @@
 <?php
-
-$action = $this->actions();
-
-$IC = new Item();
-$itemtype = "wishlist";
-
-$model = $IC->typeObject($itemtype);
+global $action;
+global $IC;
+global $model;
+global $itemtype;
 
 $item = $IC->getCompleteItem($action[1]);
 $item_id = $item["item_id"];

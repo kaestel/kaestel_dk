@@ -1,8 +1,8 @@
 <?php
-$action = $this->actions();
-
-$IC = new Item();
-$itemtype = "wishlist";
+global $action;
+global $IC;
+global $model;
+global $itemtype;
 
 $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position ASC"));
 ?>

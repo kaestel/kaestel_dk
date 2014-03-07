@@ -3246,7 +3246,7 @@ Util.Objects["wishes"] = new function() {
 			this.nodes = u.qsa("li.item", this);
 			if(this.nodes.length) {
 				var text_width = this.nodes[0].offsetWidth - this.image_width;
-				var i, node, header, price, description, action;
+				var i, node;
 				for(i = 0; node = this.nodes[i]; i++) {
 					node.item_id = u.cv(node, "id");
 					node.image_format = u.cv(node, "format");

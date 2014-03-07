@@ -19,19 +19,19 @@
 	font-style: normal;
 }
 @font-face {
+	font-family: 'OpenSans';
+	src: url('/css/fonts/opensans-italic-webfont.woff') format('woff'),
+		 url('/css/fonts/opensans-italic-webfont.ttf') format('truetype'),
+		 url('/css/fonts/opensans-italic-webfont.svg#open_sansitalic') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
 	font-family: 'PT Serif';
 	src: url('/css/fonts/pt_serif-regular-webfont.woff') format('woff'),
 		 url('/css/fonts/pt_serif-regular-webfont.ttf') format('truetype'),
 		 url('/css/fonts/pt_serif-regular-webfont.svg#pt_serifregular') format('svg');
 	font-weight: normal;
-	font-style: normal;
-}
-@font-face {
-	font-family: 'PT Serif';
-	src: url('/css/fonts/pt_serif-bold-webfont.woff') format('woff'),
-		 url('/css/fonts/pt_serif-bold-webfont.ttf') format('truetype'),
-		 url('/css/fonts/pt_serif-bold-webfont.svg#pt_serifbold') format('svg');
-	font-weight: bold;
 	font-style: normal;
 }
 
@@ -56,10 +56,10 @@ a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-wei
 h1 {padding: 0 50px 30px; font-size: 48px; line-height: 1em;
 	font-family: "PT Serif", Times, serif;
 }
-h2 {padding: 0 50px 20px; font-size: 32px; line-height: 1em;
+h2 {padding: 0 50px 20px; font-size: 30px; line-height: 1em;
 	font-family: "PT Serif", Times, serif;
 }
-h3 {padding: 0 50px 10px; font-size: 20px; line-height: 1em;}
+h3 {padding: 0 50px 10px; font-size: 18px; line-height: 1em;}
 h4 {}
 h5 {}
 h6 {}
@@ -67,8 +67,8 @@ p {padding: 0 50px 20px; font-size: 13px; line-height: 1.38em;}
 ul {font-size: 0;}
 li {display: inline-block; vertical-align: top; font-size: 13px;}
 dl {font-size: 0;} 
-dd, 
-dt {display: inline-block; vertical-align: top; text-transform: uppercase; font-size: 13px;}
+dt, 
+dd {display: inline-block; vertical-align: top; font-size: 13px;}
 .c {clear: both; font-size: 0;}
 .c400, .c300, .c266, .c200, .c150, .c133, .c100, .c75, .c50 {display: inline-block; min-height: 10px; vertical-align: top;}
 .c400 {width: 100%;}
@@ -104,12 +104,39 @@ dt {display: inline-block; vertical-align: top; text-transform: uppercase; font-
 #content .scene {position: relative; padding: 30px 0 0;}
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #63ADD0;}
-#content .scene p {max-width: 450px;}
+#content .scene h1,
+#content .scene h2,
+#content .scene h3,
+#content .scene h4,
+#content .scene p {max-width: 500px;}
 #content .scene hr {border: none; border-top: 1px solid #adb7c1; margin: 15px 15px 20px; padding: 0;}
-#content .scene ul {padding: 0 50px;}
-#content .scene li {}
+#content .scene p.note {font-style: italic;}
+#content .scene ul {padding: 0 50px 15px;}
+#content .scene li {display: block; padding: 0 0 5px;}
 #content .scene li h3,
-#content .scene li p {}
+#content .scene li p,
+#content .scene li dl {padding-left: 0; padding-right: 0;}
+#content .scene dl {padding: 0 50px 15px; white-space: nowrap; overflow: hidden;}
+#content .scene dt {float: left; clear: left; min-width: 10%; text-align: right; text-transform: uppercase; padding: 0 5px 0 0; color: #999999;} 
+#content .scene dt:after {content: ":";}
+#content .scene dd {float: left; clear: right; padding: 0 0 5px;}
+#content .scene code {min-width: 500px; margin: 0 50px 5px; position: relative; top: -15px; padding: 10px 20px; background-color: #ededed; font-size: 13px; display: inline-block;
+	font-family: "Monaco", "Courier New", "Courier";
+}
+#content .scene span.type,
+#content .scene span.var,
+#content .scene span.value,
+#content .scene span.file,
+#content .scene span.htmltag,
+#content .scene span.command {
+	font-family: "Monaco", "Courier New", "Courier"; font-size: 12px;
+}
+#content .scene span.type {color: #a67800;}
+#content .scene span.var {color: #007633;}
+#content .scene span.value {color: #a65900; font-style: italic;}
+#content .scene span.file {color: #a62300;}
+#content .scene span.htmltag {text-transform: uppercase;}
+#content .scene span.command {color: #4b5cd7;}
 
 
 /*s-form-desktop.css*/
@@ -179,7 +206,7 @@ dt {display: inline-block; vertical-align: top; text-transform: uppercase; font-
 #content ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 10px 10px 0; vertical-align: top;}
 #content ul.actions input.button {width: auto; height: 28px; padding: 3px 12px; display: inline-block; vertical-align: top;}
 @media all and (-webkit-min-device-pixel-ratio:0) {#content ul.actions input.button {padding-bottom: 5px;}}
-#content ul.actions a.button {display: block; text-decoration: none; height: 14px; padding: 5px 12px 7px;}
+#content ul.actions a.button {display: block; text-decoration: none; height: 14px; padding: 7px 12px;}
 #content ul.actions input.button,
 #content ul.actions a.button {background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px;}
 #content ul.actions input.button:hover,
@@ -233,6 +260,27 @@ dt {display: inline-block; vertical-align: top; text-transform: uppercase; font-
 #content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
+
+
+/*s-todolist-desktop.css*/
+#content .scene.todolist {}
+#content .scene.todolist {}
+#content .scene.todolist ul.todos {}
+#content .scene.todolist ul.todos > li {display: block; overflow: hidden; border-top: 1px solid #cccccc; padding: 20px 0 0; position: relative;}
+#content .scene.todolist ul.todos > li .text {margin-bottom: 10px; padding: 0 100px 0 0;}
+#content .scene.todolist ul.todos > li h3 {}
+#content .scene.todolist ul.todos > li div.description {}
+#content .scene.todolist ul.todos > li div.description p {}
+#content .scene.todolist ul.todos > li dl {}
+#content .scene.todolist ul.todos > li dt {display: none;}
+#content .scene.todolist ul.todos > li dd {font-size: 13px; color: #999999;}
+#content .scene.todolist ul.todos > li dd:after {content: ",\00a0";}
+#content .scene.todolist ul.todos > li dd:last-child:after {content: "";}
+#content .scene.todolist ul.todos > li ul.actions {padding: 0; position: absolute; top: 20px; right: 0;}
+#content .scene.todolist ul.todos > li ul.actions li {padding: 0;}
+#content .scene.todolist ul.todos > li ul.actions.closed .close {display: none;}
+#content .scene.todolist ul.todos > li ul.actions .open {display: none;}
+#content .scene.todolist ul.todos > li ul.actions.closed .open {display: inline-block;}
 
 
 /*s-hovers-desktop.css*/

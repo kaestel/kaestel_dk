@@ -22,14 +22,14 @@ class TypeWishlist extends Model {
 			"label" => "Name",
 			"required" => true,
 			"unique" => $this->db,
-			"hint_message" => "Name of the category", 
+			"hint_message" => "Name of the wishlist", 
 			"error_message" => "Category name must be unique"
 		));
 
 		// Class
 		$this->addToModel("class", array(
 			"type" => "string",
-			"label" => "CSS Class for category",
+			"label" => "CSS Class for wishlist",
 			"hint_message" => "If you don't know what this is, just leave it empty"
 		));
 
@@ -50,10 +50,6 @@ class TypeWishlist extends Model {
 		if(count($action) > 1) {
 
 			$query = new Query();
-
-			// delete all to avoid leftovers
-//			$query->sql("SELECT * FROM ".$this->db_slides." WHERE page_id = ".$action[1]);
-
 			for($i = 1; $i < count($action); $i++) {
 				$item_id = $action[$i];
 				$query->sql("UPDATE ".$this->db." SET position = ".($i)." WHERE item_id = ".$item_id);
@@ -67,8 +63,6 @@ class TypeWishlist extends Model {
 		return false;
 
 	}
-
-
 
 }
 

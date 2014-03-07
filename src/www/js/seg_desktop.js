@@ -2878,7 +2878,7 @@ Util.Objects["wishes"] = new function() {
 			this.nodes = u.qsa("li.item", this);
 			if(this.nodes.length) {
 				var text_width = this.nodes[0].offsetWidth - this.image_width;
-				var i, node, header, price, description, action;
+				var i, node;
 				for(i = 0; node = this.nodes[i]; i++) {
 					node.item_id = u.cv(node, "id");
 					node.image_format = u.cv(node, "format");
@@ -2921,6 +2921,67 @@ Util.Objects["wishes"] = new function() {
 						this.response = function(response) {
 							if(response.cms_status == "success") {
 								u.rc(this.node.actions, "reserved");
+							}
+							else {
+							}
+						}
+						u.request(this, this.form.action, {"method":this.form.method});
+					}
+				}
+			}
+			page.cN.scene = this;
+			page.resized();
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-todolist-desktop.js*/
+Util.Objects["todolist"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			u.bug("scene.ready:" + u.nodeId(this));
+			this.nodes = u.qsa("li.item", this);
+			if(this.nodes.length) {
+				var i, node;
+				for(i = 0; node = this.nodes[i]; i++) {
+					node.item_id = u.cv(node, "id");
+					node.text_mask = u.ae(node, "div", {"class":"text"});
+					u.ae(node.text_mask, u.qs("h3", node));
+					u.ae(node.text_mask, u.qs("dl", node));
+					u.ae(node.text_mask, u.qs("div.description", node));
+					node.actions = u.qs("ul.actions", node);
+					node.close_form = u.qs("li.close form", node);
+					u.f.init(node.close_form);
+					node.bn_close = u.qs("input", node.close_form);
+					node.bn_close.node = node;
+					u.e.click(node.bn_close)
+					node.bn_close.clicked = function(event) {
+						u.e.kill(event);
+						this.response = function(response) {
+							if(response.cms_status == "success") {
+								u.ac(this.node.actions, "closed");
+							}
+							else {
+							}
+						}
+						u.request(this, this.form.action, {"method":this.form.method});
+					}
+					node.open_form = u.qs("li.open form", node);
+					u.f.init(node.open_form);
+					node.bn_open = u.qs("input", node.open_form);
+					node.bn_open.node = node;
+					u.e.click(node.bn_open)
+					node.bn_open.clicked = function(event) {
+						u.e.kill(event);
+						this.response = function(response) {
+							if(response.cms_status == "success") {
+								u.rc(this.node.actions, "closed");
 							}
 							else {
 							}

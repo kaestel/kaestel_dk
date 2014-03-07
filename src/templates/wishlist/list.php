@@ -1,5 +1,8 @@
 <?
-$IC = new Item();
+global $action;
+global $IC;
+global $model;
+
 $items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist"));
 ?>
 <div class="scene wishlist i:wishlist">

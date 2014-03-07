@@ -12,13 +12,45 @@ COLOR PALETTE: http://colorschemedesigner.com/#3s51Tw0w0w0w0
 
 #content .scene .link {cursor: pointer;}
 #content .scene a {color: #63ADD0;}
-#content .scene p {max-width: 450px;}
+#content .scene h1,
+#content .scene h2,
+#content .scene h3,
+#content .scene h4,
+#content .scene p {max-width: 500px;}
 #content .scene hr {border: none; border-top: 1px solid #adb7c1; margin: 15px 15px 20px; padding: 0;}
+#content .scene p.note {font-style: italic;}
 
-#content .scene ul {padding: 0 50px;}
-#content .scene li {}
+#content .scene ul {padding: 0 50px 15px;}
+#content .scene li {display: block; padding: 0 0 5px;}
 #content .scene li h3,
-#content .scene li p {}
+#content .scene li p,
+#content .scene li dl {padding-left: 0; padding-right: 0;}
+
+
+#content .scene dl {padding: 0 50px 15px; white-space: nowrap; overflow: hidden;}
+#content .scene dt {float: left; clear: left; min-width: 10%; text-align: right; text-transform: uppercase; padding: 0 5px 0 0; color: #999999;} 
+#content .scene dt:after {content: ":";}
+#content .scene dd {float: left; clear: right; padding: 0 0 5px;}
+
+
+/* CODE AND TYPECASTING */
+#content .scene code {min-width: 500px; margin: 0 50px 5px; position: relative; top: -15px; padding: 10px 20px; background-color: #ededed; font-size: 13px; display: inline-block;
+	font-family: "Monaco", "Courier New", "Courier";
+}
+#content .scene span.type,
+#content .scene span.var,
+#content .scene span.value,
+#content .scene span.file,
+#content .scene span.htmltag,
+#content .scene span.command {
+	font-family: "Monaco", "Courier New", "Courier"; font-size: 12px;
+}
+#content .scene span.type {color: #a67800;}
+#content .scene span.var {color: #007633;}
+#content .scene span.value {color: #a65900; font-style: italic;}
+#content .scene span.file {color: #a62300;}
+#content .scene span.htmltag {text-transform: uppercase;}
+#content .scene span.command {color: #4b5cd7;}
 
 
 

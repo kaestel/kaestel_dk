@@ -1,8 +1,10 @@
 
 <?
-$action = $this->actions();
+global $action;
+global $IC;
+global $model;
+global $itemtype;
 
-$IC = new Item();
 $wishlist = $IC->getCompleteItem($action[1]);
 
 if($wishlist && $wishlist["tags"]):
@@ -40,7 +42,7 @@ endif;
 				</li>
 				<li class="unreserve">
 					<form action="/wishlist/unreserve/<?= $item["id"] ?>" method="post" enctype="multipart/form-data">
-						<input type="submit" value="Reserved" class="button secondary" />
+						<input type="submit" value="Un-reserve" class="button secondary" />
 					</form>
 				</li>
 			</ul>

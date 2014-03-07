@@ -1,11 +1,10 @@
 <?php
-$action = $this->actions();
-
-$IC = new Item();
-$itemtype = "wish";
+global $action;
+global $IC;
+global $model;
+global $itemtype;
 
 $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DESC"));
-
 ?>
 <div class="scene defaultList <?= $itemtype ?>List">
 	<h1>Wishes</h1>
@@ -24,7 +23,7 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DES
 				<h3><?= $item["name"] ?></h3>
 				<dl>
 					<dt class="reserved">Reserved</dt>
-					<dd class="reserved"><?= $item["reserved"] ? "Reserved" : "Available" ?></dd>
+					<dd class="reserved"><?= $model->wish_reserved[$item["reserved"]] ?></dd>
 				</dl>
 <?				if($item["tags"]): ?>
 				<ul class="tags">
