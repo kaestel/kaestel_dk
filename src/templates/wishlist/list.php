@@ -12,7 +12,7 @@ $items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist"));
 <?	if($items): ?>
 	<ul class="items">
 <?		foreach($items as $item):
-			$item = $IC->getCompleteItem($item["id"]); ?>
+			$item = $IC->extendItem($item); ?>
 		<li<?= HTML::attribute("class") ?>><a href="/wishlist/view/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></li>
 <?		endforeach; ?>
 	</ul>

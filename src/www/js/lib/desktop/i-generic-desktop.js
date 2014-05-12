@@ -25,3 +25,8 @@ Util.Objects["generic"] = new function() {
 		scene.ready();
 	}
 }
+Util.Objects["standardForm"] = new function() {
+	this.init = function(form) {
+		u.f.init(form);
+	}
+}

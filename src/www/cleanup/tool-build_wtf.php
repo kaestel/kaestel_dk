@@ -1,5 +1,9 @@
 #!/usr/bin/php
 <?php
+$access_item = false;
+if(isset($read_access) && $read_access) {
+	return;
+}
 
 $full = file_get_contents("http://jes.local/bundles/full/lib/include.php");
 $medium = file_get_contents("http://jes.local/bundles/medium/lib/include.php");

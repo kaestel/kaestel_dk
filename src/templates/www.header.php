@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="<?= $this->language() ?>">
 <head>
-	<!-- (c) & (p) think.dk 2009-2014 //-->
+	<!-- (c) & (p) parentNode.dk 2009-2014 //-->
 	<!-- All material protected by copyrightlaws, as if you didnt know //-->
+	<!-- If you want to help build the ultimate frontend-centered platform, visit parentnode.dk -->
 	<title><?= SITE_URL ?> - <?= $this->pageTitle() ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="keywords" content="think for yourself live free get in trouble" />
@@ -27,6 +28,12 @@
 	<div id="header">
 		<ul class="servicenavigation">
 			<li class="keynav navigation nofollow"><a href="#navigation">To navigation</a></li>
+<?			if(Session::value("user_id") && Session::value("user_group_id")): ?>
+			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
+			<li class="keynav admin nofollow"><a href="/admin" target="_blank">Admin</a></li>
+<?			else: ?>
+			<li class="keynav user nofollow"><a href="/login">Login</a></li>
+<?			endif; ?>
 		</ul>
 	</div>
 

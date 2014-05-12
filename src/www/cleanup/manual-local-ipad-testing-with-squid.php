@@ -1,3 +1,10 @@
+<?
+$access_item = false;
+if(isset($read_access) && $read_access) {
+	return;
+}
+	
+?>
 <?php $body_class = "blog" ?>
 <?php $page_description = "Local iPad testing with Squid Proxy Server" ?>
 <?php $page_title = "Local iPad testing with Squid Proxy Server @ Hvadhedderde" ?>

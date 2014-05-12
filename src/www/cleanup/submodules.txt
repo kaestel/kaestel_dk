@@ -1,11 +1,5 @@
 
 
-git submodule add https://github.com/parentnode/manipulator.git submodules/jes
-git commit -m 'added jes submodule'
-git push
-
-
-
 git submodule add https://github.com/parentnode/js-merger.git submodules/js-merger
 git commit -m 'added js-merger submodule'
 git push
@@ -23,11 +17,18 @@ git push
 
 
 
+
+
 # PODIO
 git submodule add https://github.com/podio/podio-php.git submodules/podio
 git commit -m 'added podio submodule'
 git push
 
+
+
+git submodule add https://github.com/parentnode/manipulator.git submodules/jes
+git commit -m 'added jes submodule'
+git push
 
 
 

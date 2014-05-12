@@ -1,3 +1,10 @@
+<?
+$access_item = false;
+if(isset($read_access) && $read_access) {
+	return;
+}
+	
+?>
 <?php $body_class = "blog" ?>
 <?php $page_description = "" ?>
 <?php $page_title = "" ?>

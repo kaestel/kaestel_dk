@@ -11,14 +11,19 @@ Add library + private/public folder if needed
 sudo mkdir src/library
 sudo mkdir src/library/private
 sudo mkdir src/library/public
+
+
+Copy library/private/0 if it exists
+
+
 sudo chown -R www-data:deploy src/library
 sudo chmod -R 770 src/library
 
 
 
 Add connect_db+mail if needed
-sudo vi connect_db.php
-sudo vi connect_mail.php
+sudo vi src/config/connect_db.php
+sudo vi src/config/connect_mail.php
 
 Create database and grant user access if needed
 

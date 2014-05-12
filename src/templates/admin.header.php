@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="<?= $this->language() ?>">
 <head>
-	<!-- (c) & (p) think.dk 2011-2014 //-->
+	<!-- (c) & (p) parentNode.dk 2009-2014 //-->
 	<!-- All material protected by copyrightlaws, as if you didnt know //-->
+	<!-- If you want to help build the ultimate frontend-centered platform, visit parentnode.dk -->
 	<title><?= $this->pageTitle() ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="language" content="<?= $this->language() ?>" />
 	<meta name="keywords" content="" />
 	<meta name="description" content="<?= $this->pageDescription() ?>" />
 	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
@@ -27,6 +27,11 @@
 	<div id="header">
 		<ul class="servicenavigation">
 			<li class="keynav front"><a href="/admin">Kæstel Admin</a></li>
+<?			if(Session::value("user_id") && Session::value("user_group_id")): ?>
+			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
+<?			else: ?>
+			<li class="keynav user nofollow"><a href="/login">Login</a></li>
+<?			endif; ?>
 		</ul>
 	</div>
 

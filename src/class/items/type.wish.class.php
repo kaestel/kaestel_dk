@@ -17,6 +17,7 @@ class TypeWish extends Model {
 
 		$this->wish_reserved = array(0 => "Available", 1 => "Reserved");
 
+
 		// Name
 		$this->addToModel("name", array(
 			"type" => "string",

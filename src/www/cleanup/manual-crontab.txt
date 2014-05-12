@@ -13,6 +13,10 @@ wget -q http://tilbyen.dev.e-types.com/admin/instagram/fetch --http-user=__USERN
 
 45 23 * * * wget -q http://tilbyen.dk/admin/instagram/fetch --http-user=__USERNAME__ --http-password=__PASSWORD__ --directory-prefix=tilbyen_cron
 
+40 23 * * * wget -q http://fralandet.live.e-types.com/admin/instagram/fetch --http-user=__USERNAME__ --http-password=__PASSWORD__ --directory-prefix=tilbyen_cron
+
+40 23 * * * wget -q http://fralandet.dev.e-types.com/admin/instagram/fetch --http-user=fralandet --http-password=l4ndfrad3t --directory-prefix=fralandet_cron
+
 
 
 sudo crontab -e

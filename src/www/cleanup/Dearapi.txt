@@ -1,0 +1,73 @@
+Alongside our production company, Hvadhedderde, we develop our own APIs accessible through dearAPI.
+
+Our collection of APIs grow continuously as we attempt to meet our own repetitive needs via standardized APIs.
+
+Current APIs:
+
+Devices
+
+
+Coming soon / work in progress
+
+Users
+Shop
+SMS
+Content
+
+
+#DEVICES
+
+Devices is a simple device-segmentation tool, grouping any kind of devices capable of rendering HTML, be it a desktop computer, your TV set top box or even a screen reader aiding a visually impaired, into manageable segments, allowing you to provide any visitor with an optimized user experience.
+
+Too complicated?
+
+Well, it really is simple - what is complicated is how most people run their websites today.
+
+Maybe you belong to the group of webmasters/developers struggling with desicions ragarding regular website vs mobile website, iPhone/Android/ovi/blackberry app vs webapp, Search engine optimization, validation, complex design requirements, cross-browser support, required support of old browsers due to internal licensing policies, CMS implementation. Do you feel a little bit stuck?
+
+Basically we've been struggling with issues like these since 1997 and Devices has been born to lighten this burden.
+
+Devices divides devices into 9 well-defined segments based on common denominators such as standards support, interaction method and screen size. Logic that allows you to do more with less code.
+
+Why is this smart?
+Most device information services out there takes a completely different approach. Well, to put it simply ... They are all clones of WURFL, and in my opinion they've taken the wrong approach. I really have almost no interest in the hardware from a design perspective. I primarily care about the browser.
+
+I see where they are coming from as I've followed the development since 2003. Back then it made more sense. We were delivering ringtones, wallpapers and games to phones that were rarely firmware-updated. We did not have centralized app-stores - we were all trying to be the app-stores. And when it comes to apps (or wallpapers og ringtones) the hardware matters. 
+
+But I'm not competing with the app-stores ... I'm trying to deliver content via the browser in a manner where everyone gets an optimized experience.
+
+Basically WURFL is set off in a different era when mobile-phones sucked. Thus the information they have collected makes no sense in terms of modern mobile-phones. When it comes to the information they have stored its is mostly useless from a frontend development perspective, like does the device support x-HTML level giving a value from -1 to 4. Today, who even cares about x-HTML and furthermore they fail to provide a detailed explanation of the meaning of the different levels, and that is where it turns useless^2. Another example is the "invisible text"-value. I'm guessing no one knows what that means.
+
+Yes, I know they are making an effort to add more relevant info like css3 support, but the info is still weak. Partly because it is still focused about the hardware-device and partly because it is supplied by frontend-rookies.
+
+The trouble with the hardware device approach is that today the firmware/os updates relatively easy and we see giant leaps from one version to the next. In example the browser in Android 2.2 supports transitions in contrast to 2.1, which however supports many other basic css3 features. Many phones can be updated from 2.1 to 2.2 and thus allow for a whole different experience.
+
+And the failure to define criterial criteria regarding CSS/JS support creates more noise than aid. And let's face it ... The people feeding back information to WURFL does not exactly have the thoroughness of quirksmode.
+
+So the problem is that the unsegmented hardware orientated WURFL approach degrades too many users without any good reason. 
+
+
+
+
+
+
+The segments:
+
+Desktop
+Desktop IE
+Desktop light
+Tablet
+Mobile touch
+Mobile
+Mobile light
+TV
+Basic
+
+
+
+
+
+
+
+
+

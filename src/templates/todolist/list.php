@@ -5,7 +5,7 @@ global $model;
 global $itemtype;
 
 $items = $IC->getItems(array("status" => 1, "itemtype" => "todolist"));
-$todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "todo.deadline DESC, todo.priority DESC"));
+$todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "todo.deadline DESC, todo.priority DESC", "limit" => 10));
 ?>
 <div class="scene todolist i:todolist">
 	<h1>TODOs</h1>
@@ -14,7 +14,7 @@ $todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "to
 <?	if($items): ?>
 	<ul class="actions">
 <?		foreach($items as $item):
-			$item = $IC->getCompleteItem($item["id"]); ?>
+			$item = $IC->extendItem($item); ?>
 		<li<?= HTML::attribute("class", $item["class"]) ?>><a href="/todolist/view/<?= $item["sindex"] ?>" class="button primary"><?= $item["name"] ?></a></li>
 <?		endforeach; ?>
 	</ul>
@@ -24,7 +24,7 @@ $todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "to
 <?	if($todos): ?>
 	<ul class="todos">
 <?		foreach($todos as $item):
-			$item = $IC->getCompleteItem($item["id"]); ?>
+			$item = $IC->extendItem($item); ?>
 		<li<?= HTML::attribute("class", "item", "item_id:".$item["id"]) ?>>
 			<h3><?= $item["name"] ?></h3>
 			<div class="description">

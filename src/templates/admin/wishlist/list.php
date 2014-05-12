@@ -18,7 +18,7 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 <?		if($all_items): ?>
 		<ul class="items targets:draggable" data-save-order="/admin/<?= $itemtype ?>/updateOrder">
 <?			foreach($all_items as $item): 
-				$item = $IC->getCompleteItem($item["id"]); ?>
+				$item = $IC->extendItem($item, array("tags" => true)); ?>
 			<li class="item draggable id:<?= $item["item_id"] ?>">
 				<div class="drag"></div>
 				<h3><?= $item["name"] ?></h3>
@@ -33,16 +33,8 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 
 				<ul class="actions">
 					<li class="edit"><a href="/admin/<?= $itemtype ?>/edit/<?= $item["id"] ?>" class="button">Edit</a></li>
-					<li class="delete">
-						<form action="/admin/cms/delete/<?= $item["id"] ?>" class="i:formDefaultDelete" method="post" enctype="multipart/form-data">
-							<input type="submit" value="Delete" class="button delete" />
-						</form>
-					</li>
-					<li class="status">
-						<form action="/admin/cms/<?= ($item["status"] == 1 ? "disable" : "enable") ?>/<?= $item["id"] ?>" class="i:formDefaultStatus" method="post" enctype="multipart/form-data">
-							<input type="submit" value="<?= ($item["status"] == 1 ? "Disable" : "Enable") ?>" class="button status" />
-						</form>
-					</li>
+					<li class="delete"></li>
+					<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>"></li>
 				</ul>
 			 </li>
 <?			endforeach; ?>

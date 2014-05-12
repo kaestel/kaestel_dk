@@ -6,6 +6,9 @@
 #content .wishList ul.items > li dl dd.reserved {font-size: 14px;}
 
 
+/* LOG */
+#content .logList ul.items > li {min-height: 100px; padding-left: 160px;}
+
 
 
 /* NAVIGATION */
@@ -13,5 +16,7 @@ body.wish #navigation .wish a,
 body.wishlist #navigation .wishlist a,
 body.todo #navigation .todo a,
 body.todolist #navigation .todolist a,
+body.log #navigation .log a,
+
 body.tags #navigation .tags a {padding-left: 35px; color: #ffffff;}
 

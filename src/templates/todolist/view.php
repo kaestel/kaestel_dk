@@ -5,7 +5,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$todolist = $IC->getCompleteItem($action[1]);
+$todolist = $IC->getCompleteItem(array("sindex" => $action[1]));
 
 if($todolist && $todolist["tags"]):
 
@@ -24,7 +24,7 @@ endif;
 <?	if($items): ?>
 	<ul class="todos">
 <?		foreach($items as $item): 
-			$item = $IC->getCompleteItem($item["id"]); ?>
+			$item = $IC->extendItem($item); ?>
 		<li class="item id:<?= $item["id"] ?>">
 			<h3><?= $item["name"] ?></h3>
 			<div class="description">

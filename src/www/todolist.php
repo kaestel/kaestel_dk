@@ -1,5 +1,7 @@
 <?php
-$access_item = false;
+$access_item["/"] = true;
+$access_item["/view/"] = true;
+
 if(isset($read_access) && $read_access) {
 	return;
 }

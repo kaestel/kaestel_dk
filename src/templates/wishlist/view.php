@@ -5,7 +5,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$wishlist = $IC->getCompleteItem($action[1]);
+$wishlist = $IC->getCompleteItem(array("sindex" => $action[1]));
 
 if($wishlist && $wishlist["tags"]):
 
@@ -24,7 +24,7 @@ endif;
 <?	if($items): ?>
 	<ul class="items">
 <?		foreach($items as $item): 
-			$item = $IC->getCompleteItem($item["id"]); ?>
+			$item = $IC->extendItem($item); ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $item["files"] ?>">
 			<h3><?= $item["name"] ?></h3>
 			<div class="description">
