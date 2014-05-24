@@ -3,10 +3,10 @@
 #header .logo {font-size: 20px; text-transform: uppercase; padding: 20px 50px; color: #888888; cursor: pointer; display: inline-block;
 	font-family: "PT Serif", Times, serif;
 }
+
+/* SERVICENAVIGATION */
 #header .servicenavigation {position: absolute; top: 5px; right: 50px;}
-
 #header .servicenavigation li.navigation {display: none;}
-
 #header .servicenavigation li.user {display: none;}
 
 
@@ -17,4 +17,3 @@
 	font-family: "PT Serif", Times, serif;
 }
 #navigation ul li.front {display: none;}
-

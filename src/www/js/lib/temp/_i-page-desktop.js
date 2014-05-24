@@ -10,7 +10,7 @@ Util.Objects["page"] = new function() {
 			page.hN.service = u.qs(".servicenavigation", page.hN);
 
 			// add logo to navigation
-			page.logo = u.ie(page.hN, "a", {"class":"logo", "html":"Kæstel"});
+			page.logo = u.ie(page.hN, "a", {"class":"logo", "html":u.eitherOr(u.site_name, "Frontpage")});
 			page.logo.url = '/';
 
 			// content reference
