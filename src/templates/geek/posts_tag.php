@@ -2,25 +2,15 @@
 global $IC;
 global $action;
 
+$tag = urldecode($action[2]);
 
-$post_items = $IC->getItems(array("itemtype" => "post", "status" => 1));
+$post_items = $IC->getItems(array("itemtype" => "post", "status" => 1, "tags" => "post:$tag"));
 $post_tags = $IC->getTags(array("context" => "post"));
 
 ?>
 
-<div class="scene geek posts i:generic">
-	<h1>Postings from the void of Banausia</h1>
-
-	<div class="categories">
-<?	if($post_tags): ?>
-		<h2>Categories</h2>
-		<ul class="tags">
-<?		foreach($post_tags as $tag): ?>
-			<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
-<?		endforeach; ?>
-		</ul>
-<?	endif; ?>
-	</div>
+<div class="scene geek posts tag i:generic">
+	<h1><?= $tag ?></h1>
 
 <? if($post_items): ?>
 
@@ -28,14 +18,6 @@ $post_tags = $IC->getTags(array("context" => "post"));
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
 		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
-<?			if($item["tags"]): ?>
-			<ul class="tags">
-<?				foreach($item["tags"] as $tag): ?>
-				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
-<?				endforeach; ?>
-			</ul>
-<?			endif; ?>
-
 			<h2 itemprop="name"><?= $item["name"] ?></h2>
 
 			<dl class="info">
@@ -53,5 +35,17 @@ $post_tags = $IC->getTags(array("context" => "post"));
 	</ul>
 <? endif; ?>
 
+<?	if($post_tags): ?>
+	<h2>Categories</h2>
+	<ul class="tags">
+<?		foreach($post_tags as $tag): ?>
+		<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
+<?		endforeach; ?>
+	</ul>
+<?	endif; ?>
+
+	<ul class="actions">
+		<li class="more"><a href="/geek/posts">All postings</a></li>
+	</ul>
 
 </div>

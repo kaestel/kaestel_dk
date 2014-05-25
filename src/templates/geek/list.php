@@ -9,14 +9,12 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 $post_tags = $IC->getTags(array("context" => "post"));
 $log_tags = $IC->getTags(array("context" => "log"));
 
-//$photo_item = $IC->getItems(array("itemtype" => "photo", "limit" => 1, "status" => 1));
-
 ?>
 
-<div class="scene front i:generic">
+<div class="scene geek lists i:generic">
 	<h1>Geek is Good, <br />I am Geek.</h1>
 	<p>
-		I live to live. <br />This is part of the story.
+		I live to live. <br />This is a selected part of my story.
 	</p>
 
 	<div class="logbooks">

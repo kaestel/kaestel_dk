@@ -4,7 +4,7 @@ global $IC;
 global $model;
 ?>
 <div class="scene plain i:plainlist">
-	<h1>Plain as Mars</h1>
+	<h1>Plain as the Sun</h1>
 	<p>
 		I'm plain as a pancake and odd like nutella. I think it is a good combination, but admittedly I am not diet
 		material. Don't scrape, it won't help. I am like that.

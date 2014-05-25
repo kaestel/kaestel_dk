@@ -31,16 +31,24 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <?		foreach($log_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
 		<li class="log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+<?			if($item["tags"]): ?>
+			<ul class="tags">
+<?				foreach($item["tags"] as $tag): ?>
+				<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				endforeach; ?>
+			</ul>
+<?			endif; ?>
+
 			<h3 itemprop="name"><?= $item["name"] ?></h3>
 
 			<dl class="info">
-				<dt class="date_published">Date published</dt>
-				<dd class="date_published" itemprop="datePublished"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Date published</dt>
+				<dt class="published_at">Date published</dt>
+				<dd class="published_at" itemprop="datePublished"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 			</dl>
 
-			<dl itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
+			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
 <?			if($item["location"]): ?>
 				<dt class="location">location</dt>
 				<dd class="location" itemprop="name"><?= $item["location"] ?></dd>
@@ -52,14 +60,16 @@ $log_tags = $IC->getTags(array("context" => "log"));
 			</dl>
 
 			<div class="description" itemprop="description">
-				<?= stringOr($item["description"], $item["html"]) ?>
+				<?//= stringOr($item["description"], $item["html"]) ?>
+				<?= $item["html"] ?>
 			</div>
+
 		</li>
 <?		endforeach; ?>
 	</ul>
 
 	<ul class="actions">
-		<li class="more"><a href="/geek/logs">All logbook entries</a></li>
+		<li class="more"><a href="/geek">More log entries</a></li>
 	</ul>
 <?	endif; ?>
 
@@ -71,24 +81,33 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
 		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+<?			if($item["tags"]): ?>
+			<ul class="tags">
+<?				foreach($item["tags"] as $tag): ?>
+				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				endforeach; ?>
+			</ul>
+<?			endif; ?>
+
 			<h3 itemprop="name"><?= $item["name"] ?></h3>
 
 			<dl class="info">
-				<dt class="date_published">Date published</dt>
-				<dd class="date_published" itemprop="datePublished" content="2015-07-27"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Date published</dt>
+				<dt class="published_at">Date published</dt>
+				<dd class="published_at" itemprop="datePublished" content="2015-07-27"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 			</dl>
 
 			<div class="description" itemprop="description">
 				<?= $item["html"] ?>
 			</div>
+
 		</li>
 <?		endforeach; ?>
 	</ul>
 
 	<ul class="actions">
-		<li class="more"><a href="/geek/posts">All postings</a></li>
+		<li class="more"><a href="/geek">More postings</a></li>
 	</ul>
 <? endif; ?>
 
