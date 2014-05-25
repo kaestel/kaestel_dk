@@ -37,7 +37,7 @@
 
 
 /*s-page-desktop.css*/
-* {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #034769;
+* {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;
 	-webkit-text-size-adjust: none;
 	-webkit-font-smoothing: antialiased;
 }
@@ -53,22 +53,22 @@ fieldset {border: none;}
 input, select, textarea {font-size: 14px;}
 input, textarea {outline: none;}
 a, span {font-size: inherit; font-family: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; color: inherit; text-transform: inherit;}
-h1 {padding: 0 50px 30px; font-size: 48px; line-height: 1em;
+h1 {padding: 0 50px 30px; font-size: 48px; line-height: 1.05em;
 	font-family: "PT Serif", Times, serif;
 }
-h2 {padding: 0 50px 20px; font-size: 30px; line-height: 1em;
+h2 {padding: 0 50px 30px; font-size: 30px; line-height: 1.1em;
 	font-family: "PT Serif", Times, serif;
 }
-h3 {padding: 0 50px 10px; font-size: 18px; line-height: 1em;}
-h4 {}
-h5 {}
-h6 {}
-p {padding: 0 50px 20px; font-size: 13px; line-height: 1.38em;} 
+h3 {padding: 0 50px 10px; font-size: 20px; line-height: 1.25em;}
+h4 {padding: 0 50px 5px; font-size: 14px; line-height: 1em; font-weight: bold;}
+h5 {padding: 0 50px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
+h6 {padding: 0 50px 2px; font-size: 14px; line-height: 1em; font-weight: bold;}
+p {padding: 0 50px 20px; font-size: 14px; line-height: 1.38em;} 
 ul {font-size: 0;}
-li {display: inline-block; vertical-align: top; font-size: 13px;}
+li {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.25em;}
 dl {font-size: 0;} 
 dt, 
-dd {display: inline-block; vertical-align: top; font-size: 13px;}
+dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.25em;}
 .c {clear: both; font-size: 0;}
 .c400, .c300, .c266, .c200, .c150, .c133, .c100, .c75, .c50 {display: inline-block; min-height: 10px; vertical-align: top;}
 .c400 {width: 100%;}
@@ -77,51 +77,80 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 .c200 {width: 50%;}
 .c133 {width: 34%;}
 .c100 {width: 25%;}
-#page {position: relative; min-height: 100%;}
+#page {position: relative; min-height: 100%; min-width: 600px;}
+#page.fixed {width: 1300px; margin: 0 auto;}
+.terms_notification {position: fixed; z-index: 90; top: 50%; margin-top: -100px; right: 0px; padding: 15px 20px; border-top-left-radius: 20px; border-bottom-left-radius: 20px; border: 1px solid #888888; border-right: none;}
+.terms_notification h3 {padding: 0; font-size: 14px;}
+.terms_notification .accept,
+.terms_notification .details {padding: 0; font-size: 13px; display: inline-block; vertical-align: bottom; padding: 0 15px 0 0;}
+.terms_notification .details {}
 
 
 /*s-header-desktop.css*/
 #header {position: relative; height: 100px;}
-#header .logo {font-size: 20px; text-transform: uppercase; padding: 20px 50px; color: #63add0; cursor: pointer;
+#header .logo {font-size: 30px; padding: 20px 50px; color: #888888; cursor: pointer; display: inline-block;
 	font-family: "PT Serif", Times, serif;
 }
+#header .servicenavigation {position: absolute; top: 5px; right: 50px;}
 #header .servicenavigation li.navigation {display: none;}
-#navigation {position: absolute; right: 50px; top: 80px;}
+#header .servicenavigation li.user {display: none;}
+#navigation {position: absolute; right: 50px; top: 75px;}
 #navigation ul {}
-#navigation ul li {padding: 0 0 0 20px; font-size: 20px; color: #63add0; 
+#navigation ul li {padding: 0 0 0 20px; font-size: 20px; color: #888888;
 	font-family: "PT Serif", Times, serif;
 }
-.front #header .logo,
-.plain #navigation ul li.plain,
-.geek #navigation ul li.geek {color: #034769;}
+#navigation ul li.front {display: none;}
+
 
 /*s-footer-desktop.css*/
-#footer {text-align: center; border-top: 1px solid #cccccc; margin: 0 50px;}
-#footer p {padding: 10px;}
+#footer {text-align: center; border-top: 1px solid #888888; margin: 0 50px;}
+#footer p {padding: 10px; cursor: pointer;}
 
 /*s-content-desktop.css*/
 #content {position: relative;}
-#content .scene {position: relative; padding: 30px 0 0;}
+#content .scene {position: relative; padding: 50px 0;}
 #content .scene .link {cursor: pointer;}
-#content .scene a {color: #63ADD0;}
+#content .scene a {color: #888888;}
 #content .scene h1,
 #content .scene h2,
 #content .scene h3,
 #content .scene h4,
+#content .scene h5,
+#content .scene h6,
 #content .scene p {max-width: 500px;}
-#content .scene hr {border: none; border-top: 1px solid #adb7c1; margin: 15px 15px 20px; padding: 0;}
+#content .scene hr {border: none; border-top: 1px solid #888888; margin: 15px 15px 20px; padding: 0;}
 #content .scene p.note {font-style: italic;}
+#content .scene p+h2,
+#content .scene ul+h2,
+#content .scene dl+h2,
+#content .scene code+h2 {padding-top: 20px;}
 #content .scene ul {padding: 0 50px 15px;}
 #content .scene li {display: block; padding: 0 0 5px;}
 #content .scene li h3,
 #content .scene li p,
 #content .scene li dl {padding-left: 0; padding-right: 0;}
-#content .scene dl {padding: 0 50px 15px; white-space: nowrap; overflow: hidden;}
-#content .scene dt {float: left; clear: left; min-width: 10%; text-align: right; text-transform: uppercase; padding: 0 5px 0 0; color: #999999;} 
+#content .scene dl {padding: 0 50px 15px; width: 500px;}
+#content .scene dt {width: 100px; text-align: right; padding: 0 5px 0 0; color: #999999;} 
 #content .scene dt:after {content: ":";}
-#content .scene dd {float: left; clear: right; padding: 0 0 5px;}
-#content .scene code {min-width: 500px; margin: 0 50px 5px; position: relative; top: -15px; padding: 10px 20px; background-color: #ededed; font-size: 13px; display: inline-block;
+#content .scene dd {padding: 0 0 12px; width: 395px;}
+#content .scene dt span {text-transform: none;}
+#content .scene dl dl {padding: 0 0 10px; margin-left: -30px; width: 425px;}
+#content .scene dl dl dt {width: 80px;}
+#content .scene dl dl dd {width: 340px;}
+#content .scene dl h3,
+#content .scene dl h4,
+#content .scene dl h5,
+#content .scene dl h6 {padding-left: 0; padding-right: 0; padding-top: 10px;}
+#content .scene div.image {margin: 0 30px; max-width: 540px; padding: 0 0 30px; cursor: zoom-in;}
+#content .scene div.image img {width: 100%;}
+#content .scene div.image a {padding: 0 20px; font-size: 14px; font-style: italic; display: block; color: #cccccc;}
+#content .scene div.image.fullsize {margin: 0; max-width: 100%; cursor: zoom-out;}
+#content .scene div.image.fullsize a {padding: 0 50px;}
+#content .scene code {width: 480px; padding: 10px 10px; margin: 0 50px 5px; position: relative; top: -15px; background-color: #ededed; font-size: 12px; display: inline-block; white-space: pre-wrap;
 	font-family: "Monaco", "Courier New", "Courier";
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
 }
 #content .scene span.type,
 #content .scene span.var,
@@ -142,7 +171,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 /*s-form-desktop.css*/
 #content form {}
 #content fieldset {border: none; display: block;}
-#content .field {padding: 0 28px 15px; position: relative; font-size: 0;}
+#content .field {padding: 0 48px 15px; position: relative; font-size: 0;}
 #content label {display: none;}
 #content .field input,
 #content .field select,
@@ -151,20 +180,25 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 #content .field select {width: 381px; height: 33px; color: #333333; padding: 5px 3px 2px 2px;
 	-webkit-appearance: none;
 }
+@media all and (-webkit-min-device-pixel-ratio:0) {#content .field.focus select {}}
 #content .field select option {padding: 5px 3px 2px 6px;}
-#content .field textarea {width: 372px; height: 200px; overflow: auto; padding: 6px 0 2px 6px; }
+#content .field textarea {width: 372px; height: 100px; overflow: auto; padding: 6px 0 2px 6px;}
+#content .field.short textarea {height: 50px;}
 #content .field textarea.autoexpand {width: 366px; padding: 6px 6px 2px; overflow: hidden;}
 #content .field.checkbox,
 #content .field.boolean {}
 #content .field.checkbox input,
-#content .field.boolean input {display: inline-block; vertical-align: top; width: auto; height: auto; padding: 0; margin: 0 10px 0 0; border: 0;}
+#content .field.boolean input {display: inline-block; vertical-align: top; width: auto; height: auto; padding: 0; margin: 0 10px 0 3px; border: 0;}
 #content .field.checkbox label,
-#content .field.boolean label {width: auto; display: inline-block; vertical-align: top;}
+#content .field.boolean label {width: auto; display: inline-block; vertical-align: top; display: inline-block; vertical-align: top; font-size: 14px; line-height: 1em;}
 #content .field.radio_buttons {}
 #content .field.radio_buttons div.item {display: inline-block; vertical-align: top;}
 #content .field.radio_buttons div.item input {width: auto; height: auto; padding: 0; margin: 9px 10px 0 0; border: 0;}
 #content .field.radio_buttons label {}
 #content .field.radio_buttons div.item label {text-align: left; width: auto; padding-right: 20px; padding-left: 0;}
+#content .field input[type="number"] {
+	-moz-appearance: textfield;
+}
 #content .field input[type="number"]::-webkit-inner-spin-button,
 #content .field input[type="number"]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
@@ -179,17 +213,18 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 #content .field.focus textarea {border: 3px solid #5c5c5c;}
 #content .field.radio_buttons.focus input,
 #content .field.checkbox.focus input,
-#content .field.boolean.focus input {margin: 0px 10px 0 0; border: none;}
+#content .field.boolean.focus input {margin: 0px 10px 0 3px; border: none;}
 #content .field input.default,
 #content .field select.default,
 #content .field textarea.default {color: #aaaaaa;}
-#content .field.required .indicator {position: absolute; top: 4px; left: 420px; width: 25px; height: 25px; background: transparent url(/janitor/img/bg_icons.png) no-repeat 0 -292px;}
+#content .field.required .indicator {position: absolute; top: 4px; left: 435px; width: 25px; height: 25px; background: transparent url(/janitor/img/bg_icons.png) no-repeat 0 -292px;}
 #content .field.text.required .indicator {background-position: 0 -296px;}
 #content .field.radio_buttons.required input,
 #content .field.checkbox.required input,
 #content .field.boolean.required input {}
-#content .field.correct .indicator {background-position: 0 -320px;}
-#content .field.text.correct .indicator {background-position: 0 -321px;}
+#content .field.checkbox.required .indicator {display: none;}
+#content .field.correct .indicator {background-position: 2px -320px;}
+#content .field.text.correct .indicator {background-position: 2px -321px;}
 #content .field.radio_buttons.correct input,
 #content .field.checkbox.correct input,
 #content .field.boolean.correct input {}
@@ -198,17 +233,17 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 #content .field.error select {padding: 3px 3px 2px 0px;}
 #content .field.error input,
 #content .field.error select,
-#content .field.error textarea {border: 3px solid #f8c9bb;}
+#content .field.error textarea {border: 3px solid #a62300;}
 #content .field.radio_buttons.error input,
 #content .field.checkbox.error input,
-#content .field.boolean.error input {margin: 0px 10px 0 0; border: none;}
+#content .field.boolean.error input {margin: 0px 10px 0 3px; border: none;}
 #content ul.actions {}
 #content ul.actions li {width: auto; height: auto; display: inline-block; padding: 0 10px 10px 0; vertical-align: top;}
 #content ul.actions input.button {width: auto; height: 28px; padding: 3px 12px; display: inline-block; vertical-align: top;}
 @media all and (-webkit-min-device-pixel-ratio:0) {#content ul.actions input.button {padding-bottom: 5px;}}
-#content ul.actions a.button {display: block; text-decoration: none; height: 14px; padding: 7px 12px;}
+#content ul.actions a.button {display: block; text-decoration: none; height: 14px; padding: 6px 12px 8px;}
 #content ul.actions input.button,
-#content ul.actions a.button {background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px;}
+#content ul.actions a.button {background-color: #8c9399; color: #ffffff; border: none; cursor: pointer; border-radius: 3px; font-size: 14px;}
 #content ul.actions input.button:hover,
 #content ul.actions a.button:hover {background-color: #313942;}
 #content ul.actions input.button.primary,
@@ -226,65 +261,54 @@ dd {display: inline-block; vertical-align: top; font-size: 13px;}
 #content form input.button.delete.confirm:hover {}
 #content form input.button.disabled,
 #content form input.button.disabled:hover {cursor: default !important; color: #aaaaaa !important; background-color: #eeeeee !important;}
-#content .field div.help {position: absolute; left: 455px; top: 0; width: 200px;}
+#content .field div.help {position: absolute; left: 455px; top: 6px; width: 200px;}
 #content .field div.error,
-#content .field div.hint {display: none; padding: 5px; border-radius: 3px;}
-#content .field div.error {border: 1px solid #efdb8f; color: #a27366; background: #f8c9bb; margin-top: -3px;}
+#content .field div.hint {display: none; padding: 5px; border-radius: 3px; font-size: 12px; margin-top: -3px;}
+#content .field div.error {border: 1px solid #a62300; color: #a62300; background: #ffddd5;}
 #content .field.error div.error {display: block;}
-#content .field div.hint {z-index: 9; border: 1px solid #c8e183; color: #5d7731; background: #c8e183;}
+#content .field div.hint {z-index: 9; border: 1px solid #007633; color: #007633; background: #d0f4e0;}
 #content .field.focus div.hint {display: block;}
-
-
-/*s-front-desktop.css*/
-#content .scene.front {}
-
-
-/*s-wishlist-desktop.css*/
-#content .scene.wishlist {}
-#content .scene.wishlist ul.items > li {display: block; padding: 5px 0; font-size: 14px;}
-#content .scene.wishes {}
-#content .scene.wishes ul.items {}
-#content .scene.wishes ul.items > li {display: block; overflow: hidden; border-top: 1px solid #cccccc; padding: 20px 0 0;}
-#content .scene.wishes ul.items > li .image,
-#content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
-#content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 20px;}
-#content .scene.wishes ul.items > li .text {margin-bottom: 10px;}
-#content .scene.wishes ul.items > li h3 {padding: 0 25px 10px;}
-#content .scene.wishes ul.items > li div.description {}
-#content .scene.wishes ul.items > li div.description p {padding: 0 25px 10px;}
-#content .scene.wishes ul.items > li dl {padding: 0 25px 20px;}
-#content .scene.wishes ul.items > li dt {display: none;}
-#content .scene.wishes ul.items > li dd {font-size: 13px;}
-#content .scene.wishes ul.items > li dd:before {content: "DKK ";}
-#content .scene.wishes ul.items > li ul.actions {padding: 0 25px 10px;}
-#content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
-#content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
-#content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
-
-
-/*s-todolist-desktop.css*/
-#content .scene.todolist {}
-#content .scene.todolist {}
-#content .scene.todolist ul.todos {}
-#content .scene.todolist ul.todos > li {display: block; overflow: hidden; border-top: 1px solid #cccccc; padding: 20px 0 0; position: relative;}
-#content .scene.todolist ul.todos > li .text {margin-bottom: 10px; padding: 0 100px 0 0;}
-#content .scene.todolist ul.todos > li h3 {}
-#content .scene.todolist ul.todos > li div.description {}
-#content .scene.todolist ul.todos > li div.description p {}
-#content .scene.todolist ul.todos > li dl {}
-#content .scene.todolist ul.todos > li dt {display: none;}
-#content .scene.todolist ul.todos > li dd {font-size: 13px; color: #999999;}
-#content .scene.todolist ul.todos > li dd:after {content: ",\00a0";}
-#content .scene.todolist ul.todos > li dd:last-child:after {content: "";}
-#content .scene.todolist ul.todos > li ul.actions {padding: 0; position: absolute; top: 20px; right: 0;}
-#content .scene.todolist ul.todos > li ul.actions li {padding: 0;}
-#content .scene.todolist ul.todos > li ul.actions.closed .close {display: none;}
-#content .scene.todolist ul.todos > li ul.actions .open {display: none;}
-#content .scene.todolist ul.todos > li ul.actions.closed .open {display: inline-block;}
 
 
 /*s-hovers-desktop.css*/
 #header .logo:hover,
-#navigation ul li:hover {text-decoration: underline;}
+#navigation ul li:hover {text-decoration: none;}
 #content .scene a:hover {text-decoration: underline;}
+.terms_notification .accept:hover,
+.terms_notification .details:hover {text-decoration: underline;}
+
+/*s-pages-desktop.css*/
+#header .logo {font-size: 20px; text-transform: uppercase;}
+#content .scene.front li.log,
+#content .scene.front li.post {padding-bottom: 20px;}
+#content .scene.front ul.logs,
+#content .scene.front ul.postings {padding-bottom: 0;}
+#content .scene.front dt,
+#content .scene.front dd {width: auto;}
+#content .scene.front dd {color: #999999; padding: 0 5px 0 0;}
+#content .scene.front dl.info dt {display: none;}
+#content .scene.front ul.logs dl.info {padding-bottom: 0;}
+#content .scene div.vcard {padding: 25px 50px;}
+#content .scene div.vcard .name {padding: 0 0 15px;}
+#content .scene div.vcard .tel,
+#content .scene div.vcard .email {font-size: 13px;}
+
+/*s-colorscheme-desktop.css*/
+* {color: #034769;}
+body {background: #ffffff;}
+#header .logo {color: #63add0;}
+#navigation ul li {color: #63add0;}
+#content .scene a {color: #63add0;}
+#content .scene hr {border-color: #cccccc;}
+#content .scene code {color: #333333;}
+#footer {border-color: #cccccc;}
+#footer p {color: #034769;}
+.front #header .logo,
+.plain #navigation ul li.plain,
+.geek #navigation ul li.geek {color: #034769;}
+.terms_notification {background: #ffffff;}
+.terms_notification .accept,
+.terms_notification .details {color: #63add0;}
+.terms_notification {border-color: #034769;}
+
 
