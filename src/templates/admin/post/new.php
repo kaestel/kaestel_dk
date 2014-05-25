@@ -15,6 +15,7 @@ global $itemtype;
 		<fieldset>
 			<?= $model->input("published_at", array("value" => date("Y-m-d H:i", time()))) ?>
 			<?= $model->input("name") ?>
+			<?= $model->input("description", array("class" => "autoexpand short")) ?>
 			<?= $model->input("html", array("class" => "autoexpand")) ?>
 		</fieldset>
 

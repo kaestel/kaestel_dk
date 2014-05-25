@@ -35,6 +35,14 @@ class TypePost extends Model {
 			"error_message" => "Name must be filled out."
 		));
 
+		// description
+		$this->addToModel("description", array(
+			"type" => "text",
+			"label" => "Short description",
+			"hint_message" => "Write a short description of the log entry",
+			"error_message" => "A short description without any words? How weird."
+		));
+
 		// HTML
 		$this->addToModel("html", array(
 			"type" => "text",
