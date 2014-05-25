@@ -1,6 +1,12 @@
 #header .logo {font-size: 20px; text-transform: uppercase;}
 
 
+#content .scene.front li.log,
+#content .scene.front li.post {padding-bottom: 20px;}
+
+#content .scene.front ul.logs,
+#content .scene.front ul.postings {padding-bottom: 0;}
+
 #content .scene.front dt,
 #content .scene.front dd {width: auto;}
 #content .scene.front dd {color: #999999; padding: 0 5px 0 0;}

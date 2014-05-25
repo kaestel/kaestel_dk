@@ -3,6 +3,7 @@ CREATE TABLE `SITE_DB`.`item_log` (
   `item_id` int(11) NOT NULL,
 
   `name` varchar(100) NOT NULL,
+  `description` text NOT NULL,
   `html` text NOT NULL,
 
   `location` varchar(255) NOT NULL,

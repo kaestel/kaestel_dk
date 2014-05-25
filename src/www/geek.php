@@ -21,31 +21,42 @@ $page->pageTitle("Geek");
 
 if(is_array($action) && count($action)) {
 
-	if(preg_match("/[a-zA-Z]+/", $action[0])) {
+	if(preg_match("/[a-zA-Z\\-_]+/", $action[0])) {
+		if(is_array($action) && count($action)) {
 
-		// check if custom function exists on User class
-		if($model && method_exists($model, $action[0])) {
+			if(count($action) == 1) {
 
-			$output->screen($model->$action[0]($action));
-			exit();
+				$page->header();
+				$page->template("geek/".$action[0].".php");
+				$page->footer();
+				exit();
+
+			}
+			else if(count($action) == 2 && $action[1] != "tag") {
+
+				$page->header();
+				$page->template("geek/".$action[0]."_view.php");
+				$page->footer();
+				exit();
+
+			}
+			else if($action[1] == "tag") {
+
+				$page->header();
+				$page->template("geek/".$action[0]."_tag.php");
+				$page->footer();
+				exit();
+
+			}
+
 		}
-	}
-
-	// VIEW
-	// /wishlist/view/[item_id]
-	if(count($action) > 1 && $action[0] == "view") {
-
-		$page->header();
-		$page->template("story/story.php");
-		$page->footer();
-		exit();
 
 	}
 
 }
 
 $page->header();
-$page->template("pages/list_geek.php");
+$page->template("geek/list.php");
 $page->footer();
 
 ?>

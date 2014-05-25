@@ -3,8 +3,12 @@ global $IC;
 global $action;
 
 	
-$log_item = $IC->getItems(array("itemtype" => "log", "limit" => 1, "status" => 1));
-$post_item = $IC->getItems(array("itemtype" => "post", "limit" => 1, "status" => 1));
+$log_items = $IC->getItems(array("itemtype" => "log", "limit" => 2, "status" => 1));
+$post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" => 1));
+
+$post_tags = $IC->getTags(array("context" => "post"));
+$log_tags = $IC->getTags(array("context" => "log"));
+
 //$photo_item = $IC->getItems(array("itemtype" => "photo", "limit" => 1, "status" => 1));
 
 ?>
@@ -18,40 +22,75 @@ $post_item = $IC->getItems(array("itemtype" => "post", "limit" => 1, "status" =>
 		If you don't get it, perhaps you are just not smart enough and I urge you to try a little harder, because
 		geeks will either save the world or destroy it. It all depends on how you treat them.
 	</p>
-	<p>No geek is plain. Normal is weird.</p>
+	<p>No <a href="/geek">geek</a> is <a href="/plain">plain</a>. Normal is weird.</p>
 
-	<h2>Postings</h2>
+<? if($log_items): ?>
 
+	<h2>Recents log entries</h2>
+	<ul class="logs">
+<?		foreach($log_items as $item):
+			$item = $IC->extendItem($item, array("tags" => true)); ?>
+		<li class="log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+			<h3 itemprop="name"><?= $item["name"] ?></h3>
 
-	<h2>Logbook</h2>
-	<ul class="stories">
-		<li>
-			<h2><a href="/story">List of stories</a></h2>
 			<dl class="info">
-				<dt>Type</dt>
-				<dd>Plain</dd>
+				<dt class="date_published">Date published</dt>
+				<dd class="date_published" itemprop="datePublished"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dt class="author">Date published</dt>
+				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 			</dl>
-			<p>Brief summary</p>
-		</li>
-		<li>
-			<h2><a href="/story">List of stories</a></h2>
-			<dl class="info">
-				<dt>Type</dt>
-				<dd>Geek</dd>
+
+			<dl itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
+<?			if($item["location"]): ?>
+				<dt class="location">location</dt>
+				<dd class="location" itemprop="name"><?= $item["location"] ?></dd>
+<?			endif; ?>
+				<dt class="latitude">&phi;</dt>
+				<dd class="latitude" itemprop="latitude"><?= round($item["latitude"], 5) ?>°</dd>
+				<dt class="longitude">&lambda;</dt>
+				<dd class="longitude" itemprop="longitude"><?= round($item["longitude"], 5) ?>°</dd>
 			</dl>
-			<p>Brief summary</p>
+
+			<div class="description" itemprop="description">
+				<?= stringOr($item["description"], $item["html"]) ?>
+			</div>
 		</li>
-		<li>
-			<h2><a href="/story">List of stories</a></h2>
-			<dl class="info">
-				<dt>Type</dt>
-				<dd>Geek</dd>
-			</dl>
-			<p>Brief summary</p>
-		</li>
+<?		endforeach; ?>
 	</ul>
 
-	<h2>Maybe tease other entrences</h2>
-	<p>list or text with hints to ways of using site.</p>
+	<ul class="actions">
+		<li class="more"><a href="/geek/logs">All logbook entries</a></li>
+	</ul>
+<?	endif; ?>
+
+
+<? if($post_items): ?>
+
+	<h2>Recent postings</h2>
+	<ul class="postings">
+<?		foreach($post_items as $item):
+			$item = $IC->extendItem($item, array("tags" => true)); ?>
+		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+			<h3 itemprop="name"><?= $item["name"] ?></h3>
+
+			<dl class="info">
+				<dt class="date_published">Date published</dt>
+				<dd class="date_published" itemprop="datePublished" content="2015-07-27"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dt class="author">Date published</dt>
+				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+			</dl>
+
+			<div class="description" itemprop="description">
+				<?= $item["html"] ?>
+			</div>
+		</li>
+<?		endforeach; ?>
+	</ul>
+
+	<ul class="actions">
+		<li class="more"><a href="/geek/posts">All postings</a></li>
+	</ul>
+<? endif; ?>
+
 
 </div>

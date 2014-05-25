@@ -4,7 +4,7 @@ global $IC;
 global $model;
 ?>
 <div class="scene plain i:plainlist">
-	<h1>Plain</h1>
+	<h1>Plain as Mars</h1>
 	<p>
 		I'm plain as a pancake and odd like nutella. I think it is a good combination, but admittedly I am not diet
 		material. Don't scrape, it won't help. I am like that.
@@ -72,10 +72,10 @@ global $model;
 	</p>
 
 
-	<h2>Contact</h2>
+	<h2>Contact info (for those who dare)</h2>
 
-	<div class="vcard company" itemscope itemtype="http://schema.org/Organization">
-		<div class="name fn org" itemprop="name">kaestel.dk</div>
+	<div class="vcard company" itemscope itemtype="http://schema.org/Person">
+		<div class="name fn org" itemprop="name">Martin Kæstel Nielsen</div>
 		<div class="tel" itemprop="telephone"><a href="callto:+4520742819">+45 2074 2819</a></div>
 		<div class="email" itemprop="email"><a href="mailto:martin@kaestel.dk">martin@kaestel.dk</a></div>
 	</div>

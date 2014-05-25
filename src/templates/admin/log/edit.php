@@ -26,6 +26,7 @@ $item_id = $item["item_id"];
 				<?= $model->input("published_at", array("value" => $item["published_at"])) ?>
 
 				<?= $model->input("name", array("value" => $item["name"])) ?>
+				<?= $model->input("description", array("class" => "autoexpand short", "value" => $item["description"])) ?>
 				<?= $model->input("html", array("class" => "autoexpand", "value" => $item["html"])) ?>
 
 				<?= $model->inputLocation("location", "latitude", "longitude", array("value_loc" => $item["location"], "value_lat" => $item["latitude"], "value_lon" => $item["longitude"])) ?>

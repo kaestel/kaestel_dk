@@ -134,9 +134,6 @@ sudo service ssh restart
 
 
 
-HERE
-
-
 // LOGIN AS USER
 ssh -p __PORT__ __USERNAME__@__IP__
 
@@ -309,6 +306,9 @@ sudo make
 sudo make install
 sudo make distclean
 hash -r
+
+
+
 
 
 
