@@ -40,7 +40,7 @@ if(is_array($action) && count($action)) {
 				exit();
 
 			}
-			else if($action[1] == "tag") {
+			else if(count($action) == 3 && $action[1] == "tag") {
 
 				$page->header();
 				$page->template("geek/".$action[0]."_tag.php");

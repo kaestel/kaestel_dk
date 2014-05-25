@@ -94,7 +94,9 @@ dd {display: block; font-size: 14px; line-height: 1.25em;}
 #header .logo {font-size: 30px; padding: 20px 50px 20px; color: #888888; cursor: pointer; display: block; width: 200px;
 	font-family: "PT Serif", Times, serif;
 }
+#header .servicenavigation {position: absolute; top: 5px; right: 50px;}
 #header .servicenavigation li.navigation {display: none;}
+#header .servicenavigation li.user {display: none;}
 #navigation {position: absolute; right: 50px; top: 75px;}
 #navigation ul {}
 #navigation ul li {padding: 0 0 0 20px; font-size: 20px; color: #888888;}
@@ -146,7 +148,8 @@ dd {display: block; font-size: 14px; line-height: 1.25em;}
 #content .scene div.image a {padding: 0 20px; font-size: 14px; font-style: italic; display: block; color: #cccccc;}
 #content .scene div.image.fullsize {margin: 0; max-width: 100%; cursor: zoom-out;}
 #content .scene div.image.fullsize a {padding: 0 50px;}
-#content .scene code {width: 480px; padding: 10px 10px; margin: 0 50px 5px; position: relative; top: -15px; background-color: #ededed; font-size: 12px; display: block; white-space: pre-wrap;
+#content .scene code {width: 480px; padding: 10px 10px; margin: 0 50px 5px; position: relative; top: -15px; background-color: #ededed; font-size: 12px; display: block;
+	white-space: pre; overflow: auto;
 	font-family: "Monaco", "Courier New", "Courier";
 }
 #content .scene span.type,
@@ -274,19 +277,35 @@ dd {display: block; font-size: 14px; line-height: 1.25em;}
 .terms_notification .details:hover {text-decoration: underline;}
 
 /*s-pages-desktop_light.css*/
-#content .scene.segments dt {color: #cccccc; width: auto; text-align: left; padding: 0 0 5px 0; display: block; font-size: 16px;} 
-#content .scene.segments dd {padding: 0 0 25px 20px; width: auto; display: block;}
-#content .scene.pricing div.sponsor,
-#content .scene.pricing div.corporate,
-#content .scene.pricing div.business,
-#content .scene.pricing div.free {padding: 0 0 20px;}
-#content .scene.pricing dl.price {}
-#content .scene.pricing dl.price dt,
-#content .scene.pricing dl.price dd {width: auto; padding-left: 0;}
-#content .scene div.vcard {padding: 25px 50px;}
+#header .logo {font-size: 20px; text-transform: uppercase;}
+#content .scene li h3 {padding: 0 0 5px;}
+#content .scene li h2 {padding: 0 0 5px;}
+#content .scene li.log,
+#content .scene li.post {padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #dedede;}
+#content .scene li ul.tags {padding-left: 0;}
+#content .scene li ul.tags li {font-size: 12px;}
+#content .scene dt,
+#content .scene dd {width: auto; font-size: 12px;}
+#content .scene dd {color: #999999; padding: 0 5px 0 0;}
+#content .scene dl.info dt {display: none;}
+#content .scene dl.info dd.author {display: none;}
+#content .scene dl.info {padding-bottom: 20px;}
+#content .scene dl.geo {padding-bottom: 20px;}
+#content .scene ul.logs dl.info {padding-bottom: 0;}
+#content .scene ul.logs dl.geo dt {display: none;}
+#content .scene ul.logs dl.geo .latitude,
+#content .scene ul.logs dl.geo .longitude {display: none;}
+#content .scene div.vcard {padding: 0 50px 25px;}
 #content .scene div.vcard .name {padding: 0 0 15px;}
 #content .scene div.vcard .tel,
 #content .scene div.vcard .email {font-size: 13px;}
+#content .scene ul.logs,
+#content .scene ul.postings {padding-bottom: 0;}
+#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px;}
+#content .scene.front > ul.actions li {padding-bottom: 0;}
+#content .scene.geek div.categories {padding-bottom: 20px;}
+#content .scene.tag li.log,
+#content .scene.tag li.post {padding-top: 40px;}
 
 /*s-colorscheme-desktop_light.css*/
 * {color: #034769;}
@@ -299,8 +318,8 @@ body {background: #ffffff;}
 #footer {border-color: #cccccc;}
 #footer p {color: #034769;}
 .front #header .logo,
-.manifest #navigation ul li.manifest a,
-.about #navigation ul li.about a {color: #034769;}
+.plain #navigation ul li.plain a,
+.geek #navigation ul li.geek a {color: #034769;}
 .terms_notification {background: #ffffff;}
 .terms_notification .accept,
 .terms_notification .details {color: #63add0;}
