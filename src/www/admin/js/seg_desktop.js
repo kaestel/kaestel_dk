@@ -4129,14 +4129,22 @@ Util.Objects["defaultList"] = new function() {
 			node._item_id = u.cv(node, "item_id");
 			node._variant = u.cv(node, "variant");
 			node._actions = u.qsa(".actions li", node);
-			var i, action, form, bn_detele;
+			var i, action, form, bn_detele, form_disable, form_enable;
 			for(i = 0; action = node._actions[i]; i++) {
-				if(!action.childNodes.length) {
-					if(u.hc(action, "status")) {
-						form = u.f.addForm(action, {"action":"/admin/cms/disable/"+node._item_id, "class":"disable"});
-						u.f.addAction(form, {"value":"Disable", "class":"button status"});
-						u.f.init(form);
-						form.submitted = function() {
+				if(u.hc(action, "status")) {
+					if(!action.childNodes.length) {
+						form_disable = u.f.addForm(action, {"action":"/admin/cms/disable/"+node._item_id, "class":"disable"});
+						u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
+						form_enable = u.f.addForm(action, {"action":"/admin/cms/enable/"+node._item_id, "class":"enable"});
+						u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
+					}
+					else {
+						form_disable = u.qs("form.disable", action);
+						form_enable = u.qs("form.enable", action);
+					}
+					if(form_disable && form_enable) {
+						u.f.init(form_disable);
+						form_disable.submitted = function() {
 							this.response = function(response) {
 								page.notify(response.cms_message);
 								if(response.cms_status == "success") {
@@ -4146,10 +4154,8 @@ Util.Objects["defaultList"] = new function() {
 							}
 							u.request(this, this.action);
 						}
-						form = u.f.addForm(action, {"action":"/admin/cms/enable/"+node._item_id, "class":"enable"});
-						u.f.addAction(form, {"value":"Enable", "class":"button status"});
-						u.f.init(form);
-						form.submitted = function() {
+						u.f.init(form_enable);
+						form_enable.submitted = function() {
 							this.response = function(response) {
 								page.notify(response.cms_message);
 								if(response.cms_status == "success") {
@@ -4160,10 +4166,17 @@ Util.Objects["defaultList"] = new function() {
 							u.request(this, this.action);
 						}
 					}
-					else if(u.hc(action, "delete")) {
+				}
+				else if(u.hc(action, "delete")) {
+					if(!action.childNodes.length) {
 						form = u.f.addForm(action, {"action":"/admin/cms/delete/"+node._item_id, "class":"delete"});
 						form.node = node;
 						bn_delete = u.f.addAction(form, {"value":"Delete", "class":"button delete", "name":"delete"});
+					}
+					else {
+						form = u.qs("form", action);
+					}
+					if(form) {
 						u.f.init(form);
 						form.restore = function(event) {
 							this.actions["delete"].value = "Delete";
