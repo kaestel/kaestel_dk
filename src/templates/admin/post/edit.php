@@ -10,8 +10,9 @@ $item_id = $item["item_id"];
 <div class="scene defaultEdit <?= $itemtype ?>Edit">
 	<h1>Edit post</h1>
 
-	<ul class="actions">
+	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
 		<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button">Back</a></li>
+		<li class="delete"></li>
 	</ul>
 
 	<div class="status i:defaultEditStatus item_id:<?= $item_id ?>">
