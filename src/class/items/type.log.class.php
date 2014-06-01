@@ -93,6 +93,30 @@ class TypeLog extends Model {
 		parent::__construct();
 	}
 
+
+	// delete log image - 3 parameters exactly
+	// /log/#item_id#/deleteImage
+	function deleteMedia($action) {
+
+		if(count($action) == 4) {
+
+			$query = new Query();
+
+			$sql = "UPDATE ".$this->db." SET files = '' WHERE item_id = ".$action[1];
+			if($query->sql($sql)) {
+				FileSystem::removeDirRecursively(PUBLIC_FILE_PATH."/".$action[1]);
+				FileSystem::removeDirRecursively(PRIVATE_FILE_PATH."/".$action[1]);
+
+				message()->addMessage("Media deleted");
+				return true;
+			}
+		}
+
+		message()->addMessage("Media could not be deleted", array("type" => "error"));
+		return false;
+	}
+
+
 }
 
 ?>

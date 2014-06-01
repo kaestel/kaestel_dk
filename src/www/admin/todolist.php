@@ -1,6 +1,5 @@
 <?php
 $access_item["/"] = true;
-$access_item["/new/"] = true;
 if(isset($read_access) && $read_access) {
 	return;
 }

@@ -3,15 +3,16 @@
 	<div id="navigation">
 		<ul>
 			<? $HTML = new HTML() ?>
-			<?= $HTML->link("Logs", "/admin/log/list", array("wrap" => "li", "wrap_class" => "log")) ?>
-			<?= $HTML->link("Posts", "/admin/post/list", array("wrap" => "li", "wrap_class" => "post")) ?>
+			<?= $HTML->link("Logs", "/admin/log/list", array("wrapper" => "li.log")) ?>
+			<?= $HTML->link("Posts", "/admin/post/list", array("wrapper" => "li.post")) ?>
 
-			<?= $HTML->link("Wishes", "/admin/wish/list", array("wrap" => "li", "wrap_class" => "wish")) ?>
-			<?= $HTML->link("Wishlists", "/admin/wishlist/list", array("wrap" => "li", "wrap_class" => "wishlist")) ?>
-			<?= $HTML->link("Todo", "/admin/todo/list", array("wrap" => "li", "wrap_class" => "todo")) ?>
-			<?= $HTML->link("Todolist", "/admin/todolist/list", array("wrap" => "li", "wrap_class" => "todolist")) ?>
-			<?= $HTML->link("user", "/admin/user/list", array("wrap" => "li", "wrap_class" => "user")) ?>
-			<?= $HTML->link("Tags", "/admin/tag/list", array("wrap" => "li", "tags" => "tags")) ?>
+			<?= $HTML->link("Wishes", "/admin/wish/list", array("wrapper" => "li.wish")) ?>
+			<?= $HTML->link("Wishlists", "/admin/wishlist/list", array("wrapper" => "li.wishlist")) ?>
+			<?= $HTML->link("Todo", "/admin/todo/list", array("wrapper" => "li.todo")) ?>
+			<?= $HTML->link("Todolist", "/admin/todolist/list", array("wrapper" => "li.todolist")) ?>
+
+			<?= $HTML->link("user", "/admin/user/list", array("wrapper" => "li.user")) ?>
+			<?= $HTML->link("Tags", "/admin/tag/list", array("wrapper" => "li.tags")) ?>
 
 			<!--li class="log"><a href="/admin/log/list">Logs</a></li>
 			<li class="wish"><a href="/admin/wish/list">Wishes</a></li>

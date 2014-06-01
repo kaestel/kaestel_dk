@@ -11,18 +11,18 @@ $item_id = $item["item_id"];
 	<h1>Edit post</h1>
 
 	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
-		<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button">Back</a></li>
-		<li class="delete"></li>
+		<?= $HTML->link("Back", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
+		<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
 	</ul>
 
-	<div class="status i:defaultEditStatus item_id:<?= $item_id ?>">
+	<div class="status i:defaultEditStatus item_id:<?= $item["id"] ?>">
 		<ul class="actions">
-			<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>"></li>
+			<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 		</ul>
 	</div>
 
 	<div class="item i:defaultEdit">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("published_at", array("value" => $item["published_at"])) ?>
 
@@ -32,23 +32,23 @@ $item_id = $item["item_id"];
 			</fieldset>
 
 			<ul class="actions">
-				<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button key:esc">Back</a></li>
-				<li class="save"><input type="submit" value="Update" class="button primary key:s" /></li>
+				<?= $model->link("Back", "/admin/".$itemtype."/list", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
+				<?= $model->submit("Update", array("class" => "primary key:s", "wrapper" => "li.save")) ?>
 			</ul>
-		</form>
+		<?= $model->formEnd() ?>
 	</div>
 
 	<h2>Tags</h2>
 	<div class="tags i:defaultTags item_id:<?= $item_id ?>">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("tags") ?>
 			</fieldset>
 
 			<ul class="actions">
-				<li class="save"><input type="submit" value="Add tag" class="button primary" /></li>
+				<?= $model->submit("Add tag", array("class" => "primary", "wrapper" => "li.save")) ?>
 			</ul>
-		</form>
+		<?= $model->formEnd() ?>
 
 		<ul class="tags">
 <?		if($item["tags"]): ?>
@@ -59,6 +59,35 @@ $item_id = $item["item_id"];
 <?			endforeach; ?>
 <?		endif; ?>
 		</ul>
+	</div>
+
+	<h2>Media</h2>
+	<div class="media i:addMedia sortable">
+		<p>Image must be jpg or png.</p>
+
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "upload labelstyle:inject")) ?>
+			<fieldset>
+				<?= $model->input("files") ?>
+			</fieldset>
+
+			<ul class="actions">
+				<?= $model->submit("Add image", array("class" => "primary", "wrapper" => "li.save")) ?>
+			</ul>
+		<?= $model->formEnd() ?>
+
+		<ul class="media targets:media" data-save-order="/admin/<?= $itemtype ?>/updateMediaOrder">
+<?		if($item["mediae"]): ?>
+<?			foreach($item["mediae"] as $index => $media): ?>
+			<li class="media media_id:<?= $media["id"] ?>">
+				<img src="/images/<?= $item_id ?><?= ($media["variant"] ? "/".$media["variant"] : "") ?>/x150.<?= $media["format"] ?>" />
+				<?= $model->formStart("/admin/cms/".$itemtype."/".$item_id."/deleteMedia/".$media["variant"], array("class" => "delete i:deleteMedia")) ?>
+					<?= $model->submit("Delete", array("class" => "delete")) ?>
+				<?= $model->formEnd() ?>
+			</li>
+<?			endforeach; ?>
+<?		endif; ?>
+		</ul>
+
 	</div>
 
 </div>

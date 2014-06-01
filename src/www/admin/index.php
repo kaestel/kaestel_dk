@@ -18,7 +18,6 @@ $page->pageTitle("the Janitor @ kaestel.dk")
 	<h1>Kaestel Admin</h1>
 
 
-	<?= $HTML->link("test", "/todolist/view/janitor") ?>
 </div>
 
 <? $page->footer(array("type" => "admin")) ?>

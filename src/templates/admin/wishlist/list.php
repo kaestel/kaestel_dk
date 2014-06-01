@@ -10,7 +10,7 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 	<h1>Wishlists</h1>
 
 	<ul class="actions">
-		<li class="new"><a href="/admin/<?= $itemtype ?>/new" class="button primary key:n">New wishlist</a></li>
+		<?= $HTML->link("New wishlist", "/admin/".$itemtype."/new", array("class" => "button primary key:n", "wrapper" => "li.new")) ?>
 	</ul>
 
 
@@ -32,9 +32,9 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 <?				endif; ?>
 
 				<ul class="actions">
-					<li class="edit"><a href="/admin/<?= $itemtype ?>/edit/<?= $item["id"] ?>" class="button">Edit</a></li>
-					<li class="delete"></li>
-					<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>"></li>
+					<?= $HTML->link("Edit", "/admin/".$itemtype."/edit/".$item["id"], array("class" => "button", "wrapper" => "li.edit")) ?>
+					<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+					<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 				</ul>
 			 </li>
 <?			endforeach; ?>

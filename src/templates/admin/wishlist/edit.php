@@ -10,53 +10,43 @@ $item_id = $item["item_id"];
 <div class="scene defaultEdit <?= $itemtype ?>Edit">
 	<h1>Edit wishlist</h1>
 
-	<ul class="actions">
-		<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button">Back</a></li>
+	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
+		<?= $HTML->link("Back", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
+		<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
 	</ul>
 
-	<div class="status">
+	<div class="status i:defaultEditStatus item_id:<?= $item["id"] ?>">
 		<ul class="actions">
-			<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>">
-				<form action="/admin/cms/disable/<?= $item["id"] ?>" class="disable i:formDefaultStatus" method="post" enctype="multipart/form-data">
-					<h3>Enabled</h3>
-					<input type="submit" value="Disable" class="button status disable" />
-				</form>
-				<form action="/admin/cms/enable/<?= $item["id"] ?>" class="enable i:formDefaultStatus" method="post" enctype="multipart/form-data">
-					<h3>Disabled</h3>
-					<input type="submit" value="Enable" class="button status enable" />
-				</form>
-			</li>
+			<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 		</ul>
 	</div>
 
 	<div class="item i:defaultEdit">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
-
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
 				<?= $model->input("class", array("value" => $item["class"])) ?>
 			</fieldset>
 
 			<ul class="actions">
-				<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button key:esc">Back</a></li>
-				<li class="save"><input type="submit" value="Update" class="button primary key:s" /></li>
+				<?= $model->link("Back", "/admin/".$itemtype."/list", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
+				<?= $model->submit("Update", array("class" => "primary key:s", "wrapper" => "li.save")) ?>
 			</ul>
-
-		</form>
+		<?= $model->formEnd() ?>
 	</div>
 
 	<h2>Tags</h2>
 	<div class="tags i:defaultTags item_id:<?= $item_id ?>">
 		<p>Add tag identifyer for this wishlist. Wishes with this/these tags will automatically be added to this wishlist.</p>
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("tags") ?>
 			</fieldset>
 
 			<ul class="actions">
-				<li class="save"><input type="submit" value="Add tag" class="button primary" /></li>
+				<?= $model->submit("Add tag", array("class" => "primary", "wrapper" => "li.save")) ?>
 			</ul>
-		</form>
+		<?= $model->formEnd() ?>
 
 		<ul class="tags">
 <?		if($item["tags"]): ?>

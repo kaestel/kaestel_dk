@@ -10,7 +10,7 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DES
 	<h1>Wishes</h1>
 
 	<ul class="actions">
-		<li class="new"><a href="/admin/<?= $itemtype ?>/new" class="button primary key:n">New wish</a></li>
+		<?= $HTML->link("New wish", "/admin/".$itemtype."/new", array("class" => "button primary key:n", "wrapper" => "li.new")) ?>
 	</ul>
 
 	<div class="all_items i:defaultList taggable filters">
@@ -33,9 +33,9 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DES
 <?				endif; ?>
 
 				<ul class="actions">
-					<li class="edit"><a href="/admin/<?= $itemtype ?>/edit/<?= $item["id"] ?>" class="button">Edit</a></li>
-					<li class="delete"></li>
-					<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>"></li>
+					<?= $HTML->link("Edit", "/admin/".$itemtype."/edit/".$item["id"], array("class" => "button", "wrapper" => "li.edit")) ?>
+					<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+					<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 				</ul>
 			 </li>
 <?			endforeach; ?>

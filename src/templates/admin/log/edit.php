@@ -10,18 +10,19 @@ $item_id = $item["item_id"];
 <div class="scene defaultEdit <?= $itemtype ?>Edit">
 	<h1>Edit log entry</h1>
 
-	<ul class="actions">
-		<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button">Back</a></li>
+	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
+		<?= $HTML->link("Back", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
+		<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
 	</ul>
 
-	<div class="status i:defaultEditStatus item_id:<?= $item_id ?>">
+	<div class="status i:defaultEditStatus item_id:<?= $item["id"] ?>">
 		<ul class="actions">
-			<li class="status <?= ($item["status"] == 1 ? "enabled" : "disabled") ?>"></li>
+			<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 		</ul>
 	</div>
 
 	<div class="item i:defaultEdit">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("published_at", array("value" => $item["published_at"])) ?>
 
@@ -33,23 +34,23 @@ $item_id = $item["item_id"];
 			</fieldset>
 
 			<ul class="actions">
-				<li class="cancel"><a href="/admin/<?= $itemtype ?>/list" class="button key:esc">Back</a></li>
-				<li class="save"><input type="submit" value="Update" class="button primary key:s" /></li>
+				<?= $model->link("Back", "/admin/".$itemtype."/list", array("class" => "button key:esc", "wrapper" => "li.cancel")) ?>
+				<?= $model->submit("Update", array("class" => "primary key:s", "wrapper" => "li.save")) ?>
 			</ul>
-		</form>
+		<?= $model->formEnd() ?>
 	</div>
 
 	<h2>Tags</h2>
 	<div class="tags i:defaultTags item_id:<?= $item_id ?>">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("tags") ?>
 			</fieldset>
 
 			<ul class="actions">
-				<li class="save"><input type="submit" value="Add tag" class="button primary" /></li>
+				<?= $model->submit("Add tag", array("class" => "primary", "wrapper" => "li.save")) ?>
 			</ul>
-		</form>
+		<?= $model->formEnd() ?>
 
 		<ul class="tags">
 <?		if($item["tags"]): ?>
@@ -66,22 +67,23 @@ $item_id = $item["item_id"];
 	<div class="media i:addMedia">
 		<p>Image must be jpg or png.</p>
 
-		<form action="/admin/cms/update/<?= $item_id ?>" class="upload labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "upload labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("files") ?>
 			</fieldset>
 
 			<ul class="actions">
-				<li class="save"><input type="submit" value="Add image" class="button primary" /></li>
+				<?= $model->submit("Add image", array("class" => "primary", "wrapper" => "li.save")) ?>
 			</ul>
-
-		</form>
+		<?= $model->formEnd() ?>
 
 		<ul class="media">
 			<li class="image">
-				<h4>Image</h4>
 <?		if($item["files"]): ?>
 				<img src="/images/<?= $item["id"] ?>/160x.<?= $item["files"] ?>" alt="Current image" />
+				<?= $model->formStart("/admin/cms/".$itemtype."/".$item_id."/deleteMedia", array("class" => "delete i:deleteMedia")) ?>
+					<?= $model->submit("Delete", array("class" => "delete")) ?>
+				<?= $model->formEnd() ?>
 <?		else: ?>
 				<img src="/images/0/missing/160x.png" alt="Missing image" />
 <?		endif; ?>

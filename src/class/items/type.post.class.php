@@ -76,7 +76,43 @@ class TypePost extends Model {
 	}
 
 
+	/**
+	* Get item
+	*/
+	function get($item_id) {
+		$query = new Query();
+		$query_media = new Query();
+
+		if($query->sql("SELECT * FROM ".$this->db." WHERE item_id = $item_id")) {
+			$item = $query->result(0);
+			unset($item["id"]);
+
+			$item["mediae"] = false;
+
+			// get media
+			if($query_media->sql("SELECT * FROM ".$this->db_mediae." WHERE item_id = $item_id ORDER BY position ASC, id DESC")) {
+
+				$mediae = $query_media->results();
+				foreach($mediae as $i => $media) {
+					$item["mediae"][$i]["id"] = $media["id"];
+					$item["mediae"][$i]["variant"] = $media["variant"];
+					$item["mediae"][$i]["format"] = $media["format"];
+					$item["mediae"][$i]["width"] = $media["width"];
+					$item["mediae"][$i]["height"] = $media["height"];
+				}
+			}
+
+			return $item;
+		}
+		else {
+			return false;
+		}
+	}
+
 	// CMS SECTION
+
+
+
 
 	// update item type - based on posted values
 	function update($item_id) {
@@ -90,7 +126,7 @@ class TypePost extends Model {
 		$uploads = $IC->upload($item_id, array("auto_add_variant" => true));
 		if($uploads) {
 			foreach($uploads as $upload) {
-				$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$upload["name"]."', '".$upload["format"]."', '".$upload["variant"]."', 0)");
+				$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$upload["name"]."', '".$upload["format"]."', '".$upload["variant"]."', ".$upload["width"].", ".$upload["height"].", 0)");
 			}
 		}
 
@@ -123,17 +159,16 @@ class TypePost extends Model {
 
 	// custom loopback function
 
-	// delete product image - 4 parameters exactly
-	// /product/#item_id#/deleteImage/#image_id#
+	// delete post image - 4 parameters exactly
+	// /post/#item_id#/deleteImage/#image_id#
 	function deleteMedia($action) {
 
 		if(count($action) == 4) {
 
 			$query = new Query();
+			$sql = "DELETE FROM ".$this->db_mediae." WHERE item_id = ".$action[1]." AND variant = '".$action[3]."'";
 
-//			print "DELETE FROM ".$this->db_images." WHERE item_id = ".$action[0]." AND variant = '".$action[2]."'";
-
-			if($query->sql("DELETE FROM ".$this->db_mediae." WHERE item_id = ".$action[1]." AND variant = '".$action[3]."'")) {
+			if($query->sql($sql)) {
 				FileSystem::removeDirRecursively(PUBLIC_FILE_PATH."/".$action[1]."/".$action[3]);
 				FileSystem::removeDirRecursively(PRIVATE_FILE_PATH."/".$action[1]."/".$action[3]);
 
@@ -146,6 +181,26 @@ class TypePost extends Model {
 		return false;
 	}
 
+
+	function updateMediaOrder($action) {
+
+		if(count($action) > 1) {
+
+			$query = new Query();
+			for($i = 1; $i < count($action); $i++) {
+				$media_id = $action[$i];
+				$sql = "UPDATE ".$this->db_mediae." SET position = ".($i)." WHERE id = ".$media_id;
+				$query->sql($sql);
+			}
+
+			message()->addMessage("Media order updated");
+			return true;
+		}
+
+		message()->addMessage("Media order could not be updated - refresh your browser", array("type" => "error"));
+		return false;
+
+	}
 }
 
 ?>

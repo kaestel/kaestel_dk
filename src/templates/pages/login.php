@@ -8,7 +8,7 @@ $username = stringOr(getPost("username"));
 <div class="scene login i:login">
 	<h1>Login</h1>
 
-	<form action="?login=true" method="post" class="labelstyle:inject">
+	<?= $model->formStart("?login=true", array("class" => "labelstyle:inject")) ?>
 
 <?	if(message()->hasMessages(array("type" => "error"))): ?>
 		<p class="error">
@@ -29,7 +29,7 @@ $username = stringOr(getPost("username"));
 		<ul class="actions">
 			<li class="login"><input type="submit" value="Log ind" class="button primary" /></li>
 		</ul>
-	</form>
+	<?= $model->formEnd() ?>
 
 	<p>Not registered yet? <a href="/login/signup">Sign up now</a>.</p>
 </div>
