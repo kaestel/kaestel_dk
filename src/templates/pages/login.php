@@ -1,7 +1,6 @@
 <?php
 	
 $model = new Model();
-
 $username = stringOr(getPost("username"));
 	
 ?>
