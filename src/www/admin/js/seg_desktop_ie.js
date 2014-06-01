@@ -678,7 +678,7 @@ Util.hasFixedParent = u.hfp = function(node) {
 	return false;
 }
 Util.Events = u.e = new function() {
-	this.event_pref = typeof(document.ontouchmove) == "undefined" ? "mouse" : "touch";
+	this.event_pref = typeof(document.ontouchmove) == "undefined" || navigator.maxTouchPoints > 1 ? "mouse" : "touch";
 	this.kill = function(event) {
 		if(event) {
 			event.preventDefault();
@@ -730,8 +730,9 @@ Util.Events = u.e = new function() {
 		u.t.resetTimer(node.t_clicked);
 		this.removeEvent(node, "mouseup", this._dblclicked);
 		this.removeEvent(node, "touchend", this._dblclicked);
-		this.removeEvent(node, "mousemove", this._clickCancel);
-		this.removeEvent(node, "touchmove", this._clickCancel);
+		this.removeEvent(node, "mousemove", this._cancelClick);
+		this.removeEvent(node, "touchmove", this._cancelClick);
+		this.removeEvent(node, "mouseout", this._cancelClick);
 		this.removeEvent(node, "mousemove", this._move);
 		this.removeEvent(node, "touchmove", this._move);
 	}
@@ -1814,12 +1815,9 @@ Util.Form = u.f = new function() {
 	}
 	this.autoExpand = function(iN) {
 		var current_height = parseInt(u.gcs(iN, "height"));
-		u.bug("AE:" + current_height + "," + iN.scrollHeight);
 		var current_value = iN.val();
 		iN.val("");
-		u.bug(current_height + "," + iN.scrollHeight);
 		u.as(iN, "overflow", "hidden");
-		u.bug(current_height + "," + iN.scrollHeight);
 		iN.autoexpand_offset = 0;
 		if(parseInt(u.gcs(iN, "height")) != iN.scrollHeight) {
 			iN.autoexpand_offset = iN.scrollHeight - parseInt(u.gcs(iN, "height"));
@@ -1829,7 +1827,7 @@ Util.Form = u.f = new function() {
 			u.bug("iN.setHeight:" + u.nodeId(this));
 			var textarea_height = parseInt(u.gcs(this, "height"));
 			if(this.val()) {
-				if(u.browser("webkit")) {
+				if(u.browser("webkit") || u.browser("firefox", ">=29")) {
 					if(this.scrollHeight - this.autoexpand_offset > textarea_height) {
 						u.a.setHeight(this, this.scrollHeight);
 					}
@@ -2349,8 +2347,10 @@ u.f.addAction = function(node, settings) {
 }
 Util.absoluteX = u.absX = function(node) {
 	if(node.offsetParent) {
+		u.bug("node.offsetParent, node.offsetLeft + u.absX(node.offsetParent):" + node.offsetLeft + ", " + u.nodeId(node.offsetParent))
 		return node.offsetLeft + u.absX(node.offsetParent);
 	}
+	u.bug("node.offsetLeft:" + node.offsetLeft)
 	return node.offsetLeft;
 }
 Util.absoluteY = u.absY = function(node) {
@@ -2496,7 +2496,7 @@ Util.round = function(number, decimals) {
 	return Math.round(round_number)/Math.pow(10, decimals);
 }
 u.navigation = function(options) {
-	page._nav_path = page._nav_path ? page._nav_path : "/";
+	page._nav_path = page._nav_path ? page._nav_path : u.h.getCleanUrl(location.href);
 	page._nav_history = page._nav_history ? page._nav_history : [];
 	page._navigate = function(url) {
 		url = u.h.getCleanUrl(url);
@@ -3024,8 +3024,11 @@ Util.stringOr = u.eitherOr = function(value, replacement) {
 Util.browser = function(model, version) {
 	var current_version = false;
 	if(model.match(/\bexplorer\b|\bie\b/i)) {
-		if(window.ActiveXObject) {
+		if(window.ActiveXObject && navigator.userAgent.match(/(MSIE )(\d+.\d)/i)) {
 			current_version = navigator.userAgent.match(/(MSIE )(\d+.\d)/i)[2];
+		}
+		else if(navigator.userAgent.match(/Trident\/[\d+]\.\d[^$]+rv:(\d+.\d)/i)) {
+			current_version = navigator.userAgent.match(/Trident\/[\d+]\.\d[^$]+rv:(\d+.\d)/i)[1];
 		}
 	}
 	else if(model.match(/\bfirefox\b|\bgecko\b/i)) {
@@ -3054,7 +3057,7 @@ Util.browser = function(model, version) {
 				current_version = navigator.userAgent.match(/(Version\/)(\d+)(.\d)/i)[2];
 			}
 			else {
-				current_version = navigator.userAgent.match(/(Opera\/)(\d+)(.\d)/i)[2];
+				current_version = navigator.userAgent.match(/(Opera[\/ ]{1})(\d+)(.\d)/i)[2];
 			}
 		}
 	}
@@ -4458,11 +4461,11 @@ Util.Objects["addMedia"] = new function() {
 			this.HTTPRequest.open("POST", this.form.action);
 			this.HTTPRequest.send(fd);
 		}
-		if(u.hc(div, "sortable")) {
-			div.list = u.qs("ul.media", div);
-			u.s.sortable(div.list);
-			div.list.picked = function() {}
-			div.list.dropped = function() {
+		div.media_list = u.qs("ul.media", div.media_list);
+		if(u.hc(div, "sortable") && div.media_list) {
+			u.s.sortable(div.media_list);
+			div.media_list.picked = function() {}
+			div.media_list.dropped = function() {
 				var url = this.getAttribute("data-save-order");
 				this.nodes = u.qsa("li.media", this);
 				for(i = 0; node = this.nodes[i]; i++) {
@@ -4472,6 +4475,50 @@ Util.Objects["addMedia"] = new function() {
 					page.notify(response.cms_message);
 				}
 				u.request(this, url);
+			}
+		}
+	}
+}
+Util.Objects["deleteMedia"] = new function() {
+	this.init = function(form) {
+		u.f.init(form);
+		var bn_delete = u.qs("input.delete", form);
+		if(bn_delete) {
+			bn_delete.org_value = bn_delete.value;
+			u.e.click(bn_delete);
+			bn_delete.restore = function(event) {
+				this.value = this.org_value;
+				u.rc(this, "confirm");
+			}
+			bn_delete.inputStarted = function(event) {
+				u.e.kill(event);
+			}
+			bn_delete.clicked = function(event) {
+				u.e.kill(event);
+				if(!u.hc(this, "confirm")) {
+					u.ac(this, "confirm");
+					this.value = "Confirm";
+					this.t_confirm = u.t.setTimer(this, this.restore, 3000);
+				}
+				else {
+					u.t.resetTimer(this.t_confirm);
+					this.response = function(response) {
+						if(response.cms_status == "success") {
+							if(response.cms_object && response.cms_object.constraint_error) {
+								page.notify(response.cms_message);
+								this.value = this.org_value;
+								u.ac(this, "disabled");
+							}
+							else {
+								location.reload();
+							}
+						}
+						else {
+							page.notify(response.cms_message);
+						}
+					}
+					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
+				}
 			}
 		}
 	}
@@ -4515,9 +4562,9 @@ Util.Objects["defaultList"] = new function() {
 			for(i = 0; action = node._actions[i]; i++) {
 				if(u.hc(action, "status")) {
 					if(!action.childNodes.length) {
-						form_disable = u.f.addForm(action, {"action":"/admin/cms/disable/"+node._item_id, "class":"disable"});
+						form_disable = u.f.addForm(action, {"action":"/admin/cms/status/"+node._item_id+"/0", "class":"disable"});
 						u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
-						form_enable = u.f.addForm(action, {"action":"/admin/cms/enable/"+node._item_id, "class":"enable"});
+						form_enable = u.f.addForm(action, {"action":"/admin/cms/status/"+node._item_id+"/1", "class":"enable"});
 						u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
 					}
 					else {
@@ -4557,6 +4604,7 @@ Util.Objects["defaultList"] = new function() {
 					}
 					else {
 						form = u.qs("form", action);
+						form.node = node;
 					}
 					if(form) {
 						u.f.init(form);
@@ -4820,35 +4868,43 @@ Util.Objects["defaultEdit"] = new function() {
 
 /*i-defaulteditstatus.js*/
 Util.Objects["defaultEditStatus"] = new function() {
-	this.init = function(div) {
-		div._item_id = u.cv(div, "item_id");
-		var li_status = u.qs("li.status");
-		if(li_status) {
-			form = u.f.addForm(li_status, {"action":"/admin/cms/disable/"+div._item_id, "class":"disable"});
-			u.f.addAction(form, {"value":"Disable", "class":"button status"});
-			u.f.init(form);
-			form.submitted = function() {
-				this.response = function(response) {
-					page.notify(response.cms_message);
-					if(response.cms_status == "success") {
-						u.ac(this.parentNode, "disabled");
-						u.rc(this.parentNode, "enabled");
-					}
-				}
-				u.request(this, this.action);
+	this.init = function(node) {
+		node._item_id = u.cv(node, "item_id");
+		var action = u.qs("li.status");
+		if(action) {
+			if(!action.childNodes.length) {
+				form_disable = u.f.addForm(action, {"action":"/admin/cms/disable/"+node._item_id, "class":"disable"});
+				u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
+				form_enable = u.f.addForm(action, {"action":"/admin/cms/enable/"+node._item_id, "class":"enable"});
+				u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
 			}
-			form = u.f.addForm(li_status, {"action":"/admin/cms/enable/"+div._item_id, "class":"enable"});
-			u.f.addAction(form, {"value":"Enable", "class":"button status"});
-			u.f.init(form);
-			form.submitted = function() {
-				this.response = function(response) {
-					page.notify(response.cms_message);
-					if(response.cms_status == "success") {
-						u.rc(this.parentNode, "disabled");
-						u.ac(this.parentNode, "enabled");
+			else {
+				form_disable = u.qs("form.disable", action);
+				form_enable = u.qs("form.enable", action);
+			}
+			if(form_disable && form_enable) {
+				u.f.init(form_disable);
+				form_disable.submitted = function() {
+					this.response = function(response) {
+						page.notify(response.cms_message);
+						if(response.cms_status == "success") {
+							u.ac(this.parentNode, "disabled");
+							u.rc(this.parentNode, "enabled");
+						}
 					}
+					u.request(this, this.action);
 				}
-				u.request(this, this.action);
+				u.f.init(form_enable);
+				form_enable.submitted = function() {
+					this.response = function(response) {
+						page.notify(response.cms_message);
+						if(response.cms_status == "success") {
+							u.rc(this.parentNode, "disabled");
+							u.ac(this.parentNode, "enabled");
+						}
+					}
+					u.request(this, this.action);
+				}
 			}
 		}
 	}
@@ -5095,13 +5151,35 @@ Util.Objects["usernames"] = new function() {
 }
 Util.Objects["password"] = new function() {
 	this.init = function(div) {
+		var password_state = u.qs("div.password_state", div);
+		var new_password = u.qs("div.new_password", div);
+		var a_create = u.qs(".password_missing a");
+		var a_change = u.qs(".password_set a");
+		a_create.new_password = new_password;
+		a_change.new_password = new_password;
+		a_create.password_state = password_state;
+		a_change.password_state = password_state;
+		u.ce(a_create);
+		u.ce(a_change);
+		a_create.clicked = a_change.clicked = function() {
+			u.as(this.password_state, "display", "none");
+			u.as(this.new_password, "display", "block");
+		}
 		var form = u.qs("form", div);
+		form.password_state = password_state;
+		form.new_password = new_password;
 		u.f.init(form);
 		form.submitted = function(iN) {
 			this.response = function(response) {
+				if(response.cms_status == "success") {
+					u.ac(this.password_state, "set");
+					u.as(this.password_state, "display", "block");
+					u.as(this.new_password, "display", "none");
+				}
 				page.notify(response.cms_message);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
+			this.fields["password"].val("");
 		}
 	}
 }
