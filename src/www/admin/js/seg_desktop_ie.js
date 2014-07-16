@@ -4314,7 +4314,6 @@ Util.Keys = u.k = new function() {
 		var action, i, key;
 		event = event ? event : window.event;
 		key = String.fromCharCode(event.keyCode);
-		u.bug("e:" + key + ":"+event.keyCode+":" + this.shortcuts.length)
 		if((event.ctrlKey || event.metaKey) && this.shortcuts[key]) {
 			u.e.kill(event);
 			action = this.shortcuts[key].pop();
@@ -4374,52 +4373,7 @@ Util.Objects["addPrices"] = new function() {
 		var i, field, actions;
 		form.submitted = function(event) {
 			this.response = function(response) {
-				if(response.cms_status == "success") {
-					location.reload();
-				}
-				else {
-					alert(response.cms_message[0]);
-				}
-			}
-			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
-		}
-	}
-}
-Util.Objects["formAddPrices"] = new function() {
-	this.init = function(form) {
-		u.f.init(form);
-		var i, field, actions;
-		field = form.fields["prices"].field;
-		actions = u.qs(".actions", form);
-		actions = field.insertBefore(actions, u.ns(field._input));
-		form.submitted = function(event) {
-			this.response = function(response) {
-				if(response.cms_status == "success") {
-					location.reload();
-				}
-				else {
-					alert(response.cms_message[0]);
-				}
-			}
-			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
-		}
-	}
-}
-Util.Objects["formAddTags"] = new function() {
-	this.init = function(form) {
-		var i, field, actions;
-		u.f.init(form);
-		field = form.fields["tags"].field;
-		actions = u.qs(".actions", form);
-		actions = field.insertBefore(actions, u.ns(field._input));
-		form.submitted = function(event) {
-			this.response = function(response) {
-				if(response.cms_status == "success") {
-					location.reload();
-				}
-				else {
-					alert(response.cms_message[0]);
-				}
+				page.notify(response.cms_message);
 			}
 			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 		}
@@ -4429,7 +4383,9 @@ Util.Objects["addMedia"] = new function() {
 	this.init = function(div) {
 		var form = u.qs("form.upload", div);
 		u.f.init(form);
+		div.csrf_token = form.fields["csrf-token"].val();
 		var file_input = u.qs("input[type=file]", form);
+		file_input.div = div;
 		file_input.changed = function() {
 			this.response = function(response) {
 				response = JSON.parse(this.responseText);
@@ -4450,6 +4406,9 @@ Util.Objects["addMedia"] = new function() {
 				}
 			}
 			var fd = new FormData();
+			if(this.div.csrf_token) {
+				fd.append("csrf-token", this.div.csrf_token);
+			}
 			var i, file;
 			for(i = 0; file = this.files[i]; i++) {
 				fd.append(this.name+"["+i+"]", file);
@@ -4462,19 +4421,26 @@ Util.Objects["addMedia"] = new function() {
 			this.HTTPRequest.send(fd);
 		}
 		div.media_list = u.qs("ul.media", div.media_list);
+		div.media_list.div = div;
 		if(u.hc(div, "sortable") && div.media_list) {
-			u.s.sortable(div.media_list);
-			div.media_list.picked = function() {}
-			div.media_list.dropped = function() {
-				var url = this.getAttribute("data-save-order");
-				this.nodes = u.qsa("li.media", this);
-				for(i = 0; node = this.nodes[i]; i++) {
-					url += "/"+u.cv(node, "media_id");
+			div.save_order_url = div.getAttribute("data-save-order");
+			if(div.save_order_url) {
+				u.s.sortable(div.media_list);
+				div.media_list.picked = function() {}
+				div.media_list.dropped = function() {
+					var order = new Array();
+					this.nodes = u.qsa("li.media", this);
+					for(i = 0; node = this.nodes[i]; i++) {
+						order.push(u.cv(node, "media_id"));
+					}
+					this.response = function(response) {
+						page.notify(response.cms_message);
+					}
+					u.request(this, this.div.save_order_url, {"method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
-				this.response = function(response) {
-					page.notify(response.cms_message);
-				}
-				u.request(this, url);
+			}
+			else {
+				u.rc(div, "sortable");
 			}
 		}
 	}
@@ -4528,12 +4494,17 @@ Util.Objects["deleteMedia"] = new function() {
 /*i-defaultlist.js*/
 Util.Objects["defaultList"] = new function() {
 	this.init = function(div) {
-		u.bug("init defaultList 22")
 		var i, node;
 		div.list = u.qs("ul.items", div);
 		if(!div.list) {
 			div.list = u.ae(div, "ul", {"class":"items"});
 		}
+		div.list.div = div;
+		div.csrf_token = div.getAttribute("data-csrf-token");
+		div.save_order_url = div.getAttribute("data-save-order");
+		div.update_item_url = div.getAttribute("data-update-item");
+		div.delete_tag_url = div.getAttribute("data-delete-tag");
+		div.get_tags_url = div.getAttribute("data-get-tags");
 		div.nodes = u.qsa("li.item", div);
 		div.scrolled = function() {
 			var scroll_y = u.scrollY()
@@ -4547,25 +4518,28 @@ Util.Objects["defaultList"] = new function() {
 			}
 		}
 		div._scrollHandler = function() {
-			var div = u.qs(".scrollingListHandler");
-			u.t.resetTimer(div.t_scroll);
-			div.scrolled();
+			u.t.resetTimer(this.t_scroll);
+			this.scrolled();
 		}
-		u.ac(div, "scrollingListHandler");
-		u.e.addEvent(window, "scroll", div._scrollHandler);
+		var event_id = u.e.addWindowScrollEvent(div, div._scrollHandler);
 		div.buildNode = function(node) {
-			u.bug("build node")
 			node._item_id = u.cv(node, "item_id");
 			node._variant = u.cv(node, "variant");
+			node.div = this;
 			node._actions = u.qsa(".actions li", node);
 			var i, action, form, bn_detele, form_disable, form_enable;
 			for(i = 0; action = node._actions[i]; i++) {
 				if(u.hc(action, "status")) {
 					if(!action.childNodes.length) {
-						form_disable = u.f.addForm(action, {"action":"/admin/cms/status/"+node._item_id+"/0", "class":"disable"});
-						u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
-						form_enable = u.f.addForm(action, {"action":"/admin/cms/status/"+node._item_id+"/1", "class":"enable"});
-						u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
+						action.update_status_url = action.getAttribute("data-update-status");
+						if(action.update_status_url) {
+							form_disable = u.f.addForm(action, {"action":action.update_status_url+"/"+node._item_id+"/0", "class":"disable"});
+							u.ae(form_disable, "input", {"type":"hidden","name":"csrf-token", "value":this.csrf_token});
+							u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
+							form_enable = u.f.addForm(action, {"action":action.update_status_url+"/"+node._item_id+"/1", "class":"enable"});
+							u.ae(form_enable, "input", {"type":"hidden","name":"csrf-token", "value":this.csrf_token});
+							u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
+						}
 					}
 					else {
 						form_disable = u.qs("form.disable", action);
@@ -4581,7 +4555,7 @@ Util.Objects["defaultList"] = new function() {
 									u.rc(this.parentNode, "enabled");
 								}
 							}
-							u.request(this, this.action);
+							u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 						}
 						u.f.init(form_enable);
 						form_enable.submitted = function() {
@@ -4592,15 +4566,19 @@ Util.Objects["defaultList"] = new function() {
 									u.ac(this.parentNode, "enabled");
 								}
 							}
-							u.request(this, this.action);
+							u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 						}
 					}
 				}
 				else if(u.hc(action, "delete")) {
 					if(!action.childNodes.length) {
-						form = u.f.addForm(action, {"action":"/admin/cms/delete/"+node._item_id, "class":"delete"});
-						form.node = node;
-						bn_delete = u.f.addAction(form, {"value":"Delete", "class":"button delete", "name":"delete"});
+						action.delete_item_url = action.getAttribute("data-delete-item");
+						if(action.delete_item_url) {
+							form = u.f.addForm(action, {"action":action.delete_item_url, "class":"delete"});
+							u.ae(form, "input", {"type":"hidden","name":"csrf-token", "value":this.csrf_token});
+							form.node = node;
+							bn_delete = u.f.addAction(form, {"value":"Delete", "class":"button delete", "name":"delete"});
+						}
 					}
 					else {
 						form = u.qs("form", action);
@@ -4629,10 +4607,11 @@ Util.Objects["defaultList"] = new function() {
 										}
 										else {
 											this.node.parentNode.removeChild(this.node);
+											this.node.div.scrolled();
 										}
 									}
 								}
-								u.request(this, this.action);
+								u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
 							}
 						}
 					}
@@ -4663,6 +4642,7 @@ Util.Objects["defaultList"] = new function() {
 					page.audioplayer = u.audioPlayer();
 				}
 				var audio = u.ie(node, "div", {"class":"audio"});
+				audio.scene = this;
 				audio.url = "/audios/"+node._item_id+"/128."+node._audio;
 				u.e.click(audio);
 				audio.clicked = function(event) {
@@ -4686,112 +4666,116 @@ Util.Objects["defaultList"] = new function() {
 			node._ready = true;
 		}
 		if(u.hc(div, "taggable")) {
-			u.bug("init taggable")
-			div.tagsResponse = function(response) {
-				if(response.cms_status == "success" && response.cms_object) {
-					this.all_tags = response.cms_object;
-					var i, node, tag, j, bn_add, context, value;
-					for(i = 0; node = this.nodes[i]; i++) {
-						node._tags = u.qs("ul.tags", node);
-						if(!node._tags) {
-							node._tags = u.ae(node, "ul", {"class":"tags"});
-						}
-						node._bn_add = u.ae(node._tags, "li", {"class":"add","html":"+"});
-						node._bn_add.div = this;
-						node._bn_add.node = node;
-						u.e.click(node._bn_add);
-						node._bn_add.clicked = function() {
-							this.div._taggableNode(this.node);
-						}
-					}
-				}
-				else {
-					page.notify(response.cms_message);
-				}
-			}
-			u.request(div, "/admin/cms/tags", {"callback":"tagsResponse"});
-			div._taggableNode = function(node) {
-				u.ac(node, "addtags");
-				node._bn_add.innerHTML = "-";
-				node._bn_add.clicked = function() {
-					this.innerHTML = "+";
-					u.rc(this.node, "addtags");
-					this.node._tag_options.parentNode.removeChild(this.node._tag_options);
-					this.clicked = function() {
-						this.div._taggableNode(this.node);
-					}
-				}
-				node._tag_options = u.ae(node, "div", {"class":"tagoptions"});
-				node._tag_options._field = u.ae(node._tag_options, "div", {"class":"field"});
-				node._tag_options._tagfilter = u.ae(node._tag_options._field, "input", {"class":"filter ignoreinput"});
-				node._tag_options._tagfilter.node = node;
-				node._tag_options._tagfilter.onkeyup = function() {
-					if(this.node._new_tags) {
-						var tags = u.qsa(".tag", this.node._new_tags);
-						var i, tag;
-						for(i = 0; tag = tags[i]; i++) {
-							if(tag.textContent.toLowerCase().match(this.value.toLowerCase())) {
-								u.as(tag, "display", "inline-block");
+			if(div.get_tags_url && div.delete_tag_url && div.update_item_url) {
+				div.tagsResponse = function(response) {
+					if(response.cms_status == "success" && response.cms_object) {
+						this.all_tags = response.cms_object;
+						var i, node, tag, j, bn_add, context, value;
+						for(i = 0; node = this.nodes[i]; i++) {
+							node._tags = u.qs("ul.tags", node);
+							if(!node._tags) {
+								node._tags = u.ae(node, "ul", {"class":"tags"});
 							}
-							else {
-								u.as(tag, "display", "none");
+							node._bn_add = u.ae(node._tags, "li", {"class":"add","html":"+"});
+							node._bn_add.div = this;
+							node._bn_add.node = node;
+							u.e.click(node._bn_add);
+							node._bn_add.clicked = function() {
+								this.div.taggableNode(this.node);
 							}
 						}
-					}
-				}
-				node._new_tags = u.ae(node._tag_options, "ul", {"class":"tags"});
-				var itemTags = u.qsa("li:not(.add)", node._tags);
-				var usedTags = {};
-				for(j = 0; tag = itemTags[j]; j++) {
-					tag._context = u.qs(".context", tag).innerHTML;
-					tag._value = u.qs(".value", tag).innerHTML;
-					if(!usedTags[tag._context]) {
-						usedTags[tag._context] = {}
-					}
-					if(!usedTags[tag._context][tag._value]) {
-						usedTags[tag._context][tag._value] = tag;
-					}
-				}
-				for(tag in this.all_tags) {
-					context = this.all_tags[tag].context;
-					value = this.all_tags[tag].value.replace(/ & /, " &amp; ");
-					if(usedTags && usedTags[context] && usedTags[context][value]) {
-						tag_node = usedTags[context][value];
 					}
 					else {
-						tag_node = u.ae(node._new_tags, "li", {"class":"tag"});
-						tag_node._context = context;
-						tag_node._value = value;
-						u.ae(tag_node, "span", {"class":"context", "html":tag_node._context});
-						u.ae(tag_node, "span", {"class":"value", "html":tag_node._value});
+						page.notify(response.cms_message);
 					}
-					tag_node.new_tags = this;
-					tag_node._id = this.all_tags[tag].id;
-					tag_node.node = node;
-					u.e.click(tag_node);
-					tag_node.clicked = function() {
-						if(u.hc(this.node, "addtags")) {
-							if(this.parentNode == this.node._tags) {
-								this.response = function(response) {
-									if(response.cms_status == "success") {
-										u.ae(this.node._new_tags, this);
-									}
-									page.notify(response.cms_message);
+				}
+				u.request(div, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
+				div.taggableNode = function(node) {
+					u.ac(node, "addtags");
+					node._bn_add.innerHTML = "-";
+					node._bn_add.clicked = function() {
+						this.innerHTML = "+";
+						u.rc(this.node, "addtags");
+						this.node._tag_options.parentNode.removeChild(this.node._tag_options);
+						this.clicked = function() {
+							this.div.taggableNode(this.node);
+						}
+					}
+					node._tag_options = u.ae(node, "div", {"class":"tagoptions"});
+					node._tag_options._field = u.ae(node._tag_options, "div", {"class":"field"});
+					node._tag_options._tagfilter = u.ae(node._tag_options._field, "input", {"class":"filter ignoreinput"});
+					node._tag_options._tagfilter.node = node;
+					node._tag_options._tagfilter.onkeyup = function() {
+						if(this.node._new_tags) {
+							var tags = u.qsa(".tag", this.node._new_tags);
+							var i, tag;
+							for(i = 0; tag = tags[i]; i++) {
+								if(tag.textContent.toLowerCase().match(this.value.toLowerCase())) {
+									u.as(tag, "display", "inline-block");
 								}
-								u.request(this, "/admin/cms/tags/delete/"+this.node._item_id+"/" + this._id);
+								else {
+									u.as(tag, "display", "none");
+								}
 							}
-							else {
-								this.response = function(response) {
-									if(response.cms_status == "success") {
-										u.ie(this.node._tags, this);
+						}
+					}
+					node._new_tags = u.ae(node._tag_options, "ul", {"class":"tags"});
+					var itemTags = u.qsa("li:not(.add)", node._tags);
+					var usedTags = {};
+					for(j = 0; tag = itemTags[j]; j++) {
+						tag._context = u.qs(".context", tag).innerHTML;
+						tag._value = u.qs(".value", tag).innerHTML;
+						if(!usedTags[tag._context]) {
+							usedTags[tag._context] = {}
+						}
+						if(!usedTags[tag._context][tag._value]) {
+							usedTags[tag._context][tag._value] = tag;
+						}
+					}
+					for(tag in this.all_tags) {
+						context = this.all_tags[tag].context;
+						value = this.all_tags[tag].value.replace(/ & /, " &amp; ");
+						if(usedTags && usedTags[context] && usedTags[context][value]) {
+							tag_node = usedTags[context][value];
+						}
+						else {
+							tag_node = u.ae(node._new_tags, "li", {"class":"tag"});
+							tag_node._context = context;
+							tag_node._value = value;
+							u.ae(tag_node, "span", {"class":"context", "html":tag_node._context});
+							u.ae(tag_node, "span", {"class":"value", "html":tag_node._value});
+						}
+						tag_node.new_tags = this;
+						tag_node._id = this.all_tags[tag].id;
+						tag_node.node = node;
+						u.e.click(tag_node);
+						tag_node.clicked = function() {
+							if(u.hc(this.node, "addtags")) {
+								if(this.parentNode == this.node._tags) {
+									this.response = function(response) {
+										if(response.cms_status == "success") {
+											u.ae(this.node._new_tags, this);
+										}
+										page.notify(response.cms_message);
 									}
-									page.notify(response.cms_message);
+									u.request(this, this.node.div.delete_tag_url+"/"+this.node._item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.node.div.csrf_token});
 								}
-								u.request(this, "/admin/cms/update/"+this.node._item_id, {"method":"post", "params":"tags="+this._id});
+								else {
+									this.response = function(response) {
+										if(response.cms_status == "success") {
+											u.ie(this.node._tags, this);
+										}
+										page.notify(response.cms_message);
+									}
+									u.request(this, this.node.div.update_item_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.div.csrf_token});
+								}
 							}
 						}
 					}
 				}
+			}
+			else {
+				u.rc(div, "taggable");
 			}
 		}
 		if(u.hc(div, "filters")) {
@@ -4828,19 +4812,24 @@ Util.Objects["defaultList"] = new function() {
 				this.scrolled();
 			}
 		}
-		if(u.hc(div, "sortable")) {
-			u.s.sortable(div.list);
-			div.list.picked = function() {}
-			div.list.dropped = function() {
-				var url = this.getAttribute("data-save-order");
-				this.nodes = u.qsa("li.item", this);
-				for(i = 0; node = this.nodes[i]; i++) {
-					url += "/"+u.cv(node, "id");
+		if(u.hc(div, "sortable") && div.list) {
+			if(div.save_order_url) {
+				u.s.sortable(div.list);
+				div.list.picked = function() {}
+				div.list.dropped = function() {
+					var order = new Array();
+					this.nodes = u.qsa("li.item", this);
+					for(i = 0; node = this.nodes[i]; i++) {
+						order.push(u.cv(node, "id"));
+					}
+					this.orderResponse = function(response) {
+						page.notify(response.cms_message);
+					}
+					u.request(this, this.div.save_order_url, {"callback":"orderResponse", "method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
-				this.response = function(response) {
-					page.notify(response.cms_message);
-				}
-				u.request(this, url);
+			}
+			else {
+				u.rc(div, "sortable");
 			}
 		}
 		div.scrolled();
@@ -4917,6 +4906,10 @@ Util.Objects["defaultTags"] = new function() {
 		div._tags_form = u.qs("form", div);
 		div._tags_form.div = div;
 		u.f.init(div._tags_form);
+		div.csrf_token = div._tags_form.fields["csrf-token"].value;
+		div.update_item_url = div._tags_form.action;
+		div.delete_tag_url = div.getAttribute("data-delete-tag");
+		div.get_tags_url = div.getAttribute("data-get-tags");
 		div._tags_form.fields["tags"].focused = function() {
 			this.form.div.enableTagging();
 		}
@@ -4965,7 +4958,7 @@ Util.Objects["defaultTags"] = new function() {
 				page.notify(response.cms_message);
 			}
 		}
-		u.request(div._tags, "/admin/cms/tags", {"callback":"tagsResponse"});
+		u.request(div._tags, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
 		div.enableTagging = function() {
 			u.bug("enable tagging")
 			if(!this._tag_options) {
@@ -5021,7 +5014,7 @@ Util.Objects["defaultTags"] = new function() {
 									}
 									page.notify(response.cms_message);
 								}
-								u.request(this, "/admin/cms/tags/delete/"+this.div.item_id+"/" + this._id);
+								u.request(this, this.div.delete_tag_url+"/"+this.div.item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.div.csrf_token});
 							}
 							else {
 								this.response = function(response) {
@@ -5030,7 +5023,7 @@ Util.Objects["defaultTags"] = new function() {
 									}
 									page.notify(response.cms_message);
 								}
-								u.request(this, "/admin/cms/update/"+this.div.item_id, {"method":"post", "params":"tags="+this._id});
+								u.request(this, this.div.update_item_url, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.div.csrf_token});
 							}
 						}
 					}

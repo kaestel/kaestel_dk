@@ -11,18 +11,18 @@ $item_id = $item["item_id"];
 	<h1>Edit wish</h1>
 
 	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
-		<?= $HTML->link("Back", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
-		<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+		<?= $HTML->link("List", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
+		<?= $HTML->deleteButton("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
 	</ul>
 
 	<div class="status i:defaultEditStatus item_id:<?= $item["id"] ?>">
 		<ul class="actions">
-			<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
+			<?= $HTML->statusButton("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 		</ul>
 	</div>
 
 	<div class="item i:defaultEdit">
-		<form action="/admin/cms/update/<?= $item_id ?>" class="labelstyle:inject" method="post" enctype="multipart/form-data">
+		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("name", array("value" => $item["name"])) ?>
 				<?= $model->input("price", array("value" => $item["price"])) ?>
@@ -39,7 +39,10 @@ $item_id = $item["item_id"];
 	</div>
 
 	<h2>Tags</h2>
-	<div class="tags i:defaultTags item_id:<?= $item_id ?>">
+	<div class="tags i:defaultTags item_id:<?= $item_id ?>"
+		data-get-tags="<?= $this->validAction("/admin/cms/tags") ?>" 
+		data-delete-tag="<?= $this->validAction("/admin/cms/tags/delete") ?>"
+		>
 		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("tags") ?>
@@ -62,8 +65,10 @@ $item_id = $item["item_id"];
 	</div>
 
 	<h2>Media</h2>
-	<div class="media i:addMedia">
-		<p>Image must be 200x90 pixels, jpg or png.</p>
+	<div class="media i:addMedia"
+		data-csrf-token="<?= session()->value("csrf") ?>"
+		>
+		<p>Image must be jpg or png.</p>
 
 		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "upload labelstyle:inject")) ?>
 			<fieldset>
@@ -75,15 +80,15 @@ $item_id = $item["item_id"];
 			</ul>
 		<?= $model->formEnd() ?>
 
-		</form>
-
 		<ul class="media">
 			<li class="image">
-				<h4>Image</h4>
 <?		if($item["files"]): ?>
-				<img src="/images/<?= $item["id"] ?>/160x.<?= $item["files"] ?>">
+				<img src="/images/<?= $item["id"] ?>/160x.<?= $item["files"] ?>" alt="Current image" />
+				<?= $model->formStart("/admin/cms/".$itemtype."/".$item_id."/deleteMedia", array("class" => "delete i:deleteMedia")) ?>
+					<?= $model->submit("Delete", array("class" => "delete")) ?>
+				<?= $model->formEnd() ?>
 <?		else: ?>
-				<img src="/images/0/missing/160x.png">
+				<img src="/images/0/missing/160x.png" alt="Missing image" />
 <?		endif; ?>
 			</li>
 		</ul>

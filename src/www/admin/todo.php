@@ -24,7 +24,7 @@ $page->pageTitle("TODOs");
 
 if(is_array($action) && count($action)) {
 
-	if(preg_match("/[a-zA-Z]+/", $action[0])) {
+	if(preg_match("/[a-zA-Z]+/", $action[0]) && $page->validateCsrfToken()) {
 
 		// check if custom function exists on User class
 		if($model && method_exists($model, $action[0])) {

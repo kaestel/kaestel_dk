@@ -4,7 +4,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "published_at DESC"));
+$all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DESC, published_at DESC"));
 ?>
 <div class="scene defaultList <?= $itemtype ?>List">
 	<h1>Posts</h1>
@@ -13,7 +13,12 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "published_
 		<?= $HTML->link("New post", "/admin/".$itemtype."/new", array("class" => "button primary key:n", "wrapper" => "li.new")) ?>
 	</ul>
 
-	<div class="all_items i:defaultList taggable filters">
+	<div class="all_items i:defaultList taggable filters" 
+		data-csrf-token="<?= session()->value("csrf") ?>"
+		data-get-tags="<?= $this->validAction("/admin/cms/tags") ?>" 
+		data-delete-tag="<?= $this->validAction("/admin/cms/tags/delete") ?>"
+		data-update-item="<?= $this->validAction("/admin/cms/update") ?>"
+		>
 <?		if($all_items): ?>
 		<ul class="items">
 <?			foreach($all_items as $item): 
@@ -30,8 +35,8 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "published_
 
 				<ul class="actions">
 					<?= $HTML->link("Edit", "/admin/".$itemtype."/edit/".$item["id"], array("class" => "button", "wrapper" => "li.edit")) ?>
-					<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
-					<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
+					<?= $HTML->deleteButton("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+					<?= $HTML->statusButton("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 				</ul>
 			 </li>
 <?			endforeach; ?>

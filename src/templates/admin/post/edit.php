@@ -11,13 +11,13 @@ $item_id = $item["item_id"];
 	<h1>Edit post</h1>
 
 	<ul class="actions i:defaultEditActions item_id:<?= $item_id ?>">
-		<?= $HTML->link("Back", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
-		<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+		<?= $HTML->link("List", "/admin/".$itemtype."/list", array("class" => "button", "wrapper" => "li.cancel")) ?>
+		<?= $HTML->deleteButton("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
 	</ul>
 
 	<div class="status i:defaultEditStatus item_id:<?= $item["id"] ?>">
 		<ul class="actions">
-			<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
+			<?= $HTML->statusButton("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 		</ul>
 	</div>
 
@@ -39,7 +39,10 @@ $item_id = $item["item_id"];
 	</div>
 
 	<h2>Tags</h2>
-	<div class="tags i:defaultTags item_id:<?= $item_id ?>">
+	<div class="tags i:defaultTags item_id:<?= $item_id ?>"
+		data-get-tags="<?= $this->validAction("/admin/cms/tags") ?>" 
+		data-delete-tag="<?= $this->validAction("/admin/cms/tags/delete") ?>"
+		>
 		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "labelstyle:inject")) ?>
 			<fieldset>
 				<?= $model->input("tags") ?>
@@ -62,7 +65,10 @@ $item_id = $item["item_id"];
 	</div>
 
 	<h2>Media</h2>
-	<div class="media i:addMedia sortable">
+	<div class="media i:addMedia sortable"
+		data-save-order="/admin/<?= $itemtype ?>/updateMediaOrder" 
+		data-csrf-token="<?= session()->value("csrf") ?>"
+		>
 		<p>Image must be jpg or png.</p>
 
 		<?= $model->formStart("/admin/cms/update/".$item_id, array("class" => "upload labelstyle:inject")) ?>
@@ -75,7 +81,7 @@ $item_id = $item["item_id"];
 			</ul>
 		<?= $model->formEnd() ?>
 
-		<ul class="media targets:media" data-save-order="/admin/<?= $itemtype ?>/updateMediaOrder">
+		<ul class="media targets:media">
 <?		if($item["mediae"]): ?>
 <?			foreach($item["mediae"] as $index => $media): ?>
 			<li class="media media_id:<?= $media["id"] ?>">

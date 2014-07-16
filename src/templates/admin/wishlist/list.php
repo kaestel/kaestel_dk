@@ -13,13 +13,18 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 		<?= $HTML->link("New wishlist", "/admin/".$itemtype."/new", array("class" => "button primary key:n", "wrapper" => "li.new")) ?>
 	</ul>
 
-
-	<div class="all_items i:defaultList taggable filters sortable">
+	<div class="all_items i:defaultList taggable filters sortable" 
+		data-csrf-token="<?= session()->value("csrf") ?>"
+		data-save-order="<?= $this->validAction("/admin/$itemtype/updateOrder") ?>" 
+		data-get-tags="<?= $this->validAction("/admin/cms/tags") ?>" 
+		data-delete-tag="<?= $this->validAction("/admin/cms/tags/delete") ?>"
+		data-update-item="<?= $this->validAction("/admin/cms/update") ?>"
+		>
 <?		if($all_items): ?>
-		<ul class="items targets:draggable" data-save-order="/admin/<?= $itemtype ?>/updateOrder">
+		<ul class="items targets:draggable">
 <?			foreach($all_items as $item): 
 				$item = $IC->extendItem($item, array("tags" => true)); ?>
-			<li class="item draggable id:<?= $item["item_id"] ?>">
+			<li class="item draggable item_id:<?= $item["item_id"] ?>">
 				<div class="drag"></div>
 				<h3><?= $item["name"] ?></h3>
 
@@ -33,8 +38,8 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position A
 
 				<ul class="actions">
 					<?= $HTML->link("Edit", "/admin/".$itemtype."/edit/".$item["id"], array("class" => "button", "wrapper" => "li.edit")) ?>
-					<?= $HTML->delete("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
-					<?= $HTML->status("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
+					<?= $HTML->deleteButton("Delete", "/admin/cms/delete/".$item["id"], array("js" => true)) ?>
+					<?= $HTML->statusButton("Enable", "Disable", "/admin/cms/status", $item, array("js" => true)) ?>
 				</ul>
 			 </li>
 <?			endforeach; ?>

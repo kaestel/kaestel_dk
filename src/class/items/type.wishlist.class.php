@@ -47,19 +47,23 @@ class TypeWishlist extends Model {
 
 	function updateOrder($action) {
 
-		if(count($action) > 1) {
+		$order_list = getPost("order");
+		if(count($action) == 1 && $order_list) {
 
 			$query = new Query();
-			for($i = 1; $i < count($action); $i++) {
-				$item_id = $action[$i];
-				$query->sql("UPDATE ".$this->db." SET position = ".($i)." WHERE item_id = ".$item_id);
+			$order = explode(",", $order_list);
+
+			for($i = 0; $i < count($order); $i++) {
+				$item_id = $order[$i];
+				$sql = "UPDATE ".$this->db." SET position = ".($i+1)." WHERE item_id = ".$item_id;
+				$query->sql($sql);
 			}
 
 			message()->addMessage("Wishlist order updated");
 			return true;
 		}
 
-		message()->addMessage("Wishlist order could not be updated - refresh your browser", array("type" => "error"));
+		message()->addMessage("Wishlist order could not be updated - please refresh your browser", array("type" => "error"));
 		return false;
 
 	}

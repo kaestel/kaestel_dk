@@ -12,7 +12,7 @@
 	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-<? if(Session::value("dev")) { ?>
+<? if(session()->value("dev")) { ?>
 	<link type="text/css" rel="stylesheet" media="all" href="/css/lib/seg_<?= $this->segment() ?>_include.css" />
 	<script type="text/javascript" src="/js/lib/seg_<?= $this->segment() ?>_include.js"></script>
 <? } else { ?>
@@ -21,14 +21,14 @@
 <? } ?>
 </head>
 
-<body<?= HTML::attribute("class", $this->bodyClass()) ?>>
+<body<?= $HTML->attribute("class", $this->bodyClass()) ?>>
 
 <div id="page" class="i:page">
 
 	<div id="header">
 		<ul class="servicenavigation">
 			<li class="keynav navigation nofollow"><a href="#navigation">To navigation</a></li>
-<?			if(Session::value("user_id") && Session::value("user_group_id")): ?>
+<?			if(session()->value("user_id") && session()->value("user_group_id")): ?>
 			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
 			<li class="keynav admin nofollow"><a href="/admin" target="_blank">Admin</a></li>
 <?			else: ?>

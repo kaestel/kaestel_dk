@@ -14,7 +14,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <div class="scene geek lists i:generic">
 	<h1>Geek is Good, <br />I am Geek.</h1>
 	<p>
-		I live to live. <br />This is a selected part of my story.
+		I live to learn, I learn to live. One experience at the time. <br />This is a selected part of my story.
 	</p>
 
 	<div class="logbooks">

@@ -45,7 +45,7 @@ class TypePost extends Model {
 
 		// HTML
 		$this->addToModel("html", array(
-			"type" => "text",
+			"type" => "html",
 			"label" => "HTML",
 			"required" => true,
 			"hint_message" => "Write the log entry",
@@ -145,7 +145,7 @@ class TypePost extends Model {
 		if($this->validateList($names, $item_id)) {
 			if($values) {
 				$sql = "UPDATE ".$this->db." SET ".implode(",", $values)." WHERE item_id = ".$item_id;
-//					print $sql;
+//				print $sql;
 			}
 
 			if(!$values || $query->sql($sql)) {
@@ -166,11 +166,12 @@ class TypePost extends Model {
 		if(count($action) == 4) {
 
 			$query = new Query();
-			$sql = "DELETE FROM ".$this->db_mediae." WHERE item_id = ".$action[1]." AND variant = '".$action[3]."'";
+			$fs = new FileSystem();
 
+			$sql = "DELETE FROM ".$this->db_mediae." WHERE item_id = ".$action[1]." AND variant = '".$action[3]."'";
 			if($query->sql($sql)) {
-				FileSystem::removeDirRecursively(PUBLIC_FILE_PATH."/".$action[1]."/".$action[3]);
-				FileSystem::removeDirRecursively(PRIVATE_FILE_PATH."/".$action[1]."/".$action[3]);
+				$fs->removeDirRecursively(PUBLIC_FILE_PATH."/".$action[1]."/".$action[3]);
+				$fs->removeDirRecursively(PRIVATE_FILE_PATH."/".$action[1]."/".$action[3]);
 
 				message()->addMessage("Media deleted");
 				return true;
@@ -184,12 +185,15 @@ class TypePost extends Model {
 
 	function updateMediaOrder($action) {
 
-		if(count($action) > 1) {
+		$order_list = getPost("order");
+		if(count($action) == 1 && $order_list) {
 
 			$query = new Query();
-			for($i = 1; $i < count($action); $i++) {
-				$media_id = $action[$i];
-				$sql = "UPDATE ".$this->db_mediae." SET position = ".($i)." WHERE id = ".$media_id;
+			$order = explode(",", $order_list);
+
+			for($i = 0; $i < count($order); $i++) {
+				$media_id = $order[$i];
+				$sql = "UPDATE ".$this->db_mediae." SET position = ".($i+1)." WHERE id = ".$media_id;
 				$query->sql($sql);
 			}
 

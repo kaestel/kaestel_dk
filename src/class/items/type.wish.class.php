@@ -112,6 +112,30 @@ class TypeWish extends Model {
 		return false;
 	}
 
+
+	// delete log image - 3 parameters exactly
+	// /log/#item_id#/deleteImage
+	function deleteMedia($action) {
+
+		if(count($action) == 3) {
+
+			$query = new Query();
+			$fs = new FileSystem();
+
+			$sql = "UPDATE ".$this->db." SET files = '' WHERE item_id = ".$action[1];
+			if($query->sql($sql)) {
+				$fs->removeDirRecursively(PUBLIC_FILE_PATH."/".$action[1]);
+				$fs->removeDirRecursively(PRIVATE_FILE_PATH."/".$action[1]);
+
+				message()->addMessage("Media deleted");
+				return true;
+			}
+		}
+
+		message()->addMessage("Media could not be deleted", array("type" => "error"));
+		return false;
+	}
+
 }
 
 ?>

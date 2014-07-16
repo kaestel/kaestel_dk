@@ -15,7 +15,7 @@ $todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "to
 	<ul class="actions">
 <?		foreach($items as $item):
 			$item = $IC->extendItem($item); ?>
-		<li<?= HTML::attribute("class", $item["class"]) ?>><a href="/todolist/view/<?= $item["sindex"] ?>" class="button primary"><?= $item["name"] ?></a></li>
+		<li<?= $HTML->attribute("class", $item["class"]) ?>><a href="/todolist/view/<?= $item["sindex"] ?>" class="button primary"><?= $item["name"] ?></a></li>
 <?		endforeach; ?>
 	</ul>
 <?	endif; ?>
@@ -25,7 +25,7 @@ $todos = $IC->getItems(array("status" => 1, "itemtype" => "todo", "order" => "to
 	<ul class="todos">
 <?		foreach($todos as $item):
 			$item = $IC->extendItem($item); ?>
-		<li<?= HTML::attribute("class", "item", "item_id:".$item["id"]) ?>>
+		<li<?= $HTML->attribute("class", "item", "item_id:".$item["id"]) ?>>
 			<h3><?= $item["name"] ?></h3>
 			<div class="description">
 				<p><?= $item["description"] ?></p>
