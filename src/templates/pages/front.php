@@ -17,7 +17,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<h1>The plain geek</h1>
 	<p>
 		Geeks are passionate people. We are curious. We are having fun in our own way. Our excessive passion grants 
-		us the geek label and our passion and curiosity drives our to dig further and further into our subjects, 
+		us the geek label and our passion and curiosity drives us to dig further and further into our subjects, 
 		whatever it might be without any concern for profit. 
 		If you don't get it, perhaps you are just not smart enough and I urge you to try a little harder, because
 		geeks will either save the world or destroy it. It all depends on how you treat them.

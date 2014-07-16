@@ -4,7 +4,7 @@ global $action;
 
 $tag = urldecode($action[2]);
 
-$post_items = $IC->getItems(array("itemtype" => "post", "status" => 1, "tags" => "post:$tag"));
+$post_items = $IC->getItems(array("itemtype" => "post", "status" => 1, "tags" => "post:".addslashes($tag)));
 $post_tags = $IC->getTags(array("context" => "post"));
 
 ?>
