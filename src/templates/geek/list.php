@@ -26,6 +26,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 			<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
 <?		endforeach; ?>
 		</ul>
+<?	endif; ?>
 
 		<ul class="actions">
 			<li class="more"><a href="/geek/logs">All logbook entries</a></li>
