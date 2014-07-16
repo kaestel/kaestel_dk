@@ -124,6 +124,7 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene ul+h2,
 #content .scene dl+h2,
 #content .scene code+h2 {padding-top: 20px;}
+#content .scene ul.tags+h2 {padding-top: 0;}
 #content .scene ul {padding: 0 50px 15px;}
 #content .scene li {display: block; padding: 0 0 5px;}
 #content .scene li h3,
@@ -314,8 +315,6 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene.geek.lists div.logbooks ul,
 #content .scene.geek.lists div.posts ul {padding-right: 0;}
 #content .scene.geek div.categories {padding-bottom: 20px;}
-#content .scene.tag li.log,
-#content .scene.tag li.post {padding-top: 40px;}
 
 
 /*s-colorscheme-desktop.css*/

@@ -4280,14 +4280,16 @@ Util.Form = u.f = new function() {
 			this.deleteOption(em);
 			this.hideSelectionOptions();
 		}
-		field._focused_content = function() {
+		field._focused_content = function(event) {
 			u.ac(this.div, "focus");
-			var range = document.createRange();
-			range.selectNodeContents(this);
-			range.collapse(false);
-			var selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
+			if(event.rangeOffset == 1) {
+				var range = document.createRange();
+				range.selectNodeContents(this);
+				range.collapse(false);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
 		}
 		field._blurred_content = function() {
 			u.rc(this.div, "focus");
@@ -7613,14 +7615,16 @@ Util.Form = u.f = new function() {
 			this.deleteOption(em);
 			this.hideSelectionOptions();
 		}
-		field._focused_content = function() {
+		field._focused_content = function(event) {
 			u.ac(this.div, "focus");
-			var range = document.createRange();
-			range.selectNodeContents(this);
-			range.collapse(false);
-			var selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(range);
+			if(event.rangeOffset == 1) {
+				var range = document.createRange();
+				range.selectNodeContents(this);
+				range.collapse(false);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
 		}
 		field._blurred_content = function() {
 			u.rc(this.div, "focus");
