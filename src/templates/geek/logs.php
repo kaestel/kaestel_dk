@@ -28,13 +28,14 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <?		foreach($log_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
 		<li class="log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
-<?			if($item["tags"]): ?>
 			<ul class="tags">
+				<li><a href="/geek/logs">Logs</a></li>
+<?			if($item["tags"]): ?>
 <?				foreach($item["tags"] as $tag): ?>
 				<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
 <?				endforeach; ?>
-			</ul>
 <?			endif; ?>
+			</ul>
 
 			<h2 itemprop="name"><?= $item["name"] ?></h2>
 

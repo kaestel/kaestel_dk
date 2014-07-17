@@ -28,13 +28,14 @@ $post_tags = $IC->getTags(array("context" => "post"));
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
 		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
-<?			if($item["tags"]): ?>
 			<ul class="tags">
+				<li><a href="/geek/posts">Posts</a></li>
+<?			if($item["tags"]): ?>
 <?				foreach($item["tags"] as $tag): ?>
 				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
 <?				endforeach; ?>
-			</ul>
 <?			endif; ?>
+			</ul>
 
 			<h2 itemprop="name"><?= $item["name"] ?></h2>
 
