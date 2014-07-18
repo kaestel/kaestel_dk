@@ -3944,20 +3944,133 @@ Util.Form = u.f = new function() {
 	}
 	this.geoLocation = function(field) {
 		u.ac(field, "geolocation");
-		var bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
-		bn_geolocation.field = field;
-		u.ce(bn_geolocation);
-		bn_geolocation.clicked = function() {
+		field.lat_input = u.qs("div.latitude input", field);
+		field.lat_input.autocomplete = "off";
+		field.lat_input.field = field;
+		field.lon_input = u.qs("div.longitude input", field);
+		field.lon_input.autocomplete = "off";
+		field.lon_input.field = field;
+		field.showMap = function() {
+			if(!window._mapsiframe) {
+				var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
+				var html = '<html><head>';
+				html += '<style type="text/css">body {margin: 0;}#map {width: 300px; height: 300px;}</style>';
+				html += '<script type="text/javascript" src="'+maps_url+'"></script>';
+				html += '<script type="text/javascript">';
+				html += 'var map, marker;';
+				html += 'var initialize = function() {';
+				html += '	window._map_loaded = true;';
+				html += '	var mapOptions = {center: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'),zoom: 15};';
+				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
+				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+')});';
+				html += '	marker.setMap(map);';
+				html += '	map.changed = function(event_type) {';
+				html += '		if(event_type == "center" && marker) {';
+				html += '			var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
+				html += '			var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
+				html += '			var lat_map = Math.round(map.getCenter().lat()*100000)/100000;';
+				html += '			var lon_map = Math.round(map.getCenter().lng()*100000)/100000;';
+				html += '			if(lon_marker != lon_map || lat_marker != lat_map) {';
+				html += '				marker.setPosition(map.getCenter());';
+				html += '				field.lon_input.val(lon_map);'
+				html += '				field.lat_input.val(lat_map);'
+				html += '			};';
+				html += '		};';
+				html += '	};';
+				html += '};';
+				html += 'var centerMap = function(lat, lon) {';
+				html += '	var loc = new google.maps.LatLng(lat, lon);';
+				html += '	map.setCenter(loc);';
+				html += '	marker.setPosition(loc);';
+				html += '};';
+				html += 'google.maps.event.addDomListener(window, "load", initialize);';
+				html += '</script>';
+				html += '</head><body><div id="map"></div></body></html>';
+				window._mapsiframe = u.ae(document.body, "iframe", {"id":"geolocationmap"});
+				window._mapsiframe.doc = window._mapsiframe.contentDocument? window._mapsiframe.contentDocument: window._mapsiframe.contentWindow.document;
+				window._mapsiframe.doc.open();
+				window._mapsiframe.doc.write(html);
+				window._mapsiframe.doc.close();
+			}
+			window._mapsiframe.contentWindow.field = this;
+			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
+			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
+		}
+		field.updateMap = function() {
+			if(window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
+				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
+			}
+		}
+		field.move_map = function(event) {
+			var factor;
+			if(this._move_direction) {
+				if(event && event.shiftKey) {
+					factor = 0.001;
+				}
+				else {
+					factor = 0.0001;
+				}
+				if(this._move_direction == "38") {
+					this.lat_input.val(u.round(parseFloat(this.lat_input.val())+factor, 6));
+				}
+				else if(this._move_direction == "40") {
+					this.lat_input.val(u.round(parseFloat(this.lat_input.val())-factor, 6));
+				}
+				else if(this._move_direction == "39") {
+					this.lon_input.val(u.round(parseFloat(this.lon_input.val())+factor, 6));
+				}
+				else if(this._move_direction == "37") {
+					this.lon_input.val(u.round(parseFloat(this.lon_input.val())-factor, 6));
+				}
+				this.updateMap();
+			}
+		}
+		field._end_move_map = function(event) {
+			this.field._move_direction = false;
+		}
+		field._start_move_map = function(event) {
+			if(event.keyCode.toString().match(/37|38|39|40/)) {
+				this.field._move_direction = event.keyCode;
+				this.field.move_map(event);
+			}
+		}
+		u.e.addEvent(field.lat_input, "keydown", field._start_move_map);
+		u.e.addEvent(field.lon_input, "keydown", field._start_move_map);
+		u.e.addEvent(field.lat_input, "keyup", field._end_move_map);
+		u.e.addEvent(field.lon_input, "keyup", field._end_move_map);
+		field.lat_input.updated = field.lon_input.updated = function() {
+			this.field.updateMap();
+		}
+		field.lat_input.focused = field.lon_input.focused = function() {
+			this.field.showMap();
+		}
+		field.bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
+		field.bn_geolocation.field = field;
+		u.ce(field.bn_geolocation);
+		field.bn_geolocation.clicked = function() {
+			u.a.transition(this, "all 0.5s ease-in-out");
+			this.transitioned = function() {
+				var new_scale;
+				if(this._scale == 1.4) {
+					new_scale = 1;
+				}
+				else {
+					new_scale = 1.4;
+				}
+				u.a.scale(this, new_scale);
+			}
+			this.transitioned();
 			window._geoLocationField = this.field;
 			window._foundLocation = function(position) {
 				var lat = position.coords.latitude;
 				var lon = position.coords.longitude;
-				var lat_input = u.qs("div.latitude input", window._geolocationField);
-				var lon_input = u.qs("div.longitude input", window._geolocationField);
-				lat_input.val(lat);
-				lat_input.focus();
-				lon_input.val(lon);
-				lon_input.focus();
+				window._geoLocationField.lat_input.val(u.round(lat, 6));
+				window._geoLocationField.lon_input.val(u.round(lon, 6));
+				window._geoLocationField.lat_input.focus();
+				window._geoLocationField.lon_input.focus();
+				window._geoLocationField.showMap();
+				u.a.transition(window._geoLocationField.bn_geolocation, "none");
+				u.a.scale(window._geoLocationField.bn_geolocation, 1);
 			}
 			window._noLocation = function() {
 				alert('Could not find location');
@@ -5667,7 +5780,7 @@ Util.Objects["addPrices"] = new function() {
 		var i, field, actions;
 		form.submitted = function(event) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 		}
@@ -5687,7 +5800,7 @@ Util.Objects["addMedia"] = new function() {
 					location.reload();
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			this.responseError = function(response) {
@@ -5728,7 +5841,7 @@ Util.Objects["addMedia"] = new function() {
 						order.push(u.cv(node, "media_id"));
 					}
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 					u.request(this, this.div.save_order_url, {"method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
@@ -5765,7 +5878,7 @@ Util.Objects["deleteMedia"] = new function() {
 					this.response = function(response) {
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								this.value = this.org_value;
 								u.ac(this, "disabled");
 							}
@@ -5774,7 +5887,7 @@ Util.Objects["deleteMedia"] = new function() {
 							}
 						}
 						else {
-							page.notify(response.cms_message);
+							page.notify(response);
 						}
 					}
 					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
@@ -5843,7 +5956,7 @@ Util.Objects["defaultList"] = new function() {
 						u.f.init(form_disable);
 						form_disable.submitted = function() {
 							this.response = function(response) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								if(response.cms_status == "success") {
 									u.ac(this.parentNode, "disabled");
 									u.rc(this.parentNode, "enabled");
@@ -5854,7 +5967,7 @@ Util.Objects["defaultList"] = new function() {
 						u.f.init(form_enable);
 						form_enable.submitted = function() {
 							this.response = function(response) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								if(response.cms_status == "success") {
 									u.rc(this.parentNode, "disabled");
 									u.ac(this.parentNode, "enabled");
@@ -5893,7 +6006,7 @@ Util.Objects["defaultList"] = new function() {
 							else {
 								u.t.resetTimer(this.t_confirm);
 								this.response = function(response) {
-									page.notify(response.cms_message);
+									page.notify(response);
 									if(response.cms_status == "success") {
 										if(response.cms_object && response.cms_object.constraint_error) {
 											this.value = "Delete";
@@ -5980,7 +6093,7 @@ Util.Objects["defaultList"] = new function() {
 						}
 					}
 					else {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 				}
 				u.request(div, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
@@ -6050,7 +6163,7 @@ Util.Objects["defaultList"] = new function() {
 										if(response.cms_status == "success") {
 											u.ae(this.node._new_tags, this);
 										}
-										page.notify(response.cms_message);
+										page.notify(response);
 									}
 									u.request(this, this.node.div.delete_tag_url+"/"+this.node._item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.node.div.csrf_token});
 								}
@@ -6059,7 +6172,7 @@ Util.Objects["defaultList"] = new function() {
 										if(response.cms_status == "success") {
 											u.ie(this.node._tags, this);
 										}
-										page.notify(response.cms_message);
+										page.notify(response);
 									}
 									u.request(this, this.node.div.update_item_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.div.csrf_token});
 								}
@@ -6117,7 +6230,7 @@ Util.Objects["defaultList"] = new function() {
 						order.push(u.cv(node, "id"));
 					}
 					this.orderResponse = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 					u.request(this, this.div.save_order_url, {"callback":"orderResponse", "method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
@@ -6142,7 +6255,7 @@ Util.Objects["defaultEdit"] = new function() {
 		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
@@ -6169,7 +6282,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 				u.f.init(form_disable);
 				form_disable.submitted = function() {
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 						if(response.cms_status == "success") {
 							u.ac(this.parentNode, "disabled");
 							u.rc(this.parentNode, "enabled");
@@ -6180,7 +6293,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 				u.f.init(form_enable);
 				form_enable.submitted = function() {
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 						if(response.cms_status == "success") {
 							u.rc(this.parentNode, "disabled");
 							u.ac(this.parentNode, "enabled");
@@ -6224,7 +6337,7 @@ Util.Objects["defaultEditActions"] = new function() {
 					else {
 						u.t.resetTimer(this.t_confirm);
 						this.response = function(response) {
-							page.notify(response.cms_message);
+							page.notify(response);
 							if(response.cms_status == "success") {
 								if(response.cms_object && response.cms_object.constraint_error) {
 									this.value = "Delete";
@@ -6299,7 +6412,7 @@ Util.Objects["defaultTags"] = new function() {
 				}
 			}
 			else {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 		}
 		u.request(div._tags, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
@@ -6356,7 +6469,7 @@ Util.Objects["defaultTags"] = new function() {
 									if(response.cms_status == "success") {
 										u.ae(this.div._new_tags, this);
 									}
-									page.notify(response.cms_message);
+									page.notify(response);
 								}
 								u.request(this, this.div.delete_tag_url+"/"+this.div.item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.div.csrf_token});
 							}
@@ -6365,7 +6478,7 @@ Util.Objects["defaultTags"] = new function() {
 									if(response.cms_status == "success") {
 										u.ie(this.div._tags, this)
 									}
-									page.notify(response.cms_message);
+									page.notify(response);
 								}
 								u.request(this, this.div.update_item_url, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.div.csrf_token});
 							}
@@ -6391,7 +6504,7 @@ Util.Objects["formDefaultNew"] = new function() {
 					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -6453,7 +6566,7 @@ Util.Objects["formDefaultDelete"] = new function() {
 					this.response = function(response) {
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								this.value = this.org_value;
 								u.ac(this, "disabled");
 							}
@@ -6462,7 +6575,7 @@ Util.Objects["formDefaultDelete"] = new function() {
 							}
 						}
 						else {
-							page.notify(response.cms_message);
+							page.notify(response);
 						}
 					}
 					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
@@ -6480,7 +6593,7 @@ Util.Objects["usernames"] = new function() {
 		u.f.init(form);
 		form.submitted = function(iN) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
@@ -6513,7 +6626,7 @@ Util.Objects["password"] = new function() {
 					u.as(this.password_state, "display", "block");
 					u.as(this.new_password, "display", "none");
 				}
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 			this.fields["password"].val("");
@@ -6532,7 +6645,7 @@ Util.Objects["formAddressNew"] = new function() {
 					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -6553,7 +6666,7 @@ u.notifier = function(node) {
 		u.a.transition(this, "all 0.5s ease-in-out");
 		u.a.translate(this, 0, -this.offsetHeight);
 	}
-	node.notify = function(message, _options) {
+	node.notify = function(response, _options) {
 		var class_name = "message";
 		if(typeof(_options) == "object") {
 			var argument;
@@ -6564,23 +6677,70 @@ u.notifier = function(node) {
 			}
 		}
 		var output;
-		u.bug("message:" + typeof(message) + "; " + message);
-		if(typeof(message) == "object") {
-			for(type in message) {
-				u.bug("typeof(message[type]:" + typeof(message[type]) + "; " + type);
-				if(typeof(message[type]) == "string") {
-					output = u.ae(this.notifications, "div", {"class":class_name, "html":message[type]});
-				}
-				else if(typeof(message[type]) == "object" && message[type].length) {
-					var node, i;
-					for(i = 0; _message = message[type][i]; i++) {
-						output = u.ae(this.notifications, "div", {"class":class_name, "html":_message});
+		u.bug("message:" + typeof(response) + "; JSON: " + response.isJSON + "; HTML: " + response.isHTML);
+		if(typeof(response) == "object" && response.isJSON) {
+			var message = response.cms_message;
+			if(typeof(message) == "object") {
+				for(type in message) {
+					u.bug("typeof(message[type]:" + typeof(message[type]) + "; " + type);
+					if(typeof(message[type]) == "string") {
+						output = u.ae(this.notifications, "div", {"class":class_name, "html":message[type]});
+					}
+					else if(typeof(message[type]) == "object" && message[type].length) {
+						var node, i;
+						for(i = 0; _message = message[type][i]; i++) {
+							output = u.ae(this.notifications, "div", {"class":class_name, "html":_message});
+						}
 					}
 				}
 			}
+			else if(typeof(message) == "string") {
+				output = u.ae(this.notifications, "div", {"class":class_name, "html":message});
+			}
 		}
-		else if(typeof(message) == "string") {
-			output = u.ae(this.notifications, "div", {"class":class_name, "html":message});
+		else if(typeof(response) == "object" && response.isHTML) {
+			var login = u.qs(".scene.login", response);
+			if(login) {
+				var overlay = u.ae(document.body, "div", {"id":"login_overlay"});
+				u.ae(overlay, login);
+				u.as(document.body, "overflow", "hidden");
+				var form = u.qs("form", overlay);
+				form.overlay = overlay;
+				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
+				u.f.init(form);
+				form.submitted = function() {
+					this.response = function(response) {
+						if(response.isJSON && response.cms_status) {
+							var csrf_token = response.cms_object["csrf-token"];
+							u.bug("new token:" + csrf_token);
+							var data_vars = u.qsa("[data-csrf-token]", page);
+							var input_vars = u.qsa("[name=csrf-token]", page);
+							var dom_vars = u.qsa("*", page);
+							var i, node;
+							for(i = 0; node = data_vars[i]; i++) {
+								u.bug("data:" + u.nodeId(node) + ", " + node.getAttribute("data-csrf-token"));
+								node.setAttribute("data-csrf-token", csrf_token);
+							}
+							for(i = 0; node = input_vars[i]; i++) {
+								u.bug("input:" + u.nodeId(node) + ", " + node.value);
+								node.value = csrf_token;
+							}
+							for(i = 0; node = dom_vars[i]; i++) {
+								if(node.csrf_token) {
+									u.bug("dom:" + u.nodeId(node) + ", " + node.csrf_token);
+									node.csrf_token = csrf_token;
+								}
+							}
+							this.overlay.parentNode.removeChild(this.overlay);
+							u.as(document.body, "overflow", "auto");
+						}
+						else {
+							alert("login error")
+						}
+					}
+					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
+				}
+			}
 		}
 		u.t.setTimer(this.notifications, this.notifications.hide, 3500);
 	}
@@ -7279,20 +7439,133 @@ Util.Form = u.f = new function() {
 	}
 	this.geoLocation = function(field) {
 		u.ac(field, "geolocation");
-		var bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
-		bn_geolocation.field = field;
-		u.ce(bn_geolocation);
-		bn_geolocation.clicked = function() {
+		field.lat_input = u.qs("div.latitude input", field);
+		field.lat_input.autocomplete = "off";
+		field.lat_input.field = field;
+		field.lon_input = u.qs("div.longitude input", field);
+		field.lon_input.autocomplete = "off";
+		field.lon_input.field = field;
+		field.showMap = function() {
+			if(!window._mapsiframe) {
+				var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
+				var html = '<html><head>';
+				html += '<style type="text/css">body {margin: 0;}#map {width: 300px; height: 300px;}</style>';
+				html += '<script type="text/javascript" src="'+maps_url+'"></script>';
+				html += '<script type="text/javascript">';
+				html += 'var map, marker;';
+				html += 'var initialize = function() {';
+				html += '	window._map_loaded = true;';
+				html += '	var mapOptions = {center: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'),zoom: 15};';
+				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
+				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+')});';
+				html += '	marker.setMap(map);';
+				html += '	map.changed = function(event_type) {';
+				html += '		if(event_type == "center" && marker) {';
+				html += '			var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
+				html += '			var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
+				html += '			var lat_map = Math.round(map.getCenter().lat()*100000)/100000;';
+				html += '			var lon_map = Math.round(map.getCenter().lng()*100000)/100000;';
+				html += '			if(lon_marker != lon_map || lat_marker != lat_map) {';
+				html += '				marker.setPosition(map.getCenter());';
+				html += '				field.lon_input.val(lon_map);'
+				html += '				field.lat_input.val(lat_map);'
+				html += '			};';
+				html += '		};';
+				html += '	};';
+				html += '};';
+				html += 'var centerMap = function(lat, lon) {';
+				html += '	var loc = new google.maps.LatLng(lat, lon);';
+				html += '	map.setCenter(loc);';
+				html += '	marker.setPosition(loc);';
+				html += '};';
+				html += 'google.maps.event.addDomListener(window, "load", initialize);';
+				html += '</script>';
+				html += '</head><body><div id="map"></div></body></html>';
+				window._mapsiframe = u.ae(document.body, "iframe", {"id":"geolocationmap"});
+				window._mapsiframe.doc = window._mapsiframe.contentDocument? window._mapsiframe.contentDocument: window._mapsiframe.contentWindow.document;
+				window._mapsiframe.doc.open();
+				window._mapsiframe.doc.write(html);
+				window._mapsiframe.doc.close();
+			}
+			window._mapsiframe.contentWindow.field = this;
+			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
+			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
+		}
+		field.updateMap = function() {
+			if(window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
+				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
+			}
+		}
+		field.move_map = function(event) {
+			var factor;
+			if(this._move_direction) {
+				if(event && event.shiftKey) {
+					factor = 0.001;
+				}
+				else {
+					factor = 0.0001;
+				}
+				if(this._move_direction == "38") {
+					this.lat_input.val(u.round(parseFloat(this.lat_input.val())+factor, 6));
+				}
+				else if(this._move_direction == "40") {
+					this.lat_input.val(u.round(parseFloat(this.lat_input.val())-factor, 6));
+				}
+				else if(this._move_direction == "39") {
+					this.lon_input.val(u.round(parseFloat(this.lon_input.val())+factor, 6));
+				}
+				else if(this._move_direction == "37") {
+					this.lon_input.val(u.round(parseFloat(this.lon_input.val())-factor, 6));
+				}
+				this.updateMap();
+			}
+		}
+		field._end_move_map = function(event) {
+			this.field._move_direction = false;
+		}
+		field._start_move_map = function(event) {
+			if(event.keyCode.toString().match(/37|38|39|40/)) {
+				this.field._move_direction = event.keyCode;
+				this.field.move_map(event);
+			}
+		}
+		u.e.addEvent(field.lat_input, "keydown", field._start_move_map);
+		u.e.addEvent(field.lon_input, "keydown", field._start_move_map);
+		u.e.addEvent(field.lat_input, "keyup", field._end_move_map);
+		u.e.addEvent(field.lon_input, "keyup", field._end_move_map);
+		field.lat_input.updated = field.lon_input.updated = function() {
+			this.field.updateMap();
+		}
+		field.lat_input.focused = field.lon_input.focused = function() {
+			this.field.showMap();
+		}
+		field.bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
+		field.bn_geolocation.field = field;
+		u.ce(field.bn_geolocation);
+		field.bn_geolocation.clicked = function() {
+			u.a.transition(this, "all 0.5s ease-in-out");
+			this.transitioned = function() {
+				var new_scale;
+				if(this._scale == 1.4) {
+					new_scale = 1;
+				}
+				else {
+					new_scale = 1.4;
+				}
+				u.a.scale(this, new_scale);
+			}
+			this.transitioned();
 			window._geoLocationField = this.field;
 			window._foundLocation = function(position) {
 				var lat = position.coords.latitude;
 				var lon = position.coords.longitude;
-				var lat_input = u.qs("div.latitude input", window._geolocationField);
-				var lon_input = u.qs("div.longitude input", window._geolocationField);
-				lat_input.val(lat);
-				lat_input.focus();
-				lon_input.val(lon);
-				lon_input.focus();
+				window._geoLocationField.lat_input.val(u.round(lat, 6));
+				window._geoLocationField.lon_input.val(u.round(lon, 6));
+				window._geoLocationField.lat_input.focus();
+				window._geoLocationField.lon_input.focus();
+				window._geoLocationField.showMap();
+				u.a.transition(window._geoLocationField.bn_geolocation, "none");
+				u.a.scale(window._geoLocationField.bn_geolocation, 1);
 			}
 			window._noLocation = function() {
 				alert('Could not find location');
@@ -8196,3 +8469,8 @@ Util.Objects["generic"] = new function() {
 	}
 }
 
+
+/*ga.js*/
+u.ga_account = 'UA-17394677-1';
+u.ga_domain = 'kaestel.dk';
+u.gapi_key = 'AIzaSyDDcI1nS5XiY3pfMQnlGVU4Ev2aAQZ8Wog';

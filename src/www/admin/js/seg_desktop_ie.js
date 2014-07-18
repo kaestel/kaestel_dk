@@ -4373,7 +4373,7 @@ Util.Objects["addPrices"] = new function() {
 		var i, field, actions;
 		form.submitted = function(event) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 		}
@@ -4393,7 +4393,7 @@ Util.Objects["addMedia"] = new function() {
 					location.reload();
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			this.responseError = function(response) {
@@ -4434,7 +4434,7 @@ Util.Objects["addMedia"] = new function() {
 						order.push(u.cv(node, "media_id"));
 					}
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 					u.request(this, this.div.save_order_url, {"method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
@@ -4471,7 +4471,7 @@ Util.Objects["deleteMedia"] = new function() {
 					this.response = function(response) {
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								this.value = this.org_value;
 								u.ac(this, "disabled");
 							}
@@ -4480,7 +4480,7 @@ Util.Objects["deleteMedia"] = new function() {
 							}
 						}
 						else {
-							page.notify(response.cms_message);
+							page.notify(response);
 						}
 					}
 					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
@@ -4549,7 +4549,7 @@ Util.Objects["defaultList"] = new function() {
 						u.f.init(form_disable);
 						form_disable.submitted = function() {
 							this.response = function(response) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								if(response.cms_status == "success") {
 									u.ac(this.parentNode, "disabled");
 									u.rc(this.parentNode, "enabled");
@@ -4560,7 +4560,7 @@ Util.Objects["defaultList"] = new function() {
 						u.f.init(form_enable);
 						form_enable.submitted = function() {
 							this.response = function(response) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								if(response.cms_status == "success") {
 									u.rc(this.parentNode, "disabled");
 									u.ac(this.parentNode, "enabled");
@@ -4599,7 +4599,7 @@ Util.Objects["defaultList"] = new function() {
 							else {
 								u.t.resetTimer(this.t_confirm);
 								this.response = function(response) {
-									page.notify(response.cms_message);
+									page.notify(response);
 									if(response.cms_status == "success") {
 										if(response.cms_object && response.cms_object.constraint_error) {
 											this.value = "Delete";
@@ -4686,7 +4686,7 @@ Util.Objects["defaultList"] = new function() {
 						}
 					}
 					else {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 				}
 				u.request(div, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
@@ -4756,7 +4756,7 @@ Util.Objects["defaultList"] = new function() {
 										if(response.cms_status == "success") {
 											u.ae(this.node._new_tags, this);
 										}
-										page.notify(response.cms_message);
+										page.notify(response);
 									}
 									u.request(this, this.node.div.delete_tag_url+"/"+this.node._item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.node.div.csrf_token});
 								}
@@ -4765,7 +4765,7 @@ Util.Objects["defaultList"] = new function() {
 										if(response.cms_status == "success") {
 											u.ie(this.node._tags, this);
 										}
-										page.notify(response.cms_message);
+										page.notify(response);
 									}
 									u.request(this, this.node.div.update_item_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.div.csrf_token});
 								}
@@ -4823,7 +4823,7 @@ Util.Objects["defaultList"] = new function() {
 						order.push(u.cv(node, "id"));
 					}
 					this.orderResponse = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 					}
 					u.request(this, this.div.save_order_url, {"callback":"orderResponse", "method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
 				}
@@ -4848,7 +4848,7 @@ Util.Objects["defaultEdit"] = new function() {
 		}
 		form.submitted = function(iN) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
@@ -4875,7 +4875,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 				u.f.init(form_disable);
 				form_disable.submitted = function() {
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 						if(response.cms_status == "success") {
 							u.ac(this.parentNode, "disabled");
 							u.rc(this.parentNode, "enabled");
@@ -4886,7 +4886,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 				u.f.init(form_enable);
 				form_enable.submitted = function() {
 					this.response = function(response) {
-						page.notify(response.cms_message);
+						page.notify(response);
 						if(response.cms_status == "success") {
 							u.rc(this.parentNode, "disabled");
 							u.ac(this.parentNode, "enabled");
@@ -4955,7 +4955,7 @@ Util.Objects["defaultTags"] = new function() {
 				}
 			}
 			else {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 		}
 		u.request(div._tags, div.get_tags_url, {"callback":"tagsResponse", "method":"post", "params":"csrf-token=" + div.csrf_token});
@@ -5012,7 +5012,7 @@ Util.Objects["defaultTags"] = new function() {
 									if(response.cms_status == "success") {
 										u.ae(this.div._new_tags, this);
 									}
-									page.notify(response.cms_message);
+									page.notify(response);
 								}
 								u.request(this, this.div.delete_tag_url+"/"+this.div.item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.div.csrf_token});
 							}
@@ -5021,7 +5021,7 @@ Util.Objects["defaultTags"] = new function() {
 									if(response.cms_status == "success") {
 										u.ie(this.div._tags, this)
 									}
-									page.notify(response.cms_message);
+									page.notify(response);
 								}
 								u.request(this, this.div.update_item_url, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.div.csrf_token});
 							}
@@ -5047,7 +5047,7 @@ Util.Objects["formDefaultNew"] = new function() {
 					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -5109,7 +5109,7 @@ Util.Objects["formDefaultDelete"] = new function() {
 					this.response = function(response) {
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response.cms_message);
+								page.notify(response);
 								this.value = this.org_value;
 								u.ac(this, "disabled");
 							}
@@ -5118,7 +5118,7 @@ Util.Objects["formDefaultDelete"] = new function() {
 							}
 						}
 						else {
-							page.notify(response.cms_message);
+							page.notify(response);
 						}
 					}
 					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
@@ -5136,7 +5136,7 @@ Util.Objects["usernames"] = new function() {
 		u.f.init(form);
 		form.submitted = function(iN) {
 			this.response = function(response) {
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 		}
@@ -5169,7 +5169,7 @@ Util.Objects["password"] = new function() {
 					u.as(this.password_state, "display", "block");
 					u.as(this.new_password, "display", "none");
 				}
-				page.notify(response.cms_message);
+				page.notify(response);
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
 			this.fields["password"].val("");
@@ -5188,7 +5188,7 @@ Util.Objects["formAddressNew"] = new function() {
 					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
 				}
 				else if(response.cms_message) {
-					page.notify(response.cms_message);
+					page.notify(response);
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -5209,7 +5209,7 @@ u.notifier = function(node) {
 		u.a.transition(this, "all 0.5s ease-in-out");
 		u.a.translate(this, 0, -this.offsetHeight);
 	}
-	node.notify = function(message, _options) {
+	node.notify = function(response, _options) {
 		var class_name = "message";
 		if(typeof(_options) == "object") {
 			var argument;
@@ -5220,23 +5220,70 @@ u.notifier = function(node) {
 			}
 		}
 		var output;
-		u.bug("message:" + typeof(message) + "; " + message);
-		if(typeof(message) == "object") {
-			for(type in message) {
-				u.bug("typeof(message[type]:" + typeof(message[type]) + "; " + type);
-				if(typeof(message[type]) == "string") {
-					output = u.ae(this.notifications, "div", {"class":class_name, "html":message[type]});
-				}
-				else if(typeof(message[type]) == "object" && message[type].length) {
-					var node, i;
-					for(i = 0; _message = message[type][i]; i++) {
-						output = u.ae(this.notifications, "div", {"class":class_name, "html":_message});
+		u.bug("message:" + typeof(response) + "; JSON: " + response.isJSON + "; HTML: " + response.isHTML);
+		if(typeof(response) == "object" && response.isJSON) {
+			var message = response.cms_message;
+			if(typeof(message) == "object") {
+				for(type in message) {
+					u.bug("typeof(message[type]:" + typeof(message[type]) + "; " + type);
+					if(typeof(message[type]) == "string") {
+						output = u.ae(this.notifications, "div", {"class":class_name, "html":message[type]});
+					}
+					else if(typeof(message[type]) == "object" && message[type].length) {
+						var node, i;
+						for(i = 0; _message = message[type][i]; i++) {
+							output = u.ae(this.notifications, "div", {"class":class_name, "html":_message});
+						}
 					}
 				}
 			}
+			else if(typeof(message) == "string") {
+				output = u.ae(this.notifications, "div", {"class":class_name, "html":message});
+			}
 		}
-		else if(typeof(message) == "string") {
-			output = u.ae(this.notifications, "div", {"class":class_name, "html":message});
+		else if(typeof(response) == "object" && response.isHTML) {
+			var login = u.qs(".scene.login", response);
+			if(login) {
+				var overlay = u.ae(document.body, "div", {"id":"login_overlay"});
+				u.ae(overlay, login);
+				u.as(document.body, "overflow", "hidden");
+				var form = u.qs("form", overlay);
+				form.overlay = overlay;
+				u.ae(form, "input", {"type":"hidden", "name":"ajaxlogin", "value":"true"})
+				u.f.init(form);
+				form.submitted = function() {
+					this.response = function(response) {
+						if(response.isJSON && response.cms_status) {
+							var csrf_token = response.cms_object["csrf-token"];
+							u.bug("new token:" + csrf_token);
+							var data_vars = u.qsa("[data-csrf-token]", page);
+							var input_vars = u.qsa("[name=csrf-token]", page);
+							var dom_vars = u.qsa("*", page);
+							var i, node;
+							for(i = 0; node = data_vars[i]; i++) {
+								u.bug("data:" + u.nodeId(node) + ", " + node.getAttribute("data-csrf-token"));
+								node.setAttribute("data-csrf-token", csrf_token);
+							}
+							for(i = 0; node = input_vars[i]; i++) {
+								u.bug("input:" + u.nodeId(node) + ", " + node.value);
+								node.value = csrf_token;
+							}
+							for(i = 0; node = dom_vars[i]; i++) {
+								if(node.csrf_token) {
+									u.bug("dom:" + u.nodeId(node) + ", " + node.csrf_token);
+									node.csrf_token = csrf_token;
+								}
+							}
+							this.overlay.parentNode.removeChild(this.overlay);
+							u.as(document.body, "overflow", "auto");
+						}
+						else {
+							alert("login error")
+						}
+					}
+					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
+				}
+			}
 		}
 		u.t.setTimer(this.notifications, this.notifications.hide, 3500);
 	}

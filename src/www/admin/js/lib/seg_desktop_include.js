@@ -5,5 +5,6 @@ document.write('<script type="text/javascript" src="/js/manipulator/src/u-form.j
 
 
 document.write('<script type="text/javascript" src="/admin/js/lib/i-form.js"></script>');
+document.write('<script type="text/javascript" src="/js/lib/ga.js"></script>');
 
 
