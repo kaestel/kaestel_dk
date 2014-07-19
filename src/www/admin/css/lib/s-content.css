@@ -9,6 +9,9 @@
 /* LOG */
 #content .logList ul.items > li {min-height: 100px; padding-left: 160px;}
 
+/* POST */
+#content .postList ul.items > li {min-height: 100px; padding-left: 160px;}
+
 
 
 /* NAVIGATION */

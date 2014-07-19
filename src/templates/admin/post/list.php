@@ -23,7 +23,7 @@ $all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DES
 		<ul class="items">
 <?			foreach($all_items as $item): 
 				$item = $IC->extendItem($item, array("tags" => true)); ?>
-			<li class="item item_id:<?= $item["id"] ?> image:<?= $item["files"] ?> width:160">
+			<li class="item item_id:<?= $item["id"] ?> <?= $item["mediae"] ? (" image:".$item["mediae"][0]["format"]." variant:".$item["mediae"][0]["variant"]) : "" ?> width:160">
 				<h3><?= $item["name"] ?></h3>
 <?				if($item["tags"]): ?>
 				<ul class="tags">

@@ -541,6 +541,7 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .wishList ul.items > li dl dt.reserved {display: none;}
 #content .wishList ul.items > li dl dd.reserved {font-size: 14px;}
 #content .logList ul.items > li {min-height: 100px; padding-left: 160px;}
+#content .postList ul.items > li {min-height: 100px; padding-left: 160px;}
 body.wish #navigation .wish a,
 body.wishlist #navigation .wishlist a,
 body.todo #navigation .todo a,
