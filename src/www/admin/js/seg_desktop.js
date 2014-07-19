@@ -3962,21 +3962,15 @@ Util.Form = u.f = new function() {
 				html += '	window._map_loaded = true;';
 				html += '	var mapOptions = {center: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'),zoom: 15};';
 				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
-				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+')});';
+				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'), draggable:true});';
 				html += '	marker.setMap(map);';
-				html += '	map.changed = function(event_type) {';
-				html += '		if(event_type == "center" && marker) {';
-				html += '			var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
-				html += '			var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
-				html += '			var lat_map = Math.round(map.getCenter().lat()*100000)/100000;';
-				html += '			var lon_map = Math.round(map.getCenter().lng()*100000)/100000;';
-				html += '			if(lon_marker != lon_map || lat_marker != lat_map) {';
-				html += '				marker.setPosition(map.getCenter());';
-				html += '				field.lon_input.val(lon_map);'
-				html += '				field.lat_input.val(lat_map);'
-				html += '			};';
-				html += '		};';
+				html += '	marker.dragend = function(event_type) {';
+				html += '		var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
+				html += '		var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
+				html += '		field.lon_input.val(lon_marker);';
+				html += '		field.lat_input.val(lat_marker);';
 				html += '	};';
+				html += '	marker.addListener("dragend", marker.dragend);';
 				html += '};';
 				html += 'var centerMap = function(lat, lon) {';
 				html += '	var loc = new google.maps.LatLng(lat, lon);';
@@ -3992,12 +3986,15 @@ Util.Form = u.f = new function() {
 				window._mapsiframe.doc.write(html);
 				window._mapsiframe.doc.close();
 			}
+			else {
+				this.updateMap();
+			}
 			window._mapsiframe.contentWindow.field = this;
 			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
 			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
 		}
 		field.updateMap = function() {
-			if(window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
+			if(window._mapsiframe && window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
 				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
 			}
 		}
@@ -4173,6 +4170,21 @@ Util.Form = u.f = new function() {
 			u.e.addEvent(div._input, "blur", this._blurred_content);
 			return div;
 		}
+		field._focused_content = function(event) {
+			u.ac(this.div, "focus");
+			if(event.rangeOffset == 1) {
+				var range = document.createRange();
+				range.selectNodeContents(this);
+				range.collapse(false);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
+		}
+		field._blurred_content = function() {
+			u.rc(this.div, "focus");
+			this.field.hideSelectionOptions();
+		}
 		field._changed_type = function(event) {
 			this.field.update();
 		}
@@ -4182,7 +4194,6 @@ Util.Form = u.f = new function() {
 			}
 		}
 		field._changed_content = function(event) {
-			u.bug("changed node:" + u.nodeId(this));
 			var selection = window.getSelection(); 
 			if(event.keyCode == 13) {
 				u.e.kill(event);
@@ -4262,6 +4273,7 @@ Util.Form = u.f = new function() {
 				this.options.parentNode.removeChild(this.options);
 				this.options = null;
 			}
+			this.update();
 		}
 		field.showSelectionOptions = function(node, selection) {
 			var x = u.absX(node);
@@ -4325,6 +4337,7 @@ Util.Form = u.f = new function() {
 						var fragment = document.createTextNode(this.node.innerHTML);
 						this.node.parentNode.replaceChild(fragment, this.node);
 						this.node.reallyout();
+						this.node.field.update();
 					}
 					u.as(this.bn_delete, "top", (u.absY(this)-5)+"px");
 					u.as(this.bn_delete, "left", (u.absX(this)+this.offsetWidth-5)+"px");
@@ -4342,6 +4355,14 @@ Util.Form = u.f = new function() {
 			}
 			u.e.addEvent(node, "mouseover", node.over);
 			u.e.addEvent(node, "mouseout", node.out);
+		}
+		field.activateInlineFormatting = function(input) {
+			var i, node;
+			var inline_tags = u.qsa("a,strong,em", input);
+			for(i = 0; node = inline_tags[i]; i++) {
+				node.field = input.field;
+				this.deleteOption(node);
+			}
 		}
 		field.anchorOptions = function(node) {
 			var form = u.f.addForm(this.options, {"class":"labelstyle:inject"});
@@ -4378,6 +4399,7 @@ Util.Form = u.f = new function() {
 		field.addStrongTag = function(selection) {
 			var range, a, url, target;
 			var strong = document.createElement("strong");
+			strong.field = this;
 			range = selection.getRangeAt(0);
 			range.surroundContents(strong);
 			selection.removeAllRanges();
@@ -4387,30 +4409,16 @@ Util.Form = u.f = new function() {
 		field.addEmTag = function(selection) {
 			var range, a, url, target;
 			var em = document.createElement("em");
+			em.field = this;
 			range = selection.getRangeAt(0);
 			range.surroundContents(em);
 			selection.removeAllRanges();
 			this.deleteOption(em);
 			this.hideSelectionOptions();
 		}
-		field._focused_content = function(event) {
-			u.ac(this.div, "focus");
-			if(event.rangeOffset == 1) {
-				var range = document.createRange();
-				range.selectNodeContents(this);
-				range.collapse(false);
-				var selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(range);
-			}
-		}
-		field._blurred_content = function() {
-			u.rc(this.div, "focus");
-			this.field.hideSelectionOptions();
-		}
 		field._viewer.innerHTML = field._input.val();
 		field._fields = new Array();
-		var value, node, i;
+		var value, node, i, tag;
 		var nodes = u.cn(field._viewer, "br");
 		if(nodes.length) {
 			for(i = 0; node = field._viewer.childNodes[i]; i++) {
@@ -4420,18 +4428,21 @@ Util.Form = u.f = new function() {
 						if(fragments) {
 							for(index in fragments) {
 								value = fragments[index].replace(/\n\r|\n|\r/g, "<br>");
-								field.add("p", fragments[index]);
+								tag = field.add("p", fragments[index]);
+								field.activateInlineFormatting(tag._input);
 							}
 						}
 						else {
 							value = node.nodeValue; 
-							field.add("p", value);
+							tag = field.add("p", value);
+							field.activateInlineFormatting(tag._input);
 						}
 					}
 				}
 				else if(node.nodeName.toLowerCase().match(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/)) {
 					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
-					field.add(node.nodeName.toLowerCase(), value);
+					tag = field.add(node.nodeName.toLowerCase(), value);
+					field.activateInlineFormatting(tag._input);
 				}
 				else {
 					alert("invalid node:" + node.nodeName);
@@ -4440,7 +4451,8 @@ Util.Form = u.f = new function() {
 		}
 		else {
 			value = field._viewer.innerHTML.replace(/\<br[\/]?\>/g, "\n");
-			field.add("p", value);
+			tag = field.add("p", value);
+			field.activateInlineFormatting(tag._input);
 		}
 		u.s.sortable(field._editor);
 		field.update = function() {
@@ -7457,21 +7469,15 @@ Util.Form = u.f = new function() {
 				html += '	window._map_loaded = true;';
 				html += '	var mapOptions = {center: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'),zoom: 15};';
 				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
-				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+')});';
+				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'), draggable:true});';
 				html += '	marker.setMap(map);';
-				html += '	map.changed = function(event_type) {';
-				html += '		if(event_type == "center" && marker) {';
-				html += '			var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
-				html += '			var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
-				html += '			var lat_map = Math.round(map.getCenter().lat()*100000)/100000;';
-				html += '			var lon_map = Math.round(map.getCenter().lng()*100000)/100000;';
-				html += '			if(lon_marker != lon_map || lat_marker != lat_map) {';
-				html += '				marker.setPosition(map.getCenter());';
-				html += '				field.lon_input.val(lon_map);'
-				html += '				field.lat_input.val(lat_map);'
-				html += '			};';
-				html += '		};';
+				html += '	marker.dragend = function(event_type) {';
+				html += '		var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
+				html += '		var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
+				html += '		field.lon_input.val(lon_marker);';
+				html += '		field.lat_input.val(lat_marker);';
 				html += '	};';
+				html += '	marker.addListener("dragend", marker.dragend);';
 				html += '};';
 				html += 'var centerMap = function(lat, lon) {';
 				html += '	var loc = new google.maps.LatLng(lat, lon);';
@@ -7487,12 +7493,15 @@ Util.Form = u.f = new function() {
 				window._mapsiframe.doc.write(html);
 				window._mapsiframe.doc.close();
 			}
+			else {
+				this.updateMap();
+			}
 			window._mapsiframe.contentWindow.field = this;
 			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
 			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
 		}
 		field.updateMap = function() {
-			if(window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
+			if(window._mapsiframe && window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
 				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
 			}
 		}
@@ -7668,6 +7677,21 @@ Util.Form = u.f = new function() {
 			u.e.addEvent(div._input, "blur", this._blurred_content);
 			return div;
 		}
+		field._focused_content = function(event) {
+			u.ac(this.div, "focus");
+			if(event.rangeOffset == 1) {
+				var range = document.createRange();
+				range.selectNodeContents(this);
+				range.collapse(false);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
+			}
+		}
+		field._blurred_content = function() {
+			u.rc(this.div, "focus");
+			this.field.hideSelectionOptions();
+		}
 		field._changed_type = function(event) {
 			this.field.update();
 		}
@@ -7677,7 +7701,6 @@ Util.Form = u.f = new function() {
 			}
 		}
 		field._changed_content = function(event) {
-			u.bug("changed node:" + u.nodeId(this));
 			var selection = window.getSelection(); 
 			if(event.keyCode == 13) {
 				u.e.kill(event);
@@ -7757,6 +7780,7 @@ Util.Form = u.f = new function() {
 				this.options.parentNode.removeChild(this.options);
 				this.options = null;
 			}
+			this.update();
 		}
 		field.showSelectionOptions = function(node, selection) {
 			var x = u.absX(node);
@@ -7820,6 +7844,7 @@ Util.Form = u.f = new function() {
 						var fragment = document.createTextNode(this.node.innerHTML);
 						this.node.parentNode.replaceChild(fragment, this.node);
 						this.node.reallyout();
+						this.node.field.update();
 					}
 					u.as(this.bn_delete, "top", (u.absY(this)-5)+"px");
 					u.as(this.bn_delete, "left", (u.absX(this)+this.offsetWidth-5)+"px");
@@ -7837,6 +7862,14 @@ Util.Form = u.f = new function() {
 			}
 			u.e.addEvent(node, "mouseover", node.over);
 			u.e.addEvent(node, "mouseout", node.out);
+		}
+		field.activateInlineFormatting = function(input) {
+			var i, node;
+			var inline_tags = u.qsa("a,strong,em", input);
+			for(i = 0; node = inline_tags[i]; i++) {
+				node.field = input.field;
+				this.deleteOption(node);
+			}
 		}
 		field.anchorOptions = function(node) {
 			var form = u.f.addForm(this.options, {"class":"labelstyle:inject"});
@@ -7873,6 +7906,7 @@ Util.Form = u.f = new function() {
 		field.addStrongTag = function(selection) {
 			var range, a, url, target;
 			var strong = document.createElement("strong");
+			strong.field = this;
 			range = selection.getRangeAt(0);
 			range.surroundContents(strong);
 			selection.removeAllRanges();
@@ -7882,30 +7916,16 @@ Util.Form = u.f = new function() {
 		field.addEmTag = function(selection) {
 			var range, a, url, target;
 			var em = document.createElement("em");
+			em.field = this;
 			range = selection.getRangeAt(0);
 			range.surroundContents(em);
 			selection.removeAllRanges();
 			this.deleteOption(em);
 			this.hideSelectionOptions();
 		}
-		field._focused_content = function(event) {
-			u.ac(this.div, "focus");
-			if(event.rangeOffset == 1) {
-				var range = document.createRange();
-				range.selectNodeContents(this);
-				range.collapse(false);
-				var selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(range);
-			}
-		}
-		field._blurred_content = function() {
-			u.rc(this.div, "focus");
-			this.field.hideSelectionOptions();
-		}
 		field._viewer.innerHTML = field._input.val();
 		field._fields = new Array();
-		var value, node, i;
+		var value, node, i, tag;
 		var nodes = u.cn(field._viewer, "br");
 		if(nodes.length) {
 			for(i = 0; node = field._viewer.childNodes[i]; i++) {
@@ -7915,18 +7935,21 @@ Util.Form = u.f = new function() {
 						if(fragments) {
 							for(index in fragments) {
 								value = fragments[index].replace(/\n\r|\n|\r/g, "<br>");
-								field.add("p", fragments[index]);
+								tag = field.add("p", fragments[index]);
+								field.activateInlineFormatting(tag._input);
 							}
 						}
 						else {
 							value = node.nodeValue; 
-							field.add("p", value);
+							tag = field.add("p", value);
+							field.activateInlineFormatting(tag._input);
 						}
 					}
 				}
 				else if(node.nodeName.toLowerCase().match(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/)) {
 					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
-					field.add(node.nodeName.toLowerCase(), value);
+					tag = field.add(node.nodeName.toLowerCase(), value);
+					field.activateInlineFormatting(tag._input);
 				}
 				else {
 					alert("invalid node:" + node.nodeName);
@@ -7935,7 +7958,8 @@ Util.Form = u.f = new function() {
 		}
 		else {
 			value = field._viewer.innerHTML.replace(/\<br[\/]?\>/g, "\n");
-			field.add("p", value);
+			tag = field.add("p", value);
+			field.activateInlineFormatting(tag._input);
 		}
 		u.s.sortable(field._editor);
 		field.update = function() {
