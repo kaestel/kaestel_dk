@@ -27,7 +27,12 @@ $post_tags = $IC->getTags(array("context" => "post"));
 	<ul class="postings">
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+		<li class="post id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/Article">
+
+<?			if($item["mediae"]): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["mediae"][0]["format"] ?> variant:<?= $item["mediae"][0]["variant"] ?>"></div>
+<?			endif; ?>
+
 			<ul class="tags">
 				<li><a href="/geek/posts">Posts</a></li>
 <?			if($item["tags"]): ?>
@@ -49,6 +54,14 @@ $post_tags = $IC->getTags(array("context" => "post"));
 			<div class="description" itemprop="articleBody">
 				<?= $item["html"] ?>
 			</div>
+
+<?			if(count($item["mediae"]) > 1):
+				array_shift($item["mediae"]);
+				foreach($item["mediae"] as $media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+<? 				endforeach;
+			endif; ?>
+
 		</li>
 <?		endforeach; ?>
 	</ul>

@@ -30,7 +30,12 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<ul class="logs">
 <?		foreach($log_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+		<li class="log id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/blog">
+
+<?			if($item["files"]): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["files"] ?>"></div>
+<?			endif; ?>
+
 <?			if($item["tags"]): ?>
 			<ul class="tags">
 <?				foreach($item["tags"] as $tag): ?>
@@ -60,7 +65,6 @@ $log_tags = $IC->getTags(array("context" => "log"));
 			</dl>
 
 			<div class="description" itemprop="description">
-				<?//= stringOr($item["description"], $item["html"]) ?>
 				<?= $item["html"] ?>
 			</div>
 
@@ -80,7 +84,12 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<ul class="postings">
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+		<li class="post id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/Article">
+
+<?			if($item["mediae"]): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["mediae"][0]["format"] ?> variant:<?= $item["mediae"][0]["variant"] ?>"></div>
+<?			endif; ?>
+
 <?			if($item["tags"]): ?>
 			<ul class="tags">
 <?				foreach($item["tags"] as $tag): ?>
@@ -101,6 +110,13 @@ $log_tags = $IC->getTags(array("context" => "log"));
 			<div class="description" itemprop="description">
 				<?= $item["html"] ?>
 			</div>
+
+<?			if(count($item["mediae"]) > 1):
+				array_shift($item["mediae"]);
+				foreach($item["mediae"] as $media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+<? 				endforeach;
+			endif; ?>
 
 		</li>
 <?		endforeach; ?>
