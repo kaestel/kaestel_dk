@@ -17,7 +17,7 @@ $post_tags = $IC->getTags(array("context" => "post"));
 	<ul class="postings i:articlelist">
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($item["mediae"]): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["mediae"][0]["format"] ?> variant:<?= $item["mediae"][0]["variant"] ?>"></div>
