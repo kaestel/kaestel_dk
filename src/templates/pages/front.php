@@ -27,10 +27,10 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <? if($log_items): ?>
 
 	<h2>Recents log entries</h2>
-	<ul class="logs">
+	<ul class="logs i:articlelist">
 <?		foreach($log_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="log id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/blog">
+		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
 
 <?			if($item["files"]): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["files"] ?>"></div>
@@ -81,10 +81,10 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <? if($post_items): ?>
 
 	<h2>Recent postings</h2>
-	<ul class="postings">
+	<ul class="postings i:articlelist">
 <?		foreach($post_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="post id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/Article">
+		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($item["mediae"]): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["mediae"][0]["format"] ?> variant:<?= $item["mediae"][0]["variant"] ?>"></div>

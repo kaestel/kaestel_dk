@@ -3759,9 +3759,26 @@ Util.Objects["standardForm"] = new function() {
 }
 
 /*i-article-desktop.js*/
+Util.Objects["articlelist"] = new function() {
+	this.init = function(list) {
+		list.items = u.qsa(".item", list);
+		list.scrolled = function() {
+			var scroll_y = u.scrollY()
+			var browser_h = u.browserH();
+			var i, node, abs_y;
+			for(i = 0; node = this.items[i]; i++) {
+				abs_y = u.absY(node);
+				if(!node._ready && abs_y - 200 < scroll_y+browser_h && abs_y + 200 > scroll_y) {
+					u.o.article.init(node);
+					node._ready = true;
+				}
+			}
+		}
+		u.e.addWindowScrollEvent(list, list.scrolled);
+	}
+}
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
-		u.bug("article init:" + u.nodeId(article))
 		article._images = u.qsa("div.image", article);
 		var i, image;
 		for(i = 0; image = article._images[i]; i++) {
@@ -3770,7 +3787,14 @@ Util.Objects["article"] = new function() {
 			image._variant = u.cv(image, "variant");
 			if(image._id && image._format) {
 				image._image_src = "/images/" + image._id + "/" + (image._variant ? image._variant+"/" : "") + image.offsetWidth + "x." + image._format;
-				image._image = u.ie(image, "img", {"src":image._image_src});
+				image._image = u.ie(image, "img");
+				u.a.setOpacity(image, 0);
+				image.loaded = function(queue) {
+					this._image.src = queue[0].image.src;
+					u.a.transition(this, "all 0.5s ease-in-out");
+					u.a.setOpacity(this, 1);
+				}
+				u.preloader(image, [image._image_src]);
 				u.ce(image);
 				image.clicked = function() {
 					if(u.hc(this, "fullsize")) {
