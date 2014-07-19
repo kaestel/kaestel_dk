@@ -16,7 +16,12 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<ul class="logs">
 <?		foreach($log_items as $item):
 			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+		<li class="log id:<?= $item["item_id"] ?> i:article" itemscope itemtype="http://schema.org/blog">
+
+<?			if($item["files"]): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["files"] ?>"></div>
+<?			endif; ?>
+
 			<ul class="tags">
 				<li><a href="/geek/logs">Logs</a></li>
 <?			if($item["tags"]): ?>
