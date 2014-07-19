@@ -4,7 +4,7 @@ global $action;
 
 $tag = urldecode($action[2]);
 
-$log_items = $IC->getItems(array("itemtype" => "log", "status" => 1, "tags" => "log:".addslashes($tag)));
+$log_items = $IC->getItems(array("itemtype" => "log", "status" => 1, "tags" => "log:".addslashes($tag), "order" => "published_at ASC"));
 $log_tags = $IC->getTags(array("context" => "log"));
 
 ?>
