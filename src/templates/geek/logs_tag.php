@@ -9,7 +9,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 ?>
 
-<div class="scene geek logs tag i:generic">
+<div class="scene geek logs tag i:logbook">
 	<h1><?= $tag ?></h1>
 
 <? if($log_items): ?>

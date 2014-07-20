@@ -36,7 +36,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 <? 	if($post_items): ?>
 	<div class="posts">
-		<h2>Post categories</h2>
+		<h2>Postings</h2>
 <?	if($post_tags): ?>
 		<ul class="tags">
 <?		foreach($post_tags as $tag): ?>

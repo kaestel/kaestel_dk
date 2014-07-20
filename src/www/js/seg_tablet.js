@@ -3194,6 +3194,56 @@ if(u.ga_account) {
 }
 
 
+/*u-events-browser.js*/
+u.e.addDOMReadyEvent = function(action) {
+	if(document.readyState && document.addEventListener) {
+		if((document.readyState == "interactive" && !u.browser("ie")) || document.readyState == "complete" || document.readyState == "loaded") {
+			action();
+		}
+		else {
+			var id = u.randomString();
+			window["DOMReady_" + id] = action;
+			eval('window["_DOMReady_' + id + '"] = function() {window["DOMReady_'+id+'"](); u.e.removeEvent(document, "DOMContentLoaded", window["_DOMReady_' + id + '"])}');
+			u.e.addEvent(document, "DOMContentLoaded", window["_DOMReady_" + id]);
+		}
+	}
+	else {
+		u.e.addOnloadEvent(action);
+	}
+}
+u.e.addOnloadEvent = function(action) {
+	if(document.readyState && (document.readyState == "complete" || document.readyState == "loaded")) {
+		action();
+	}
+	else {
+		var id = u.randomString();
+		window["Onload_" + id] = action;
+		eval('window["_Onload_' + id + '"] = function() {window["Onload_'+id+'"](); u.e.removeEvent(window, "load", window["_Onload_' + id + '"])}');
+		u.e.addEvent(window, "load", window["_Onload_" + id]);
+	}
+}
+u.e.addWindowResizeEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onresize_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onresize_'+id+' = '+action+'; node._Onresize_'+id+'();}');
+	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
+	return id;
+}
+u.e.removeWindowResizeEvent = function(node, id) {
+	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
+}
+u.e.addWindowScrollEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onscroll_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onscroll_'+id+' = '+action+'; node._Onscroll_'+id+'();}');
+	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
+	return id;
+}
+u.e.removeWindowScrollEvent = function(node, id) {
+	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
+}
+
+
 /*i-page-desktop.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
@@ -3369,12 +3419,13 @@ Util.Objects["articlelist"] = new function() {
 			}
 		}
 		u.e.addWindowScrollEvent(list, list.scrolled);
+		list.scrolled();
 	}
 }
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
-		article._images = u.qsa("div.image", article);
 		var i, image;
+		article._images = u.qsa("div.image", article);
 		for(i = 0; image = article._images[i]; i++) {
 			image._id = u.cv(image, "image_id");
 			image._format = u.cv(image, "format");
@@ -3415,6 +3466,49 @@ Util.Objects["article"] = new function() {
 						}
 					}
 				}
+			}
+		}
+		article.geolocation = u.qs("dl.geo", article);
+		if(article.geolocation) {
+			article.geolocation.article = article;
+			u.bug("article.geolocation:" + article.geolocation)
+			var dd_longitude = u.qs("dd.longitude", article.geolocation);
+			var dd_latitude = u.qs("dd.latitude", article.geolocation);
+			if(dd_longitude && dd_latitude) {
+				article.geo_longitude = parseFloat(dd_longitude.innerHTML);
+				article.geo_latitude = parseFloat(dd_latitude.innerHTML);
+				article.showMap = function() {
+					if(!this.geomap) {
+						this.geomap = u.ae(this, "div", {"class":"geomap"});
+						this.insertBefore(this.geomap, u.qs("dl.info", this));
+						var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
+						var html = '<html><head>';
+						html += '<style type="text/css">body {margin: 0;}#map {height: 100%;}</style>';
+						html += '<script type="text/javascript" src="'+maps_url+'"></script>';
+						html += '<script type="text/javascript">';
+						html += 'var map, marker;';
+						html += 'var initialize = function() {';
+						html += '	window._map_loaded = true;';
+						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12};';
+						html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
+						html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'), draggable:true});';
+						html += '	marker.setMap(map);';
+						html += '};';
+						html += 'google.maps.event.addDomListener(window, "load", initialize);';
+						html += '</script>';
+						html += '</head><body><div id="map"></div></body></html>';
+						this.mapsiframe = u.ae(this.geomap, "iframe");
+						this.mapsiframe.doc = this.mapsiframe.contentDocument? this.mapsiframe.contentDocument: this.mapsiframe.contentWindow.document;
+						this.mapsiframe.doc.open();
+						this.mapsiframe.doc.write(html);
+						this.mapsiframe.doc.close();
+					}
+				}
+				article.geolocation.clicked = function() {
+					this.article.showMap();
+				}
+				u.ce(article.geolocation);
+				u.ac(article.geolocation, "active");
 			}
 		}
 	}
@@ -3570,3 +3664,9 @@ Util.Objects["todolist"] = new function() {
 	}
 }
 
+
+/*i-logbook-desktop.js*/
+Util.Objects["logbook"] = new function() {
+	this.init = function(scene) {
+	}
+}
