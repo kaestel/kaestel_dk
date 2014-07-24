@@ -3409,16 +3409,68 @@ Util.Objects["articlelist"] = new function() {
 		list.scrolled = function() {
 			var scroll_y = u.scrollY()
 			var browser_h = u.browserH();
-			var i, node, abs_y;
+			var i, node, node_y, list_y;
+			list_y = u.absY(this);
+			if(this._prev && list_y + browser_h > scroll_y) {
+				this.loadPrev();
+			}
+			else if(this._next && list_y + this.offsetHeight < scroll_y + (browser_h*2)) {
+				this.loadNext();
+			}
 			for(i = 0; node = this.items[i]; i++) {
-				abs_y = u.absY(node);
-				if(!node._ready && abs_y - 200 < scroll_y+browser_h && abs_y + 200 > scroll_y) {
+				node_y = u.absY(node);
+				if(!node._ready && node_y - 200 < scroll_y+browser_h && node_y + 200 > scroll_y) {
 					u.o.article.init(node);
 					node._ready = true;
 				}
 			}
 		}
 		u.e.addWindowScrollEvent(list, list.scrolled);
+		var next_link = u.qs(".pagination li.next a", list.parentNode);
+		var prev_link = u.qs(".pagination li.previous a", list.parentNode);
+		list._prev = prev_link ? prev_link.href : false;
+		list._next = next_link ? next_link.href : false;
+		list.loadPrev = function() {
+			if(this._prev) {
+				u.bug("load prev function")
+				this.response = function(response) {
+					var items = u.qsa(".item", response);
+					var i, node;
+					for(i = items.length; i; i--) {
+						node = u.ie(this, items[i-1]);
+						u.bug("u.scrollY:" + u.scrollY())
+						window.scrollTo(0, u.scrollY()+node.offsetHeight);
+					}
+					var prev_link = u.qs(".pagination li.previous a", response);
+					this._prev = prev_link ? prev_link.href : false;
+					this.items = u.qsa(".item", this);
+				}
+				u.request(this, this._prev);
+				this._prev = false;
+			}
+		}
+		list.loadNext = function() {
+			this.response = function(response) {
+				var items = u.qsa(".item", response);
+				var i;
+				for(i = 0; i < items.length; i++) {
+					u.ae(this, items[i]);
+				}
+				var next_link = u.qs(".pagination li.next a", response);
+				this._next = next_link ? next_link.href : false;
+				this.items = u.qsa(".item", this);
+			}
+			u.request(this, this._next);
+			this._next = false;
+		}
+		if(list._prev) {
+			list.content_y = u.absY(u.qs("h1"));
+			list.start_y = u.absY(list.items[0]);
+			window.scrollTo(0, list.start_y-list.content_y);
+		}
+		else if(u.scrollY()) {
+			window.scrollTo(0, 0);
+		}
 		list.scrolled();
 	}
 }
@@ -3435,6 +3487,9 @@ Util.Objects["article"] = new function() {
 				image._image = u.ie(image, "img");
 				u.a.setOpacity(image, 0);
 				image.loaded = function(queue) {
+					if(u.absY(this) < u.scrollY()) {
+						window.scrollTo(0, u.scrollY()+queue[0].image.height)
+					}
 					this._image.src = queue[0].image.src;
 					u.a.transition(this, "all 0.5s ease-in-out");
 					u.a.setOpacity(this, 1);

@@ -19,28 +19,29 @@ $page->bodyClass("geek");
 $page->pageTitle("Geek");
 
 
+
+# /geek/logs[/count/N] - lists the latest 5 logs and prev button
+# /geek/logs/#sindex#[/count/N] - Lists the latest 5 logs from sindex and prev+next button
+
+# /geek/logs/#sindex#/prev[/count/N]
+# /geek/logs/#sindex#/next[/count/N]
+
+# /geek/logs/tag/#tag#[/count/N] - Lists latest 5 logs with tag and prev button
+
+# /geek/logs/tag/#tag#/#sindex#[/count/N] - Lists latest 5 logs with tag from sindex and prev+next button
+
+# /geek/logs/tag/#tag#/#sindex#/prev[/count/N]
+# /geek/logs/tag/#tag#/#sindex#/next[/count/N]
+
+
+
 if(is_array($action) && count($action)) {
 
 	if(preg_match("/[a-zA-Z\\-_]+/", $action[0])) {
 		if(is_array($action) && count($action)) {
 
-			if(count($action) == 1) {
-
-				$page->header();
-				$page->template("geek/".$action[0].".php");
-				$page->footer();
-				exit();
-
-			}
-			else if(count($action) == 2 && $action[1] != "tag") {
-
-				$page->header();
-				$page->template("geek/".$action[0]."_view.php");
-				$page->footer();
-				exit();
-
-			}
-			else if(count($action) == 3 && $action[1] == "tag") {
+			# /geek/logs/tag/#tag#[/#sindex#/prev|next]
+			if(count($action) > 2 && $action[1] == "tag") {
 
 				$page->header();
 				$page->template("geek/".$action[0]."_tag.php");
@@ -48,9 +49,17 @@ if(is_array($action) && count($action)) {
 				exit();
 
 			}
+			# /geek/logs[/#sindex#/prev|next]
+			else {
+
+				$page->header();
+				$page->template("geek/".$action[0].".php");
+				$page->footer();
+				exit();
+
+			}
 
 		}
-
 	}
 
 }

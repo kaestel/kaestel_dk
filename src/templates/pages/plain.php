@@ -71,6 +71,17 @@ global $model;
 		If you think I am full of shit. Look in the mirror. Get a job. One you like. Stop being a fucking ant.
 	</p>
 
+	<h2>Side projects</h2>
+	<ul>
+		<li><a href="http://think.dk" target="_blank">think.dk</a></li>
+		<li><a href="http://e-types.com" target="_blank">e-Types</a></li>
+		<li><a href="http://parentnode.dk" target="_blank">parentNode</a></li>
+		<li><a href="http://detector.parentnode.dk" target="_blank">Detector</a></li>
+		<li><a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>
+		<li><a href="http://janitor.parentnode.dk" target="_blank">Janitor</a></li>
+		<li><a href="http://modulator.parentnode.dk" target="_blank">Modulator</a></li>
+	</ul>
+	
 
 	<h2>Contact info (for those who dare)</h2>
 

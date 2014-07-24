@@ -168,6 +168,7 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene div.image.fullsize a {padding: 0 50px;}
 #content .scene li div.image {margin: 0; max-width: 500px; padding: 0 0 30px; cursor: zoom-in;}
 #content .scene li div.image.fullsize {margin: 0; max-width: 100%; cursor: zoom-out;}
+#content .scene .pagination {display: none;}
 #content .scene code {padding: 10px 10px; margin: 0 50px 5px; position: relative; top: -15px; background-color: #ededed; font-size: 12px; display: block; overflow: auto; white-space: pre;
 	font-family: "Monaco", "Courier New", "Courier";
 	-moz-tab-size: 4;
