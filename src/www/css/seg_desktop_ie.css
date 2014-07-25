@@ -313,7 +313,7 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene div.vcard .email {font-size: 13px;}
 #content .scene ul.logs,
 #content .scene ul.postings {padding-bottom: 0;}
-#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px;}
+#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
 #content .scene.geek.lists div.logbooks,
 #content .scene.geek.lists div.posts {padding-top: 20px; display: inline-block; vertical-align: top; width: 250px;}
