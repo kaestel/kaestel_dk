@@ -3432,18 +3432,20 @@ Util.Objects["articlelist"] = new function() {
 			}
 		}
 		list.loadNext = function() {
-			this.response = function(response) {
-				var items = u.qsa(".item", response);
-				var i;
-				for(i = 0; i < items.length; i++) {
-					u.ae(this, items[i]);
+			if(this._next) {
+				this.response = function(response) {
+					var items = u.qsa(".item", response);
+					var i;
+					for(i = 0; i < items.length; i++) {
+						u.ae(this, items[i]);
+					}
+					var next_link = u.qs(".pagination li.next a", response);
+					this._next = next_link ? next_link.href : false;
+					this.items = u.qsa(".item", this);
 				}
-				var next_link = u.qs(".pagination li.next a", response);
-				this._next = next_link ? next_link.href : false;
-				this.items = u.qsa(".item", this);
+				u.request(this, this._next);
+				this._next = false;
 			}
-			u.request(this, this._next);
-			this._next = false;
 		}
 		if(list._prev) {
 			list.content_y = u.absY(u.qs("h1"));
@@ -3500,7 +3502,7 @@ Util.Objects["article"] = new function() {
 						html += 'var map, marker;';
 						html += 'var initialize = function() {';
 						html += '	window._map_loaded = true;';
-						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12, scrollwheel: false};';
+						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12, scrollwheel: false, draggable: false};';
 						html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
 						html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'), draggable:true});';
 						html += '	marker.setMap(map);';
