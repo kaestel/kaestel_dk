@@ -73,7 +73,12 @@ foreach($results as $result) {
 
 		$files = $fs->files(PRIVATE_FILE_PATH."/".$item_id);
 
-		print_r($files);
+		if(count($files)) {
+			$info = preg_replace(PRIVATE_FILE_PATH."/".$item_id."/", "", $files[0]);
+			list($variant, $format) = explode("/", $info);
+		}
+		print $variant . ", " . $format . "<br>";
+//		print_r($files);
 
 		// $image = new Imagick(PRIVATE_FILE_PATH."/".$item_id."/".$format);
 		// //
