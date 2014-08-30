@@ -74,7 +74,7 @@ foreach($results as $result) {
 		$files = $fs->files(PRIVATE_FILE_PATH."/".$item_id);
 
 		if(count($files)) {
-			$info = preg_replace(PRIVATE_FILE_PATH."/".$item_id."/", "", $files[0]);
+			$info = str_replace(PRIVATE_FILE_PATH."/".$item_id."/", "", $files[0]);
 			list($variant, $format) = explode("/", $info);
 		}
 		print $variant . ", " . $format . "<br>";
