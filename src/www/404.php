@@ -33,12 +33,13 @@ else {
 	include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 	$page->bodyClass("error");
-	$page->pageTitle("kaestel.dk - 404");
+	$page->pageTitle(SITE_NAME." - 404");
 
 
-	$page->header();
-	$page->template("pages/404.php");
-	$page->footer();
+	$page->page(array(
+		"templates" => "pages/404.php"
+		)
+	);
 
 }
 

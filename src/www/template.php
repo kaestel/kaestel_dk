@@ -13,8 +13,10 @@ $action = $page->actions();
 $page->bodyClass("story");
 $page->pageTitle("Getting lost without loosing my way");
 
-$page->header();
-$page->template("pages/template.php");
-$page->footer();
+
+$page->page(array(
+	"templates" => "pages/template.php"
+	)
+);
 
 ?>

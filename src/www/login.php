@@ -18,26 +18,28 @@ if(is_array($action) && count($action)) {
 
 	if(count($action) == 1 && $action[0] == "signup") {
 
-		$page->header();
-		$page->template("pages/signup.php");
-		$page->footer();
+		$page->page(array(
+			"templates" => "pages/signup.php"
+			)
+		);
 		exit();
 
 	}
 	else if(count($action) == 1 && $action[0] == "forgot_password") {
 
-		$page->header();
-		$page->template("pages/forgot_password.php");
-		$page->footer();
+		$page->page(array(
+			"templates" => "pages/forgot_password.php"
+			)
+		);
 		exit();
 
 	}
 
 }
 
-
-$page->header();
-$page->template("pages/login.php");
-$page->footer();
+$page->page(array(
+	"templates" => "pages/login.php"
+	)
+);
 
 ?>

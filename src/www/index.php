@@ -14,8 +14,10 @@ $IC = new Item();
 $page->bodyClass("front");
 $page->pageTitle("Getting lost without loosing my way");
 
-$page->header();
-$page->template("pages/front.php");
-$page->footer();
+
+$page->page(array(
+	"templates" => "pages/front.php"
+	)
+);
 
 ?>
