@@ -125,6 +125,7 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene dl+h2,
 #content .scene code+h2 {padding-top: 20px;}
 #content .scene ul.tags+h2 {padding-top: 0;}
+#content .scene h4+code {top: 0;}
 #content .scene ul {padding: 0 50px 15px;}
 #content .scene li {display: block; padding: 0 0 5px;}
 #content .scene li h1,
@@ -319,6 +320,25 @@ dd {display: inline-block; vertical-align: top; font-size: 14px; line-height: 1.
 #content .scene.geek.lists div.logbooks ul,
 #content .scene.geek.lists div.posts ul {padding-right: 0;}
 #content .scene.geek div.categories {padding-bottom: 20px;}
+#content .scene.wishlist {}
+#content .scene.wishlist ul.items > li {display: block; padding: 5px 0; font-size: 14px;}
+#content .scene.wishes {}
+#content .scene.wishes ul.items {}
+#content .scene.wishes ul.items > li {display: block; overflow: hidden; border-top: 1px solid #cccccc; padding: 20px 0 0;}
+#content .scene.wishes ul.items > li .image,
+#content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
+#content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 20px; cursor: default;}
+#content .scene.wishes ul.items > li .text {margin-bottom: 10px;}
+#content .scene.wishes ul.items > li h3 {padding: 0 25px 10px;}
+#content .scene.wishes ul.items > li div.description {}
+#content .scene.wishes ul.items > li div.description p {padding: 0 25px 10px;}
+#content .scene.wishes ul.items > li dl {padding: 0 25px 20px;}
+#content .scene.wishes ul.items > li dt {display: none;}
+#content .scene.wishes ul.items > li dd {font-size: 13px;}
+#content .scene.wishes ul.items > li ul.actions {padding: 0 25px 10px;}
+#content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
+#content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
+#content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
 
 
 /*s-colorscheme-desktop.css*/

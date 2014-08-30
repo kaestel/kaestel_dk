@@ -3296,7 +3296,8 @@ u.e.addWindowResizeEvent = function(node, action) {
 	return id;
 }
 u.e.removeWindowResizeEvent = function(node, id) {
-	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
+	u.rc(node, id);
+	u.e.removeEvent(window, "resize", window["_Onresize_" + id]);
 }
 u.e.addWindowScrollEvent = function(node, action) {
 	var id = u.randomString();
@@ -3306,7 +3307,30 @@ u.e.addWindowScrollEvent = function(node, action) {
 	return id;
 }
 u.e.removeWindowScrollEvent = function(node, id) {
-	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
+	u.rc(node, id);
+	u.e.removeEvent(window, "scroll", window["_Onscroll_" + id]);
+}
+u.e.addWindowMoveEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onmove_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onmove_'+id+' = '+action+'; node._Onmove_'+id+'(event);}');
+	u.e.addMoveEvent(window, window["_Onmove_" + id]);
+	return id;
+}
+u.e.removeWindowMoveEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeMoveEvent(window, window["_Onmove_" + id]);
+}
+u.e.addWindowEndEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onend_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onend_'+id+' = '+action+'; node._Onend_'+id+'(event);}');
+	u.e.addEndEvent(window, window["_Onend_" + id]);
+	return id;
+}
+u.e.removeWindowEndEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeEndEvent(window, window["_Onend_" + id]);
 }
 
 
@@ -3316,6 +3340,7 @@ Util.Form = u.f = new function() {
 	this.customValidate = {};
 	this.customSend = {};
 	this.init = function(form, settings) {
+		u.bug("init form:" + u.nodeId(form));
 		var i, j, field, action, input;
 		form.form_send = "params";
 		form.ignore_inputs = "ignoreinput";
@@ -3389,8 +3414,8 @@ Util.Form = u.f = new function() {
 					field._input.field = field;
 					form.fields[field._input.name] = field._input;
 					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
 					this.textEditor(field);
+					this.validate(field._input);
 				}
 				else if(u.hc(field, "select")) {
 					field._input = u.qs("select", field);
@@ -3463,6 +3488,16 @@ Util.Form = u.f = new function() {
 						this.validate(field._input);
 					}
 				}
+				else if(u.hc(field, "files")) {
+					field._input = u.qs("input", field);
+					field._input.field = field;
+					form.fields[field._input.name] = field._input;
+					field._input._label = u.qs("label[for="+field._input.id+"]", field);
+					u.e.addEvent(field._input, "change", this._updated);
+					u.e.addEvent(field._input, "change", this._changed);
+					this.fileUpload(field);
+					this.validate(field._input);
+				}
 				else if(u.hc(field, "date|datetime")) {
 					field._input = u.qsa("select,input", field);
 					for(j = 0; input = field._input[j]; j++) {
@@ -3478,12 +3513,6 @@ Util.Form = u.f = new function() {
 					this.formIndex(form, field._input);
 				}
 				else if(u.hc(field, "prices")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					this.formIndex(form, field._input);
-				}
-				else if(u.hc(field, "files")) {
 					field._input = u.qs("input", field);
 					field._input.field = field;
 					field._input._label = u.qs("label[for="+field._input.id+"]", field);
@@ -3670,76 +3699,24 @@ Util.Form = u.f = new function() {
 				this.inputOnEnter(iN);
 			}
 			else if(iN.nodeName.match(/textarea/i)) {
-				iN.val = this._value;
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
+				alert("unexpected formIndex in u.form");
 			}
 			else if(iN.nodeName.match(/select/i)) {
-				iN.val = this._value_select;
-				u.e.addEvent(iN, "change", this._updated);
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
+				alert("unexpected formIndex in u.form");
 			}
 			else if(iN.type && iN.type.match(/checkbox/)) {
-				iN.val = this._value_checkbox;
-				if(u.browser("explorer", "<=8")) {
-					iN.pre_state = iN.checked;
-					iN._changed = u.f._changed;
-					iN._updated = u.f._updated;
-					iN._clicked = function(event) {
-						if(this.checked != this.pre_state) {
-							this._changed(window.event);
-							this._updated(window.event);
-						}
-						this.pre_state = this.checked;
-					}
-					u.e.addEvent(iN, "click", iN._clicked);
-				}
-				else {
-					u.e.addEvent(iN, "change", this._updated);
-					u.e.addEvent(iN, "change", this._changed);
-				}
-				this.inputOnEnter(iN);
+				alert("unexpected formIndex in u.form");
+				// 
+				// 
 			}
 			else if(iN.type && iN.type.match(/radio/)) {
-				iN.val = this._value_radio;
-				if(u.browser("explorer", "<=8")) {
-					iN.pre_state = iN.checked;
-					iN._changed = u.f._changed;
-					iN._updated = u.f._updated;
-					iN._clicked = function(event) {
-						var i, input;
-						if(this.checked != this.pre_state) {
-							this._changed(window.event);
-							this._updated(window.event);
-						}
-						for(i = 0; input = this.field._input[i]; i++) {
-							input.pre_state = input.checked;
-						}
-					}
-					u.e.addEvent(iN, "click", iN._clicked);
-				}
-				else {
-					u.e.addEvent(iN, "change", this._updated);
-					u.e.addEvent(iN, "change", this._changed);
-				}
-				this.inputOnEnter(iN);
+				alert("unexpected formIndex in u.form");
+				// 
+				// 		
+				// 
 			}
 			else if(iN.type && iN.type.match(/file/)) {
-				iN.val = function(value) {
-					if(value !== undefined) {
-						alert('adding values manually to input type="file" is not supported')
-					}
-					else {
-						var i, file, files = [];
-						for(i = 0; file = this.files[i]; i++) {
-							files.push(file);
-						}
-						return files.join(",");
-					}
-				}
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
+				alert("unexpected formIndex in u.form");
 			}
 			this.activateField(iN);
 			this.validate(iN);
@@ -3791,18 +3768,35 @@ Util.Form = u.f = new function() {
 			}
 		}
 	}
+	this.positionHint = function(field) {
+		if(field._help) {
+			var f_h =  field.offsetHeight;
+			var f_p_t = parseInt(u.gcs(field, "padding-top"));
+			var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
+			var f_b_t = parseInt(u.gcs(field, "border-top-width"));
+			var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
+			var f_h_h = field._help.offsetHeight;
+			u.as(field._help, "top", (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2) + "px");
+		}
+	}
+	this._mouseenter = function(event) {
+		u.ac(this.field, "hover");
+		u.ac(this, "hover");
+		u.as(this.field, "zIndex", 99);
+		u.f.positionHint(this.field);
+	}
+	this._mouseleave = function(event) {
+		u.rc(this.field, "hover");
+		u.rc(this, "hover");
+		u.as(this.field, "zIndex", 90);
+		u.f.positionHint(this.field);
+	}
 	this._focus = function(event) {
 		this.field.focused = true;
 		u.ac(this.field, "focus");
 		u.ac(this, "focus");
 		u.as(this.field, "zIndex", 99);
-		if(this.field._help) {
-			var f_h =  this.field.offsetHeight;
-			var f_p_t = parseInt(u.gcs(this.field, "padding-top"));
-			var f_p_b = parseInt(u.gcs(this.field, "padding-bottom"));
-			var f_h_h = this.field._help.offsetHeight;
-			u.as(this.field._help, "top", (((f_h - (f_p_t + f_p_b)) / 2) + 2) - (f_h_h / 2) + "px");
-		}
+		u.f.positionHint(this.field);
 		if(typeof(this.focused) == "function") {
 			this.focused();
 		}
@@ -3815,9 +3809,7 @@ Util.Form = u.f = new function() {
 		u.rc(this.field, "focus");
 		u.rc(this, "focus");
 		u.as(this.field, "zIndex", 90);
-		if(this.field._help) {
-			u.as(this.field._help, "top", ((this.offsetTop + this.offsetHeight/2 + 2) - (this.field._help.offsetHeight/2)) + "px")
-		}
+		u.f.positionHint(this.field);
 		this.used = true;
 		if(typeof(this.blurred) == "function") {
 			this.blurred();
@@ -3859,6 +3851,10 @@ Util.Form = u.f = new function() {
 	this.activateField = function(iN) {
 		u.e.addEvent(iN, "focus", this._focus);
 		u.e.addEvent(iN, "blur", this._blur);
+		if(u.e.event_pref == "mouse") {
+			u.e.addEvent(iN, "mouseenter", this._mouseenter);
+			u.e.addEvent(iN, "mouseleave", this._mouseleave);
+		}
 		u.e.addEvent(iN, "blur", this._validate);
 		if(iN.form.labelstyle || u.hc(iN.form, "labelstyle:[a-z]+")) {
 			iN.form.labelstyle = iN.form.labelstyle ? iN.form.labelstyle : u.cv(iN.form, "labelstyle");
@@ -3941,6 +3937,27 @@ Util.Form = u.f = new function() {
 		}
 		u.e.addEvent(iN, "keyup", iN.setHeight);
 		iN.setHeight();
+	}
+	this.fileUpload = function(field) {
+		if(u.e.event_pref == "mouse") {
+			u.e.addEvent(field._input, "dragenter", this._focus);
+			u.e.addEvent(field._input, "dragleave", this._blur);
+			u.e.addEvent(field._input, "mouseenter", this._mouseenter);
+			u.e.addEvent(field._input, "mouseleave", this._mouseleave);
+		}
+		u.e.addEvent(field._input, "blur", this._validate);
+		field._input.val = function(value) {
+			if(value !== undefined) {
+				this.value = value;
+			}
+			else {
+				var i, file, files = [];
+				for(i = 0; file = this.files[i]; i++) {
+					files.push(file);
+				}
+				return files;
+			}
+		}
 	}
 	this.geoLocation = function(field) {
 		u.ac(field, "geolocation");
@@ -4076,20 +4093,25 @@ Util.Form = u.f = new function() {
 		}
 	}
 	this.textEditor = function(field) {
+		u.bug("init editor")
 		field._viewer = u.ae(field, "div", {"class":"viewer"});
 		field._editor = u.ae(field, "div", {"class":"editor targets:tag"});
+		field._input.val = this._value;
+		field.allowed_tags = u.cv(field, "tags");
+		field.allowed_tags = field.allowed_tags ? field.allowed_tags.split(",") : false;
+		u.xInObject(field.allowed_tags)
 		field.add = function(type, value) {
+			this._tag_restrictions = new RegExp(/^(p|h1|h2|h3|h4|h5|h6|ul|dl|code)$/);
 			var div = u.ae(this._editor, "div", {"class":"tag "+type});
 			div._drag = u.ae(div, "div", {"class":"drag"});
 			div._drag.field = this;
 			div._select = u.ae(div, "ul", {"class":"type"});
-			u.ae(div._select, "li", {"html":"p"});
-			u.ae(div._select, "li", {"html":"h1"});
-			u.ae(div._select, "li", {"html":"h2"});
-			u.ae(div._select, "li", {"html":"h3"});
-			u.ae(div._select, "li", {"html":"h4"});
-			u.ae(div._select, "li", {"html":"h5"});
-			u.ae(div._select, "li", {"html":"h6"});
+			var i, tag;
+			for(i = 0; tag = this.allowed_tags[i]; i++) {
+				if(tag.match(this._tag_restrictions)) {
+					u.ae(div._select, "li", {"html":tag, "class":tag});
+				}
+			}
 			div._select.field = this;
 			div._select.div = div;
 			div._select.val = function(value) {
@@ -4107,7 +4129,7 @@ Util.Form = u.f = new function() {
 							return option;
 						}
 					}
-					return false;
+					return this.childNodes[0];
 				}
 				else {
 					return u.text(this.selected_option);
@@ -4168,6 +4190,7 @@ Util.Form = u.f = new function() {
 			u.e.addEvent(div._input, "mouseup", this._changed_content);
 			u.e.addEvent(div._input, "focus", this._focused_content);
 			u.e.addEvent(div._input, "blur", this._blurred_content);
+			u.e.addEvent(div._input, "paste", this._pasted_content);
 			return div;
 		}
 		field._focused_content = function(event) {
@@ -4191,6 +4214,29 @@ Util.Form = u.f = new function() {
 		field._changing_content = function(event) {
 			if(event.keyCode == 13) {
 				u.e.kill(event);
+			}
+		}
+		field._pasted_content = function(event) {
+			u.e.kill(event);
+			var i, node;
+			var paste_content = event.clipboardData.getData("text/plain");
+			if(paste_content !== "") {
+				var paste_parts = paste_content.split(/\n\r|\n|\r/g);
+				var text_nodes = [];
+				for(i = 0; text = paste_parts[i]; i++) {
+					text_nodes.push(document.createTextNode(text));
+					text_nodes.push(document.createElement("br"));
+				}
+ 				var text_node = document.createTextNode(paste_content);
+				for(i = text_nodes.length-1; node = text_nodes[i]; i--) {
+					window.getSelection().getRangeAt(0).insertNode(node);
+				}
+				var range = document.createRange();
+				range.selectNodeContents(this);
+				range.collapse(false);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(range);
 			}
 		}
 		field._changed_content = function(event) {
@@ -4242,7 +4288,7 @@ Util.Form = u.f = new function() {
 						}
 					}
 				}
-				else if(!this.val()) {
+				else if(!this.val() || !this.val().replace(/<br>/, "")) {
 					this.is_deletable = true;
 				}
 				else if(selection.anchorNode != this && selection.anchorNode.innerHTML == "") {
@@ -4327,7 +4373,7 @@ Util.Form = u.f = new function() {
 						u.t.resetTimer(this.node.t_out);
 					}
 					this.bn_delete.out = function(event) {
-						this.node.t_out = u.t.setTimer(this, this.node.reallyout, 300);
+						this.node.t_out = u.t.setTimer(this.node, this.node.reallyout, 300);
 					}
 					u.e.addEvent(this.bn_delete, "mouseover", this.bn_delete.over);
 					u.e.addEvent(this.bn_delete, "mouseout", this.bn_delete.out);
@@ -4439,7 +4485,7 @@ Util.Form = u.f = new function() {
 						}
 					}
 				}
-				else if(node.nodeName.toLowerCase().match(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/)) {
+				else if(node.nodeName.toLowerCase().match(field._tag_restrictions)) {
 					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
 					tag = field.add(node.nodeName.toLowerCase(), value);
 					field.activateInlineFormatting(tag._input);
@@ -4454,7 +4500,7 @@ Util.Form = u.f = new function() {
 			tag = field.add("p", value);
 			field.activateInlineFormatting(tag._input);
 		}
-		u.s.sortable(field._editor);
+		u.sortable(field._editor);
 		field.update = function() {
 			this.updateViewer();
 			this.updateContent();
@@ -4473,7 +4519,6 @@ Util.Form = u.f = new function() {
 			this._input.val("");
 			var i, node, tag, value, html = "";
 			for(i = 0; node = tags[i]; i++) {
-				u.bug(u.nodeId(node));
 				value = node._input.val();
 				tag = node._select.val();
 				html += "<"+tag+">"+value+"</"+tag+">\n";
@@ -4739,9 +4784,13 @@ Util.Form = u.f = new function() {
 				}
 			}
 			else if(u.hc(iN.field, "files")) {
-				u.bug("files:" + iN.files.length);
+				min = Number(u.cv(iN.field, "min"));
+				max = Number(u.cv(iN.field, "max"));
+				min = min ? min : 1;
+				max = max ? max : 10000000;
 				if(
-					1
+					iN.val().length >= min && 
+					iN.val().length <= max
 				) {
 					this.fieldCorrect(iN);
 				}
@@ -4980,6 +5029,629 @@ u.f.addAction = function(node, settings) {
 }
 
 
+/*u-geometry.js*/
+Util.absoluteX = u.absX = function(node) {
+	if(node.offsetParent) {
+		return node.offsetLeft + u.absX(node.offsetParent);
+	}
+	return node.offsetLeft;
+}
+Util.absoluteY = u.absY = function(node) {
+	if(node.offsetParent) {
+		return node.offsetTop + u.absY(node.offsetParent);
+	}
+	return node.offsetTop;
+}
+Util.relativeX = u.relX = function(node) {
+	if(u.gcs(node, "position").match(/absolute/) == null && node.offsetParent && u.gcs(node.offsetParent, "position").match(/relative|absolute|fixed/) == null) {
+		return node.offsetLeft + u.relX(node.offsetParent);
+	}
+	return node.offsetLeft;
+}
+Util.relativeY = u.relY = function(node) {
+	if(u.gcs(node, "position").match(/absolute/) == null && node.offsetParent && u.gcs(node.offsetParent, "position").match(/relative|absolute|fixed/) == null) {
+		return node.offsetTop + u.relY(node.offsetParent);
+	}
+	return node.offsetTop;
+}
+Util.actualWidth = u.actualW = function(node) {
+	return parseInt(u.gcs(node, "width"));
+}
+Util.actualHeight = u.actualH = function(node) {
+	return parseInt(u.gcs(node, "height"));
+}
+Util.eventX = function(event){
+	return (event.targetTouches ? event.targetTouches[0].pageX : event.pageX);
+}
+Util.eventY = function(event){
+	return (event.targetTouches ? event.targetTouches[0].pageY : event.pageY);
+}
+Util.browserWidth = u.browserW = function() {
+	return document.documentElement.clientWidth;
+}
+Util.browserHeight = u.browserH = function() {
+	return document.documentElement.clientHeight;
+}
+Util.htmlWidth = u.htmlW = function() {
+	return document.body.offsetWidth + parseInt(u.gcs(document.body, "margin-left")) + parseInt(u.gcs(document.body, "margin-right"));
+}
+Util.htmlHeight = u.htmlH = function() {
+	return document.body.offsetHeight + parseInt(u.gcs(document.body, "margin-top")) + parseInt(u.gcs(document.body, "margin-bottom"));
+}
+Util.pageScrollX = u.scrollX = function() {
+	return window.pageXOffset;
+}
+Util.pageScrollY = u.scrollY = function() {
+	return window.pageYOffset;
+}
+
+
+/*u-dom.js*/
+Util.querySelector = u.qs = function(query, scope) {
+	scope = scope ? scope : document;
+	return scope.querySelector(query);
+}
+Util.querySelectorAll = u.qsa = function(query, scope) {
+	scope = scope ? scope : document;
+	return scope.querySelectorAll(query);
+}
+Util.getElement = u.ge = function(identifier, scope) {
+	var node, i, regexp;
+	if(document.getElementById(identifier)) {
+		return document.getElementById(identifier);
+	}
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			return node;
+		}
+	}
+	return scope.getElementsByTagName(identifier).length ? scope.getElementsByTagName(identifier)[0] : false;
+}
+Util.getElements = u.ges = function(identifier, scope) {
+	var node, i, regexp;
+	var nodes = new Array();
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			nodes.push(node);
+		}
+	}
+	return nodes.length ? nodes : scope.getElementsByTagName(identifier);
+}
+Util.parentNode = u.pn = function(node, node_type) {
+	if(node_type) {
+		if(node.parentNode) {
+			var parent = node.parentNode;
+		}
+		while(parent.nodeName.toLowerCase() != node_type.toLowerCase()) {
+			if(parent.parentNode) {
+				parent = parent.parentNode;
+			}
+			else {
+				return false;
+			}
+		}
+		return parent;
+	}
+	else {
+		return node.parentNode;
+	}
+}
+Util.previousSibling = u.ps = function(node, exclude) {
+	node = node.previousSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || exclude && (u.hc(node, exclude) || node.nodeName.toLowerCase().match(exclude)))) {
+		node = node.previousSibling;
+	}
+	return node;
+}
+Util.nextSibling = u.ns = function(node, exclude) {
+	node = node.nextSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || exclude && (u.hc(node, exclude) || node.nodeName.toLowerCase().match(exclude)))) {
+		node = node.nextSibling;
+	}
+	return node;
+}
+Util.childNodes = u.cn = function(node, exclude) {
+	var i, child;
+	var children = new Array();
+	for(i = 0; child = node.childNodes[i]; i++) {
+		if(child && child.nodeType != 3 && child.nodeType != 8 && (!exclude || (!u.hc(child, exclude) && !child.nodeName.toLowerCase().match(exclude) ))) {
+			children.push(child);
+		}
+	}
+	return children;
+}
+Util.appendElement = u.ae = function(parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = parent.appendChild(node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.ae, called from: "+arguments.callee.caller.name);
+		u.bug("node:" + u.nodeId(parent, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.insertElement = u.ie = function(parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = parent.insertBefore(node, parent.firstChild);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.ie, called from: "+arguments.callee.caller);
+		u.bug("node:" + u.nodeId(parent, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.wrapElement = u.we = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = node.parentNode.insertBefore(document.createElement(node_type), node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		wrapper_node.appendChild(node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.we, called from: "+arguments.callee.caller);
+		u.bug("node:" + u.nodeId(node, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.wrapContent = u.wc = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = document.createElement(node_type);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		while(node.childNodes.length) {
+			wrapper_node.appendChild(node.childNodes[0]);
+		}
+		node.appendChild(wrapper_node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.wc, called from: "+arguments.callee.caller);
+		u.bug("node:" + u.nodeId(node, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.textContent = u.text = function(node) {
+	return node.textContent;
+}
+Util.clickableElement = u.ce = function(node, options) {
+	var a = (node.nodeName.toLowerCase() == "a" ? node : u.qs("a", node));
+	if(a) {
+		u.ac(node, "link");
+		if(a.getAttribute("href") !== null) {
+			node.url = a.href;
+			a.removeAttribute("href");
+		}
+	}
+	else {
+		u.ac(node, "clickable");
+	}
+	if(typeof(u.e.click) == "function") {
+		u.e.click(node);
+		if(typeof(options) == "object") {
+			var argument;
+			for(argument in options) {
+				switch(argument) {
+					case "type"			: node._click_type		= options[argument]; break;
+					case "method"		: node._click_method	= options[argument]; break;
+				}
+			}
+			if(node._click_type == "link") {
+				node.clicked = function(event) {
+					if(event.metaKey || event.ctrlKey) {
+						window.open(this.url);
+					}
+					else {
+						if(typeof(page.navigate) == "function") {
+							page.navigate(this.url);
+						}
+						else {
+							location.href = this.url;
+						}
+					}
+				}
+			}
+		}
+	}
+	return node;
+}
+Util.classVar = u.cv = function(node, var_name) {
+	try {
+		var regexp = new RegExp(var_name + ":[?=\\w/\\#~:.,?+=?&%@!\\-]*");
+		if(node.className.match(regexp)) {
+			return node.className.match(regexp)[0].replace(var_name + ":", "");
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.cv, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+u.getIJ = u.cv;
+Util.setClass = u.sc = function(node, classname) {
+	try {
+		var old_class = node.className;
+		node.className = classname;
+		node.offsetTop;
+		return old_class;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.setClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.hasClass = u.hc = function(node, classname) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)(" + classname + ")(\\s|$)");
+			if(regexp.test(node.className)) {
+				return true;
+			}
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.hasClass("+u.nodeId(node)+"), called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.addClass = u.ac = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$)");
+			if(!regexp.test(node.className)) {
+				node.className += node.className ? " " + classname : classname;
+				dom_update === false ? false : node.offsetTop;
+			}
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.addClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.removeClass = u.rc = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(\\b)" + classname + "(\\s|$)", "g");
+			node.className = node.className.replace(regexp, " ").trim().replace(/[\s]{2}/g, " ");
+			dom_update === false ? false : node.offsetTop;
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.removeClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.toggleClass = u.tc = function(node, classname, _classname, dom_update) {
+	try {
+		var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$|\:)");
+		if(regexp.test(node.className)) {
+			u.rc(node, classname, false);
+			if(_classname) {
+				u.ac(node, _classname, false);
+			}
+		}
+		else {
+			u.ac(node, classname, false);
+			if(_classname) {
+				u.rc(node, _classname, false);
+			}
+		}
+		dom_update === false ? false : node.offsetTop;
+		return node.className;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.toggleClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.applyStyle = u.as = function(node, property, value, dom_update) {
+	node.style[property] = value;
+	dom_update === false ? false : node.offsetTop;
+}
+Util.applyStyles = u.ass = function(node, styles, dom_update) {
+	if(styles) {
+		var style;
+		for(style in styles) {
+			node.style[style] = styles[style];
+		}
+	}
+	dom_update === false ? false : node.offsetTop;
+}
+Util.getComputedStyle = u.gcs = function(node, property) {
+	node.offsetHeight;
+	if(document.defaultView && document.defaultView.getComputedStyle) {
+		return document.defaultView.getComputedStyle(node, null).getPropertyValue(property);
+	}
+	return false;
+}
+Util.hasFixedParent = u.hfp = function(node) {
+	while(node.nodeName.toLowerCase() != "body") {
+		if(u.gcs(node.parentNode, "position").match("fixed")) {
+			return true;
+		}
+		node = node.parentNode;
+	}
+	return false;
+}
+Util.inNodeList = function(node, list) {
+	var i, list_node;
+	for(i = 0; list_node = list[i]; i++) {
+		if(list_node = node) {
+			return true;
+		}
+	}
+	return false;
+}
+Util.nodeWithin = u.nw = function(node, scope) {
+	var node_key = u.randomString(8);
+	var scope_key = u.randomString(8);
+	u.ac(node, node_key);
+	u.ac(scope, scope_key);
+	if(u.qs("."+scope_key+" ."+node_key)) {
+		u.rc(node, node_key);
+		u.rc(scope, scope_key);
+		return true;
+	}
+	u.rc(node, node_key);
+	u.rc(scope, scope_key);
+	return false;
+}
+
+
+/*u-request.js*/
+Util.createRequestObject = u.createRequestObject = function() {
+	return new XMLHttpRequest();
+}
+Util.request = u.request = function(node, url, settings) {
+	var request_id = u.randomString(6);
+	node[request_id] = {};
+	node[request_id].request_url = url;
+	node[request_id].request_method = "GET";
+	node[request_id].request_async = true;
+	node[request_id].request_params = "";
+	node[request_id].request_headers = false;
+	node[request_id].response_callback = "response";
+	if(typeof(settings) == "object") {
+		var argument;
+		for(argument in settings) {
+			switch(argument) {
+				case "method"		: node[request_id].request_method		= settings[argument]; break;
+				case "params"		: node[request_id].request_params		= settings[argument]; break;
+				case "async"		: node[request_id].request_async		= settings[argument]; break;
+				case "headers"		: node[request_id].request_headers		= settings[argument]; break;
+				case "callback"		: node[request_id].response_callback	= settings[argument]; break;
+			}
+		}
+	}
+	if(node[request_id].request_method.match(/GET|POST|PUT|PATCH/i)) {
+		node[request_id].HTTPRequest = this.createRequestObject();
+		node[request_id].HTTPRequest.node = node;
+		node[request_id].HTTPRequest.request_id = request_id;
+		if(node[request_id].request_async) {
+			node[request_id].HTTPRequest.onreadystatechange = function() {
+				if(this.readyState == 4) {
+					u.validateResponse(this);
+				}
+			}
+		}
+		try {
+			if(node[request_id].request_method.match(/GET/i)) {
+				var params = u.JSONtoParams(node[request_id].request_params);
+				node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
+				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
+				node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				var csfr_field = u.qs('meta[name="csrf-token"]');
+				if(csfr_field && csfr_field.content) {
+					node[request_id].HTTPRequest.setRequestHeader("X-CSRF-Token", csfr_field.content);
+				}
+				if(typeof(node[request_id].request_headers) == "object") {
+					var header;
+					for(header in node[request_id].request_headers) {
+						node[request_id].HTTPRequest.setRequestHeader(header, node[request_id].request_headers[header]);
+					}
+				}
+				node[request_id].HTTPRequest.send("");
+			}
+			else if(node[request_id].request_method.match(/POST|PUT|PATCH/i)) {
+				var params;
+				if(typeof(node[request_id].request_params) == "object" && !node[request_id].request_params.constructor.toString().match(/FormData/i)) {
+					params = JSON.stringify(node[request_id].request_params);
+				}
+				else {
+					params = node[request_id].request_params;
+				}
+				node[request_id].HTTPRequest.open(node[request_id].request_method, node[request_id].request_url, node[request_id].request_async);
+				if(!params.constructor.toString().match(/FormData/i)) {
+					node[request_id].HTTPRequest.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+				}
+				var csfr_field = u.qs('meta[name="csrf-token"]');
+				if(csfr_field && csfr_field.content) {
+					node[request_id].HTTPRequest.setRequestHeader("X-CSRF-Token", csfr_field.content);
+				}
+				if(typeof(node[request_id].request_headers) == "object") {
+					var header;
+					for(header in node[request_id].request_headers) {
+						node[request_id].HTTPRequest.setRequestHeader(header, node[request_id].request_headers[header]);
+					}
+				}
+				node[request_id].HTTPRequest.send(params);
+			}
+		}
+		catch(exception) {
+			node[request_id].HTTPRequest.exception = exception;
+			u.validateResponse(node[request_id].HTTPRequest);
+			return;
+		}
+		if(!node[request_id].request_async) {
+			u.validateResponse(node[request_id].HTTPRequest);
+		}
+	}
+	else if(node[request_id].request_method.match(/SCRIPT/i)) {
+		var key = u.randomString();
+		document[key] = new Object();
+		document[key].node = node;
+		document[key].request_id = request_id;
+		document[key].responder = function(response) {
+			var response_object = new Object();
+			response_object.node = this.node;
+			response_object.request_id = this.request_id;
+			response_object.responseText = response;
+			u.validateResponse(response_object);
+		}
+		var params = u.JSONtoParams(node[request_id].request_params);
+		node[request_id].request_url += params ? ((!node[request_id].request_url.match(/\?/g) ? "?" : "&") + params) : "";
+		node[request_id].request_url += (!node[request_id].request_url.match(/\?/g) ? "?" : "&") + "callback=document."+key+".responder";
+		u.ae(u.qs("head"), "script", ({"type":"text/javascript", "src":node[request_id].request_url}));
+	}
+	return request_id;
+}
+Util.JSONtoParams = function(json) {
+	if(typeof(json) == "object") {
+		var params = "", param;
+		for(param in json) {
+			params += (params ? "&" : "") + param + "=" + json[param];
+		}
+		return params
+	}
+	var object = u.isStringJSON(json);
+	if(object) {
+		return u.JSONtoParams(object);
+	}
+	return json;
+}
+Util.isStringJSON = function(string) {
+	if(string.trim().substr(0, 1).match(/[\{\[]/i) && string.trim().substr(-1, 1).match(/[\}\]]/i)) {
+		try {
+			var test = JSON.parse(string);
+			if(typeof(test) == "object") {
+				test.isJSON = true;
+				return test;
+			}
+		}
+		catch(exception) {}
+	}
+	return false;
+}
+Util.isStringHTML = function(string) {
+	if(string.trim().substr(0, 1).match(/[\<]/i) && string.trim().substr(-1, 1).match(/[\>]/i)) {
+		try {
+			var test = document.createElement("div");
+			test.innerHTML = string;
+			if(test.childNodes.length) {
+				var body_class = string.match(/<body class="([a-z0-9A-Z_: ]+)"/);
+				test.body_class = body_class ? body_class[1] : "";
+				var head_title = string.match(/<title>([^$]+)<\/title>/);
+				test.head_title = head_title ? head_title[1] : "";
+				test.isHTML = true;
+				return test;
+			}
+		}
+		catch(exception) {}
+	}
+	return false;
+}
+Util.evaluateResponseText = function(responseText) {
+	var object;
+	if(typeof(responseText) == "object") {
+		responseText.isJSON = true;
+		return responseText;
+	}
+	else {
+		var response_string;
+		if(responseText.trim().substr(0, 1).match(/[\"\']/i) && responseText.trim().substr(-1, 1).match(/[\"\']/i)) {
+			response_string = responseText.trim().substr(1, responseText.trim().length-2);
+		}
+		else {
+			response_string = responseText;
+		}
+		var json = u.isStringJSON(response_string);
+		if(json) {
+			return json;
+		}
+		var html = u.isStringHTML(response_string);
+		if(html) {
+			return html;
+		}
+		return responseText;
+	}
+}
+Util.validateResponse = function(response){
+	var object = false;
+	if(response) {
+		try {
+			if(response.status && !response.status.toString().match(/403|404|500/)) {
+				object = u.evaluateResponseText(response.responseText);
+			}
+			else if(response.responseText) {
+				object = u.evaluateResponseText(response.responseText);
+			}
+		}
+		catch(exception) {
+			response.exception = exception;
+		}
+	}
+	if(object) {
+		if(typeof(response.node[response.node[response.request_id].response_callback]) == "function") {
+			response.node[response.node[response.request_id].response_callback](object, response.request_id);
+		}
+		// 
+	}
+	else {
+		if(typeof(response.node.ResponseError) == "function") {
+			response.node.ResponseError(response);
+		}
+		if(typeof(response.node.responseError) == "function") {
+			response.node.responseError(response);
+		}
+	}
+}
+
+
 /*beta-u-sortable.js*/
 Util.Sort = u.s = new function() {
 	this.sortable = function(list) {
@@ -5129,8 +5801,8 @@ Util.Sort = u.s = new function() {
 				}
 			}
 		}
-		if(typeof(this.list.dragged) == "function") {
-			this.list.dragged(event);
+		if(typeof(this.list.moved) == "function") {
+			this.list.moved(event);
 		}
 	}
 	this._drop = function(event) {
@@ -5160,188 +5832,266 @@ Util.Sort = u.s = new function() {
 		}
 	}
 }
-u.sortable = function(node, options) {
-	var callback;
-	var draggables;	
-	var targets;	
-	var sources;
+u.sortable = function(scope, options) {
+	u.bug("u.sortable init")
+	scope.callback_picked = "picked";
+	scope.callback_moved = "moved";
+	scope.callback_dropped = "dropped";
+	scope.draggables;	
+	scope.targets;	
+	scope.layout;
+	scope.allow_nesting = false;
 	if(typeof(options) == "object") {
 		var argument;
 		for(argument in options) {
 			switch(argument) {
-				case "callback"				: callback				= options[argument]; break;
-				case "draggables"			: draggables			= options[argument]; break;
-				case "sources"				: sources				= options[argument]; break;
+				case "picked"				: scope.callback_picked		= options[argument]; break;
+				case "moved"				: scope.callback_moved		= options[argument]; break;
+				case "dropped"				: scope.callback_dropped	= options[argument]; break;
+				case "draggables"			: scope.draggables			= options[argument]; break;
+				case "targets"				: scope.targets				= options[argument]; break;
+				case "layout"				: scope.layout				= options[argument]; break;
+				case "allow_nesting"		: scope.allow_nesting		= options[argument]; break;
 			}
 		}
 	}
-	node._sortablepick = function(event) {
-		u.bug("pick:" + u.nodeId(this) + "; "+ u.nodeId(this.d_node) + ";" + u.nodeId(this.d_node.node));
-		if(!this.d_node.node._sorting_disabled) {
+	scope._sortablepick = function(event) {
+		if(!this.d_node.scope._sorting_disabled) {
 			u.e.kill(event);
-			if(!this.d_node.node._dragged) {
-				var d_node = this.d_node.node._dragged = this.d_node;
-				u.bug("now dragging:" + u.nodeId(d_node));
+			if(!this.d_node.scope._dragged) {
+				var d_node = this.d_node.scope._dragged = this.d_node;
 				d_node.start_opacity = u.gcs(d_node, "opacity");
 				d_node.start_position = u.gcs(d_node, "position");
 				d_node.start_width = u.gcs(d_node, "width");
 				d_node.start_height = u.gcs(d_node, "height");
-				if(!d_node.node.tN) {
-					d_node.node.tN = document.createElement(d_node.nodeName);
+				if(!d_node.scope.tN) {
+					d_node.scope.tN = document.createElement(d_node.nodeName);
 				}
-				u.sc(d_node.node.tN, "target " + d_node.className);
-				u.as(d_node.node.tN, "height", u.actualHeight(d_node)+"px");
-				u.as(d_node.node.tN, "width", u.actualWidth(d_node)+"px");
-				u.as(d_node.node.tN, "opacity", d_node.start_opacity - 0.5);
-				d_node.node.tN.innerHTML = d_node.innerHTML;
-				u.bug("now dragging:" + u.nodeId(d_node));
+				u.sc(d_node.scope.tN, "target " + d_node.className);
+				u.as(d_node.scope.tN, "height", u.actualHeight(d_node)+"px");
+				u.as(d_node.scope.tN, "width", u.actualWidth(d_node)+"px");
+				u.as(d_node.scope.tN, "opacity", d_node.start_opacity - 0.5);
+				d_node.scope.tN.innerHTML = d_node.innerHTML;
 				u.as(d_node, "width", u.actualWidth(d_node) + "px");
 				u.as(d_node, "opacity", d_node.start_opacity - 0.3);
-	// 			
-	// 			
-	// 
-	// 
-	// 			
-	// 			
-	// 
-	// 
-	// 			
-	// 			
-	// 
-	// 			
-				if(typeof(d_node.node.picked) == "function") {
-					d_node.node.picked(event);
+				d_node.mouse_ox = u.eventX(event) - u.absX(d_node);
+				d_node.mouse_oy = u.eventY(event) - u.absY(d_node);
+				u.as(d_node, "position", "absolute");
+				u.as(d_node, "left", (u.eventX(event) - d_node.rel_ox) - d_node.mouse_ox+"px");
+				u.as(d_node, "top", (u.eventY(event) - d_node.rel_oy) - d_node.mouse_oy+"px");
+				u.ac(d_node, "dragged");
+				d_node._event_move_id = u.e.addWindowMoveEvent(d_node, d_node.scope._sortabledrag);
+				d_node._event_end_id = u.e.addWindowEndEvent(d_node, d_node.scope._sortabledrop);
+				d_node.parentNode.insertBefore(d_node.scope.tN, d_node);
+				if(typeof(d_node.scope[d_node.scope.callback_picked]) == "function") {
+					d_node.scope[d_node.scope.callback_picked](event);
 				}
 			}
 		}
 	}
-	node._sortabledrag = function(event) {
-		var i, node;
+	scope._sortabledrag = function(event) {
 		u.e.kill(event);
-		if(this.list.dragged) {
-			var d_left = u.eventX(event) - this.list.dragged.mouse_ox;
-			var d_top = u.eventY(event) - this.list.dragged.mouse_oy;
-			if(u.scrollY() >= d_top && 0) {
-				if(u.browserH() < u.htmlH()) {
-					u.as(this.list.dragged, "position", "fixed");
-					u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-					u.as(this.list.dragged, "top", 0);
-					u.as(this.list.dragged, "bottom", "auto");
-					this.list.scroll_speed = Math.round((d_top - u.scrollY()));
-					this.list._scrollWindowY();
-				}
-			}
-			else if(u.browserH() + u.scrollY() < d_top + this.list.dragged.offsetHeight && 0) {
-				if(u.browserH() < u.htmlH()) {
-					u.as(this.list.dragged, "position", "fixed");
-					u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-					u.as(this.list.dragged, "top", "auto");
-					u.as(this.list.dragged, "bottom", 0);
-					this.list.scroll_speed = -(Math.round((u.browserH() + u.scrollY() - d_top - this.list.dragged.offsetHeight)));
-					this.list._scrollWindowY();
-				}
-			}
-			else {
-				var d_center_x = d_left + (this.list.dragged.offsetWidth/2);
-				var d_center_y = d_top + (this.list.dragged.offsetHeight/2);
-				u.as(this.list.dragged, "position", "absolute");
-				u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-				u.as(this.list.dragged, "top", d_top - this.list.dragged.rel_oy+"px");
-				u.as(this.list.dragged, "bottom", "auto");
-				for(i = 0; node = this.list.sortable_nodes[i]; i++) {
-					if(node != this.list.dragged && node != this.list.tN) {
-						if(this.list.list_type == "vertical") {
-							var o_top = u.absY(node);
-							var o_height = node.offsetHeight; 
-						 	if(o_top < d_center_y && (o_top + o_height) > d_center_y) {
-								if(o_top < d_center_y && o_top + (o_height/2) > d_center_y) {
-									this.list.insertBefore(this.list.tN, node);
+		var i, node;
+		var event_x = u.eventX(event);
+		var event_y = u.eventY(event);
+		if(this.scope._dragged == this) {
+			this.d_left = event_x - this.mouse_ox;
+			this.d_top = event_y - this.mouse_oy;
+			// 	
+			// 		
+			// 		
+			// 
+			// 	
+			// 		
+			// 		
+			// 
+				u.as(this, "position", "absolute");
+				u.as(this, "left", this.d_left - this.rel_ox+"px");
+				u.as(this, "top", this.d_top - this.rel_oy+"px");
+				u.as(this, "bottom", "auto");
+				this.scope.detectAndInject(event_x, event_y);
+		}
+		if(typeof(this.scope[this.scope.callback_moved]) == "function") {
+			this.scope[this.scope.callback_moved](event);
+		}
+	}
+	scope._sortabledrop = function(event) {
+		u.e.kill(event);
+		u.e.removeWindowMoveEvent(this, this._event_move_id);
+		u.e.removeWindowEndEvent(this, this._event_end_id);
+		this.scope.tN = this.scope.tN.parentNode.replaceChild(this, this.scope.tN);
+		u.as(this, "position", this.start_position);
+		u.as(this, "opacity", this.start_opacity);
+		u.as(this, "left", "");
+		u.as(this, "top", "");
+		u.as(this, "bottom", "");
+		u.as(this, "width", "");
+		u.as(this.scope, "width", "");
+		u.as(this.scope, "height", "");
+		if(!this.scope.draggables) {
+			this.scope.draggable_nodes = u.qsa("li", this.scope);
+		}
+		else {
+			this.scope.draggable_nodes = u.qsa("."+this.scope.draggables, this.scope);
+		}
+		if(typeof(this.scope[this.scope.callback_dropped]) == "function") {
+			this.scope[this.scope.callback_dropped](event);
+		}
+		this.rel_ox = u.absX(this) - u.relX(this);
+		this.rel_oy = u.absY(this) - u.relY(this);
+		u.rc(this, "dragged");
+		this.scope._dragged = false;
+	}
+	scope.detectAndInject = function(event_x, event_y) {
+		for(i = this.draggable_nodes.length-1; node = this.draggable_nodes[i]; i--) {
+			if(node != this._dragged && node != this.tN && (!this.targets || u.hc(node.parentNode, this.targets))) {
+				if(this.layout == "vertical") {
+					var o_top = u.absY(node);
+					var o_height = this.draggable_node_height;
+				 	if(event_y > o_top && event_y < o_top + o_height) {
+						if(this.allow_nesting) {
+							var no_nesting_offset = o_height/3 > 7 ? 7 : o_height/3;
+							if(i === 0 && event_y > o_top && event_y < o_top + no_nesting_offset) {
+								node.parentNode.insertBefore(this.tN, node);
+							}
+							else
+							if(event_y > o_top && event_y > (o_top + o_height) - ((no_nesting_offset)*2)) {
+								var next = u.ns(node);
+								if(next) {
+									node.parentNode.insertBefore(this.tN, next);
 								}
 								else {
-									var next = u.ns(node);
-									if(next) {
-										this.list.insertBefore(this.list.tN, next);
-									}
-									else {
-										this.list.appendChild(this.list.tN);
-									}
+									node.parentNode.appendChild(this.tN);
 								}
-								break;
 							}
+							else {
+								var sub_nodes = u.qs("ul" + this.targets ? ("."+this.targets) : "", node);
+								if(!sub_nodes) {
+									sub_nodes = u.ae(node, "ul", {"class":this.targets});
+								}
+								sub_nodes.appendChild(this.tN);
+							}
+							break;
 						}
 						else {
-							var o_left = u.absX(node);
-							var o_top = u.absY(node);
-							var o_width = node.offsetWidth;
-							var o_height = node.offsetHeight;
-						 	if(o_left < d_center_x && (o_left + o_width) > d_center_x && o_top < d_center_y && (o_top + o_height) > d_center_y) {
-								if(o_left < d_center_x && o_left + (o_width/2) > d_center_x) {
-									this.list.insertBefore(this.list.tN, node);
+							if(event_y > o_top && event_y < o_top + o_height/2) {
+								node.parentNode.insertBefore(this.tN, node);
+							}
+							else {
+								var next = u.ns(node);
+								if(next) {
+									node.parentNode.insertBefore(this.tN, next);
 								}
 								else {
-									var next = u.ns(node);
-									if(next) {
-										this.list.insertBefore(this.list.tN, next);
-									}
-									else {
-										this.list.appendChild(this.list.tN);
-									}
+									node.parentNode.appendChild(this.tN);
 								}
-								break;
+							}
+							break;
+						}
+					}
+				}
+				else {
+					var o_left = u.absX(node);
+					var o_top = u.absY(node);
+					var o_width = node.offsetWidth;
+					var o_height = node.offsetHeight;
+				 	if(event_x > o_left && event_x < o_left + o_width && event_y > o_top && event_y < o_top + o_height) {
+						if(event_x > o_left && event_x < o_left + o_width/2) {
+							node.parentNode.insertBefore(this.tN, node);
+						}
+						else {
+							var next = u.ns(node);
+							if(next) {
+								node.parentNode.insertBefore(this.tN, next);
+							}
+							else {
+								node.parentNode.appendChild(this.tN);
 							}
 						}
+						break;
 					}
 				}
 			}
 		}
-		if(typeof(this.list.dragged) == "function") {
-			this.list.dragged(event);
-		}
 	}
-	node._sortabledrop = function(event) {
-		u.e.kill(event);
-		u.e.removeMoveEvent(document.body , this._sortabledrag);
-		u.e.removeEndEvent(document.body , this._sortabledrop);
-		this.list.tN = this.list.replaceChild(this.list.dragged, this.list.tN);
-		u.as(this.list.dragged, "position", this.list.dragged.start_position);
-		u.as(this.list.dragged, "opacity", this.list.dragged.start_opacity);
-		u.as(this.list.dragged, "left", "");
-		u.as(this.list.dragged, "top", "");
-		u.as(this.list.dragged, "bottom", "");
-		u.as(this.list.dragged, "width", "");
-		u.as(this.list, "width", "");
-		u.as(this.list, "height", "");
-		u.rc(this.list.dragged, "dragged");
-		this.list.dragged = false;
-		var target_class = u.getIJ(this.list, "targets");
-		if(!target_class) {
-			this.list.sortable_nodes = u.qsa("li", this.list);
+	scope.getStructure = function() {
+		if(!this.draggables) {
+			this.draggable_nodes = u.qsa("li", this);
 		}
 		else {
-			this.list.sortable_nodes = u.qsa("."+target_class, this.list);
+			this.draggable_nodes = u.qsa("."+this.draggables, this);
 		}
-		if(typeof(this.list.dropped) == "function") {
-			this.list.dropped(event);
+		var structure = [];
+		var i, node, id, relation, position;
+		for(i = 0; node = this.draggable_nodes[i]; i++) {
+			id = u.cv(node, "node_id");
+			relation = this.getRelation(node);
+			position = this.getPositionInList(node);
+			structure.push({"id":id, "relation":relation, "position":position});
 		}
+		return structure;
+	}
+	scope.getPositionInList = function(node) {
+		var pos = 1;
+		var test_node = node;
+		while(u.ps(test_node)) {
+			test_node = u.ps(test_node);
+			pos++;
+		}
+		return pos;
+	}
+	scope.getRelation = function(node) {
+		if(!node.parentNode.relation_id) {
+			var li_relation = u.pn(node, "li");
+			if(u.inNodeList(li_relation, this.draggable_nodes)) {
+				node.parentNode.relation_id = u.cv(li_relation, "id");
+			}
+			else {
+				node.parentNode.relation_id = 0;
+			}
+		}
+		return node.parentNode.relation_id;
+	}
+	scope.disableNodeDrag = function(node) {
+		u.bug("disableNodeDrag:" + u.nodeId(node))
+		u.e.removeStartEvent(node.drag, this._sortablepick);
 	}
 	var i, j, d_node;
-	if(!draggables) {
-		node.draggable_nodes = u.qsa("li", node);
+	if(!scope.draggables) {
+		scope.draggable_nodes = u.qsa("li", scope);
 	}
 	else {
-		node.draggable_nodes = u.qsa(draggables, node);
+		scope.draggable_nodes = u.qsa("."+scope.draggables, scope);
 	}
-	if(!targets) {
-		node.target_nodes = u.qsa("ul", node);
+	if(!scope.draggable_nodes.length) {
+		return;
+	}
+	scope.draggable_node_height = scope.draggable_nodes[0].offsetHeight;
+	if(!scope.targets) {
+		scope.target_nodes = u.qsa("ul", scope);
 	}
 	else {
-		node.target_nodes = u.qsa(targets, node);
+		scope.target_nodes = u.qsa("."+scope.targets, scope);
 	}
-	if(node.draggable_nodes.length) {
-		node.list_type = node.offsetWidth < node.draggable_nodes[0].offsetWidth*2 ? "vertical" : "horizontal";
+	if(scope.nodeName == "UL" && (!scope.targets || u.hc(scope, scope.targets))) {
+		if(scope.target_nodes.length) {
+			var temp_scope = scope.target_nodes;
+			scope.target_nodes = [scope];
+			var target_node;
+			for(i = 0; target_node = temp_scope[i]; i++) {
+				scope.target_nodes.push(target_node);
+			} 
+		}
+		else {
+			scope.target_nodes = [scope];
+		}
 	}
-	for(i = 0; d_node = node.draggable_nodes[i]; i++) {
-		d_node.node = node;
+	if(!scope.layout && scope.draggable_nodes.length) {
+		scope.layout = scope.offsetWidth < scope.draggable_nodes[0].offsetWidth*2 ? "vertical" : "horizontal";
+	}
+	for(i = 0; d_node = scope.draggable_nodes[i]; i++) {
+		u.bug("d_node:" + u.nodeId(d_node));
+		d_node.scope = scope;
 		d_node.dragme = true;
 		d_node.rel_ox = u.absX(d_node) - u.relX(d_node);
 		d_node.rel_oy = u.absY(d_node) - u.relY(d_node);
@@ -5356,7 +6106,8 @@ u.sortable = function(node, options) {
 				child.d_node = d_node;
 			}
 		}
-		u.e.addStartEvent(d_node.drag , node._sortablepick);
+		u.e.removeStartEvent(d_node.drag, scope._sortablepick);
+		u.e.addStartEvent(d_node.drag, scope._sortablepick);
 	}
 }
 
@@ -5733,6 +6484,7 @@ Util.Keys = u.k = new function() {
 		var action, i, key;
 		event = event ? event : window.event;
 		key = String.fromCharCode(event.keyCode);
+		u.bug("e:" + key + ":"+event.keyCode+":" + this.shortcuts.length)
 		if((event.ctrlKey || event.metaKey) && this.shortcuts[key]) {
 			u.e.kill(event);
 			action = this.shortcuts[key].pop();
@@ -5798,116 +6550,6 @@ Util.Objects["addPrices"] = new function() {
 		}
 	}
 }
-Util.Objects["addMedia"] = new function() {
-	this.init = function(div) {
-		var form = u.qs("form.upload", div);
-		u.f.init(form);
-		div.csrf_token = form.fields["csrf-token"].val();
-		var file_input = u.qs("input[type=file]", form);
-		file_input.div = div;
-		file_input.changed = function() {
-			this.response = function(response) {
-				response = JSON.parse(this.responseText);
-				if(response.cms_status == "success" && response.cms_object) {
-					location.reload();
-				}
-				else if(response.cms_message) {
-					page.notify(response);
-				}
-			}
-			this.responseError = function(response) {
-				response = JSON.parse(this.responseText);
-				if(response.cms_status == "success") {
-					location.reload();
-				}
-				else {
-					alert(response.cms_message[0]);
-				}
-			}
-			var fd = new FormData();
-			if(this.div.csrf_token) {
-				fd.append("csrf-token", this.div.csrf_token);
-			}
-			var i, file;
-			for(i = 0; file = this.files[i]; i++) {
-				fd.append(this.name+"["+i+"]", file);
-			}
-			this.HTTPRequest = u.createRequestObject();
-			this.HTTPRequest.node = this;
-			u.e.addEvent(this.HTTPRequest, "load", this.response);
-			u.e.addEvent(this.HTTPRequest, "error", this.responseError);
-			this.HTTPRequest.open("POST", this.form.action);
-			this.HTTPRequest.send(fd);
-		}
-		div.media_list = u.qs("ul.media", div.media_list);
-		div.media_list.div = div;
-		if(u.hc(div, "sortable") && div.media_list) {
-			div.save_order_url = div.getAttribute("data-save-order");
-			if(div.save_order_url) {
-				u.s.sortable(div.media_list);
-				div.media_list.picked = function() {}
-				div.media_list.dropped = function() {
-					var order = new Array();
-					this.nodes = u.qsa("li.media", this);
-					for(i = 0; node = this.nodes[i]; i++) {
-						order.push(u.cv(node, "media_id"));
-					}
-					this.response = function(response) {
-						page.notify(response);
-					}
-					u.request(this, this.div.save_order_url, {"method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
-				}
-			}
-			else {
-				u.rc(div, "sortable");
-			}
-		}
-	}
-}
-Util.Objects["deleteMedia"] = new function() {
-	this.init = function(form) {
-		u.f.init(form);
-		var bn_delete = u.qs("input.delete", form);
-		if(bn_delete) {
-			bn_delete.org_value = bn_delete.value;
-			u.e.click(bn_delete);
-			bn_delete.restore = function(event) {
-				this.value = this.org_value;
-				u.rc(this, "confirm");
-			}
-			bn_delete.inputStarted = function(event) {
-				u.e.kill(event);
-			}
-			bn_delete.clicked = function(event) {
-				u.e.kill(event);
-				if(!u.hc(this, "confirm")) {
-					u.ac(this, "confirm");
-					this.value = "Confirm";
-					this.t_confirm = u.t.setTimer(this, this.restore, 3000);
-				}
-				else {
-					u.t.resetTimer(this.t_confirm);
-					this.response = function(response) {
-						if(response.cms_status == "success") {
-							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response);
-								this.value = this.org_value;
-								u.ac(this, "disabled");
-							}
-							else {
-								location.reload();
-							}
-						}
-						else {
-							page.notify(response);
-						}
-					}
-					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
-				}
-			}
-		}
-	}
-}
 
 
 /*i-defaultlist.js*/
@@ -5920,10 +6562,6 @@ Util.Objects["defaultList"] = new function() {
 		}
 		div.list.div = div;
 		div.csrf_token = div.getAttribute("data-csrf-token");
-		div.save_order_url = div.getAttribute("data-save-order");
-		div.update_item_url = div.getAttribute("data-update-item");
-		div.delete_tag_url = div.getAttribute("data-delete-tag");
-		div.get_tags_url = div.getAttribute("data-get-tags");
 		div.nodes = u.qsa("li.item", div);
 		div.scrolled = function() {
 			var scroll_y = u.scrollY()
@@ -6085,7 +6723,11 @@ Util.Objects["defaultList"] = new function() {
 			node._ready = true;
 		}
 		if(u.hc(div, "taggable")) {
-			if(div.get_tags_url && div.delete_tag_url && div.update_item_url) {
+			u.bug("init taggable")
+			div.add_tag_url = div.getAttribute("data-add-tag");
+			div.delete_tag_url = div.getAttribute("data-delete-tag");
+			div.get_tags_url = div.getAttribute("data-get-tags");
+			if(div.get_tags_url && div.delete_tag_url && div.add_tag_url) {
 				div.tagsResponse = function(response) {
 					if(response.cms_status == "success" && response.cms_object) {
 						this.all_tags = response.cms_object;
@@ -6172,21 +6814,21 @@ Util.Objects["defaultList"] = new function() {
 							if(u.hc(this.node, "addtags")) {
 								if(this.parentNode == this.node._tags) {
 									this.response = function(response) {
+										page.notify(response);
 										if(response.cms_status == "success") {
 											u.ae(this.node._new_tags, this);
 										}
-										page.notify(response);
 									}
 									u.request(this, this.node.div.delete_tag_url+"/"+this.node._item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.node.div.csrf_token});
 								}
 								else {
 									this.response = function(response) {
+										page.notify(response);
 										if(response.cms_status == "success") {
 											u.ie(this.node._tags, this);
 										}
-										page.notify(response);
 									}
-									u.request(this, this.node.div.update_item_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.div.csrf_token});
+									u.request(this, this.node.div.add_tag_url+"/"+this.node._item_id, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.node.div.csrf_token});
 								}
 							}
 						}
@@ -6232,6 +6874,7 @@ Util.Objects["defaultList"] = new function() {
 			}
 		}
 		if(u.hc(div, "sortable") && div.list) {
+			div.save_order_url = div.getAttribute("data-save-order");
 			if(div.save_order_url) {
 				u.s.sortable(div.list);
 				div.list.picked = function() {}
@@ -6274,17 +6917,44 @@ Util.Objects["defaultEdit"] = new function() {
 	}
 }
 
+/*i-defaultnew.js*/
+Util.Objects["defaultNew"] = new function() {
+	this.init = function(form) {
+		u.f.init(form);
+		form.actions["cancel"].clicked = function(event) {
+			location.href = this.url;
+		}
+		form.submitted = function(iN) {
+			this.response = function(response) {
+				if(response.cms_status == "success" && response.cms_object) {
+					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
+				}
+				else if(response.cms_message) {
+					page.notify(response);
+				}
+			}
+			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
+		}
+	}
+}
+
 /*i-defaulteditstatus.js*/
 Util.Objects["defaultEditStatus"] = new function() {
 	this.init = function(node) {
 		node._item_id = u.cv(node, "item_id");
+		node.csrf_token = node.getAttribute("data-csrf-token");
 		var action = u.qs("li.status");
 		if(action) {
 			if(!action.childNodes.length) {
-				form_disable = u.f.addForm(action, {"action":"/admin/cms/disable/"+node._item_id, "class":"disable"});
-				u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
-				form_enable = u.f.addForm(action, {"action":"/admin/cms/enable/"+node._item_id, "class":"enable"});
-				u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
+				action.update_status_url = action.getAttribute("data-update-status");
+				if(action.update_status_url) {
+					form_disable = u.f.addForm(action, {"action":action.update_status_url+"/"+node._item_id+"/0", "class":"disable"});
+					u.ae(form_disable, "input", {"type":"hidden","name":"csrf-token", "value":node.csrf_token});
+					u.f.addAction(form_disable, {"value":"Disable", "class":"button status"});
+					form_enable = u.f.addForm(action, {"action":action.update_status_url+"/"+node._item_id+"/1", "class":"enable"});
+					u.ae(form_enable, "input", {"type":"hidden","name":"csrf-token", "value":node.csrf_token});
+					u.f.addAction(form_enable, {"value":"Enable", "class":"button status"});
+				}
 			}
 			else {
 				form_disable = u.qs("form.disable", action);
@@ -6300,7 +6970,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 							u.rc(this.parentNode, "enabled");
 						}
 					}
-					u.request(this, this.action);
+					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
 				}
 				u.f.init(form_enable);
 				form_enable.submitted = function() {
@@ -6311,7 +6981,7 @@ Util.Objects["defaultEditStatus"] = new function() {
 							u.ac(this.parentNode, "enabled");
 						}
 					}
-					u.request(this, this.action);
+					u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
 				}
 			}
 		}
@@ -6322,13 +6992,18 @@ Util.Objects["defaultEditStatus"] = new function() {
 Util.Objects["defaultEditActions"] = new function() {
 	this.init = function(node) {
 		node._item_id = u.cv(node, "item_id");
+		node.csrf_token = node.getAttribute("data-csrf-token");
 		var cancel = u.qs("li.cancel a");
 		var action = u.qs("li.delete");
 		if(action && cancel && cancel.href) {
 			if(!action.childNodes.length) {
-				form = u.f.addForm(action, {"action":"/admin/cms/delete/"+node._item_id, "class":"delete"});
-				form.node = node;
-				bn_delete = u.f.addAction(form, {"value":"Delete", "class":"button delete", "name":"delete"});
+				action.delete_item_url = action.getAttribute("data-delete-item");
+				if(action.delete_item_url) {
+					form = u.f.addForm(action, {"action":action.delete_item_url, "class":"delete"});
+					u.ae(form, "input", {"type":"hidden","name":"csrf-token", "value":node.csrf_token});
+					form.node = node;
+					bn_delete = u.f.addAction(form, {"value":"Delete", "class":"button delete", "name":"delete"});
+				}
 			}
 			else {
 				form = u.qs("form", action);
@@ -6360,7 +7035,7 @@ Util.Objects["defaultEditActions"] = new function() {
 								}
 							}
 						}
-						u.request(this, this.action);
+						u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 					}
 				}
 			}
@@ -6376,7 +7051,7 @@ Util.Objects["defaultTags"] = new function() {
 		div._tags_form.div = div;
 		u.f.init(div._tags_form);
 		div.csrf_token = div._tags_form.fields["csrf-token"].value;
-		div.update_item_url = div._tags_form.action;
+		div.add_tag_url = div._tags_form.action;
 		div.delete_tag_url = div.getAttribute("data-delete-tag");
 		div.get_tags_url = div.getAttribute("data-get-tags");
 		div._tags_form.fields["tags"].focused = function() {
@@ -6398,11 +7073,29 @@ Util.Objects["defaultTags"] = new function() {
 		}
 		div._tags_form.submitted = function(iN) {
 			this.response = function(response) {
+				page.notify(response);
 				if(response.cms_status == "success") {
-					location.reload();
-				}
-				else {
-					alert(response.cms_message[0]);
+					var i, tag_node;
+					var new_tags = u.qsa("li", this.div._new_tags);
+					for(i = 0; tag_node = new_tags[i]; i++) {
+						if(tag_node._id == response.cms_object.tag_id) {
+							this.fields["tags"].val("");
+							this.fields["tags"].updated();
+							u.ae(this.div._tags, tag_node);
+							return;
+						}
+					}
+					this.div._tags._alltags.push({"id":response.cms_object.tag_id, "context":response.cms_object.context, "value":response.cms_object.value})
+					tag_node = u.ae(this.div._tags, "li", {"class":"tag"});
+					tag_node._context = response.cms_object.context;
+					tag_node._value = response.cms_object.value;
+					tag_node._id = response.cms_object.id;
+					u.ae(tag_node, "span", {"class":"context", "html":tag_node._context});
+					u.ae(tag_node, "span", {"class":"value", "html":tag_node._value});
+					tag_node.div = this.div;
+					div.activateTag(tag_node);
+					this.fields["tags"].val("");
+					this.fields["tags"].updated();
 				}
 			}
 			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
@@ -6446,22 +7139,21 @@ Util.Objects["defaultTags"] = new function() {
 				this._new_tags = u.ae(this._tag_options, "ul", {"class":"tags"});
 				var usedtags = {};
 				var itemTags = u.qsa("li:not(.add)", this._tags);
-				var i, tag, context, value;
-				for(i = 0; tag = itemTags[i]; i++) {
-					tag._context = u.qs(".context", tag).innerHTML;
-					tag._value = u.qs(".value", tag).innerHTML;
-					if(!usedtags[tag._context]) {
-						usedtags[tag._context] = {}
+				var i, tag_node, tag, context, value;
+				for(i = 0; tag_node = itemTags[i]; i++) {
+					tag_node._context = u.qs(".context", tag_node).innerHTML;
+					tag_node._value = u.qs(".value", tag_node).innerHTML;
+					if(!usedtags[tag_node._context]) {
+						usedtags[tag_node._context] = {}
 					}
-					if(!usedtags[tag._context][tag._value]) {
-						usedtags[tag._context][tag._value] = tag;
+					if(!usedtags[tag_node._context][tag_node._value]) {
+						usedtags[tag_node._context][tag_node._value] = tag_node;
 					}
 				}
 				for(tag in this._tags._alltags) {
 					context = this._tags._alltags[tag].context;
 					value = this._tags._alltags[tag].value.replace(/ & /, " &amp; ");
 					if(usedtags && usedtags[context] && usedtags[context][value]) {
-	// 					
 						tag_node = usedtags[context][value];
 					}
 					else {
@@ -6473,86 +7165,123 @@ Util.Objects["defaultTags"] = new function() {
 					}
 					tag_node._id = this._tags._alltags[tag].id;
 					tag_node.div = this;
-	 				u.e.click(tag_node);
-	 				tag_node.clicked = function() {
-						if(u.hc(this.div, "addtags")) {
-							if(this.parentNode == this.div._tags) {
-								this.response = function(response) {
-									if(response.cms_status == "success") {
-										u.ae(this.div._new_tags, this);
-									}
-									page.notify(response);
-								}
-								u.request(this, this.div.delete_tag_url+"/"+this.div.item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.div.csrf_token});
-							}
-							else {
-								this.response = function(response) {
-									if(response.cms_status == "success") {
-										u.ie(this.div._tags, this)
-									}
-									page.notify(response);
-								}
-								u.request(this, this.div.update_item_url, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.div.csrf_token});
-							}
-						}
-					}
+					div.activateTag(tag_node);
 				}
 			}
 		}
-	}
-}
-
-
-/*i-form_defaultnew.js*/
-Util.Objects["formDefaultNew"] = new function() {
-	this.init = function(form) {
-		u.f.init(form);
-		form.actions["cancel"].clicked = function(event) {
-			location.href = this.url;
-		}
-		form.submitted = function(iN) {
-			this.response = function(response) {
-				if(response.cms_status == "success" && response.cms_object) {
-					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
-				}
-				else if(response.cms_message) {
-					page.notify(response);
-				}
-			}
-			u.request(this, this.action, {"method":"post", "params" : u.f.getParams(this)});
-		}
-	}
-}
-
-/*i-form_defaultstatus.js*/
-Util.Objects["formDefaultStatus"] = new function() {
-	this.init = function(form) {
-		u.f.init(form);
-		var bn_status = u.qs("input.status", form);
-		if(bn_status) {
-			u.e.click(bn_status)
-			bn_status.clicked = function(event) {
-				u.e.kill(event);
-				this.response = function(response) {
-					if(response.cms_status == "success") {
-						if(response.cms_message.message.length && response.cms_message.message[0].match(/enabled/i)) {
-							window.scrollTo(0,0);
+		div.activateTag = function(tag_node) {
+			u.e.click(tag_node);
+			tag_node.clicked = function() {
+				if(u.hc(this.div, "addtags")) {
+					if(this.parentNode == this.div._tags) {
+						this.response = function(response) {
+							page.notify(response);
+							if(response.cms_status == "success") {
+								u.ae(this.div._new_tags, this);
+							}
 						}
-						location.reload();
+						u.request(this, this.div.delete_tag_url+"/"+this.div.item_id+"/" + this._id, {"method":"post", "params":"csrf-token=" + this.div.csrf_token});
 					}
 					else {
-						alert(response.cms_message[0]);
+						this.response = function(response) {
+							page.notify(response);
+							if(response.cms_status == "success") {
+								u.ie(this.div._tags, this)
+							}
+						}
+						u.request(this, this.div.add_tag_url, {"method":"post", "params":"tags="+this._id+"&csrf-token=" + this.div.csrf_token});
 					}
 				}
-				u.request(this, this.form.action);
 			}
 		}
 	}
 }
 
 
-/*i-form_defaultdelete.js*/
-Util.Objects["formDefaultDelete"] = new function() {
+/*i-defaultmedia.js*/
+Util.Objects["addMedia"] = new function() {
+	this.init = function(div) {
+		div.form = u.qs("form.upload", div);
+		div.form.div = div;
+		div.media_list = u.qs("ul.media", div);
+		div.item_id = u.cv(div, "item_id");
+		u.f.init(div.form);
+		div.csrf_token = div.form.fields["csrf-token"].val();
+		div.delete_url = div.getAttribute("data-delete-media");
+		div.form.file_input = u.qs("input[type=file]", div.form);
+		div.form.file_input.div = div;
+		div.form.file_input.changed = function() {
+			this.form._submit();
+		}
+		div.form.submitted = function() {
+			u.ac(this.file_input.field, "loading");
+			u.rc(this.file_input.field, "focus");
+			var form_data = new FormData(this);
+			this.response = function(response) {
+				page.notify(response);
+				if(response.cms_status == "success" && response.cms_object) {
+					var i, media, li, image;
+					for(i = 0; media = response.cms_object[i]; i++) {
+						var li = u.ae(div.media_list, "li");
+						u.ac(li, "media image");
+						u.ac(li, "variant:"+media.variant);
+						u.ac(li, "media_id:"+media.media_id);
+						var image = u.ae(li, "img");
+						image.src = "/images/"+media.item_id+"/"+media.variant+"/x"+li.offsetHeight+"."+media.format+"?"+u.randomString(4);
+						this.div.addDeleteForm(li);
+					}
+					if(this.div.save_order_url) {
+						u.sortable(this.div.media_list);
+					}
+				}
+				u.rc(this.file_input.field, "loading");
+				this.file_input.val("");
+			}
+			u.request(this, this.action, {"method":"post", "params":form_data});
+		}
+		div.addDeleteForm = function(li) {
+			var delete_form = u.f.addForm(li, {"action":this.delete_url+"/"+this.item_id+"/"+u.cv(li, "variant"), "class":"delete"});
+			delete_form.li = li;
+			u.ae(delete_form, "input", {"type":"hidden", "name":"csrf-token", "value":this.csrf_token});
+			var bn_delete = u.f.addAction(delete_form, {"class":"button delete"});
+			delete_form.deleted = function() {
+				this.li.parentNode.removeChild(this.li);
+			}
+			u.o.deleteMedia.init(delete_form);
+		}
+		if(!div.media_list) {
+			u.ae(div, "ul", {"class":"media"});
+		}
+		div.media_list.nodes = u.qsa("li.media", div.media_list);
+		div.media_list.div = div;
+		var i, node;
+		for(i = 0; node = div.media_list.nodes[i]; i++) {
+			div.addDeleteForm(node);
+		}
+		if(u.hc(div, "sortable") && div.media_list) {
+			div.save_order_url = div.getAttribute("data-save-order");
+			if(div.save_order_url) {
+				u.sortable(div.media_list);
+				div.media_list.picked = function() {}
+				div.media_list.dropped = function() {
+					var order = new Array();
+					this.nodes = u.qsa("li.media", this);
+					for(i = 0; node = this.nodes[i]; i++) {
+						order.push(u.cv(node, "media_id"));
+					}
+					this.response = function(response) {
+						page.notify(response);
+					}
+					u.request(this, this.div.save_order_url, {"method":"post", "params":"csrf-token=" + this.div.csrf_token + "&order=" + order.join(",")});
+				}
+			}
+			else {
+				u.rc(div, "sortable");
+			}
+		}
+	}
+}
+Util.Objects["deleteMedia"] = new function() {
 	this.init = function(form) {
 		u.f.init(form);
 		var bn_delete = u.qs("input.delete", form);
@@ -6576,23 +7305,160 @@ Util.Objects["formDefaultDelete"] = new function() {
 				else {
 					u.t.resetTimer(this.t_confirm);
 					this.response = function(response) {
+						page.notify(response);
 						if(response.cms_status == "success") {
 							if(response.cms_object && response.cms_object.constraint_error) {
-								page.notify(response);
 								this.value = this.org_value;
 								u.ac(this, "disabled");
 							}
 							else {
-								location.reload();
+								if(typeof(this.form.deleted) == "function") {
+									this.form.deleted();
+								}
+								else {
+									location.reload();
+								}
 							}
 						}
 						else {
-							page.notify(response);
+							this.restore();
 						}
 					}
 					u.request(this, this.form.action, {"method":"post", "params" : u.f.getParams(this.form)});
 				}
 			}
+		}
+	}
+}
+Util.Objects["addMediaSingle"] = new function() {
+	this.init = function(div) {
+		div.form = u.qs("form.upload", div);
+		div.form.div = div;
+		div.image = u.qs("img", div);
+		div.item_id = u.cv(div, "item_id");
+		div.media_variant = u.cv(div, "variant");
+		u.f.init(div.form);
+		div.csrf_token = div.form.fields["csrf-token"].val();
+		div.delete_url = div.getAttribute("data-delete-media");
+		div.form.file_input = u.qs("input[type=file]", div.form);
+		div.form.file_input.div = div;
+		div.form.file_input.changed = function() {
+			this.form._submit();
+		}
+		div.form.submitted = function() {
+			u.ac(this.file_input.field, "loading");
+			u.rc(this.file_input.field, "focus");
+			if(this.div.image) {
+				u.as(this.div.image, "display", "none");
+			}
+			var form_data = new FormData(this);
+			this.response = function(response) {
+				page.notify(response);
+				if(this.div.image) {
+					u.as(this.div.image, "display", "block");
+				}
+				if(response.cms_status == "success" && response.cms_object) {
+					if(!this.div.image) {
+						this.div.image = u.ae(this.div, "img");
+						this.div.addDeleteForm();
+					}
+					this.div.image.src = "/images/"+response.cms_object.item_id+"/"+response.cms_object.variant+"/x"+this.div.image.offsetHeight+"."+response.cms_object.format+"?"+u.randomString(4);
+				}
+				u.rc(this.file_input.field, "loading");
+				this.file_input.val("");
+			}
+			u.request(this, this.action, {"method":"post", "params":form_data});
+		}
+		div.addDeleteForm = function() {
+			this.delete_form = u.f.addForm(this, {"action":this.delete_url+"/"+this.item_id+"/"+this.media_variant, "class":"delete"});
+			this.delete_form.div = this;
+			u.ae(this.delete_form, "input", {"type":"hidden", "name":"csrf-token", "value":this.csrf_token});
+			this.bn_delete = u.f.addAction(this.delete_form, {"class":"button delete"});
+			this.delete_form.deleted = function() {
+				this.div.image.parentNode.removeChild(this.div.image);
+				this.div.image = false;
+				this.parentNode.removeChild(this);
+			}
+			u.o.deleteMedia.init(this.delete_form);
+		}
+		if(div.image) {
+			div.addDeleteForm();
+		}
+	}
+}
+
+/*i-navigations.js*/
+Util.Objects["navigationNodes"] = new function() {
+	this.init = function(div) {
+		div.list = u.qs("ul.nodes", div);
+		if(div.list) {
+			div.list.update_order_url = div.getAttribute("data-update-order");
+			div.list.csrf_token = div.getAttribute("data-csrf-token");
+			div.list.nodes = u.qsa("li.item", div.list);
+			var i, node;
+			for(i = 0; node = div.list.nodes[i]; i++) {
+				node.list = div.list;
+				var action = u.qs("li.delete", node);
+				if(action) {
+					form = u.qs("form", action);
+					form.node = node;
+					if(form) {
+						u.f.init(form);
+						if(u.qs("ul.nodes li.item", node)) {
+							u.ac(form.actions["delete"], "disabled");
+						}
+						form.restore = function(event) {
+							this.actions["delete"].value = "Delete";
+							u.rc(this.actions["delete"], "confirm");
+						}
+						form.submitted = function() {
+							if(!u.hc(this.actions["delete"], "confirm")) {
+								u.ac(this.actions["delete"], "confirm");
+								this.actions["delete"].value = "Confirm";
+								this.t_confirm = u.t.setTimer(this, this.restore, 3000);
+							}
+							else {
+								u.t.resetTimer(this.t_confirm);
+								this.response = function(response) {
+									page.notify(response);
+									if(response.cms_status == "success") {
+										this.node.parentNode.removeChild(this.node);
+										this.updateNodeStructure();
+									}
+								}
+								u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
+							}
+						}
+					}
+				}
+			}
+			div.list.dropped = function(event) {
+				this.updateNodeStructure();
+			}
+			div.list.updateNodeStructure = function() {
+				var structure = this.getStructure();
+				this.response = function(response) {
+					page.notify(response);
+				}
+				u.request(this, this.update_order_url, {"method":"post", "params":"csrf-token="+this.csrf_token+"&structure="+JSON.stringify(structure)});
+				var i, node;
+				this.nodes = u.qsa("li.item", this);
+				for(i = 0; node = this.nodes[i]; i++) {
+					var action = u.qs("li.delete", node);
+					if(action) {
+						form = u.qs("form", action);
+						if(form) {
+							if(u.qs("ul.nodes li.item", node)) {
+								u.ac(form.actions["delete"], "disabled");
+							}
+							else {
+								u.rc(form.actions["delete"], "disabled");
+							}
+						}
+					}
+				}
+			}
+			u.sortable(div.list, {"allow_nesting":true, "targets":"nodes", "draggables":"draggable"});
 		}
 	}
 }
@@ -6760,1730 +7626,41 @@ u.notifier = function(node) {
 
 
 
-/*u-geometry.js*/
-Util.absoluteX = u.absX = function(node) {
-	if(node.offsetParent) {
-		return node.offsetLeft + u.absX(node.offsetParent);
-	}
-	return node.offsetLeft;
-}
-Util.absoluteY = u.absY = function(node) {
-	if(node.offsetParent) {
-		return node.offsetTop + u.absY(node.offsetParent);
-	}
-	return node.offsetTop;
-}
-Util.relativeX = u.relX = function(node) {
-	if(u.gcs(node, "position").match(/absolute/) == null && node.offsetParent && u.gcs(node.offsetParent, "position").match(/relative|absolute|fixed/) == null) {
-		return node.offsetLeft + u.relX(node.offsetParent);
-	}
-	return node.offsetLeft;
-}
-Util.relativeY = u.relY = function(node) {
-	if(u.gcs(node, "position").match(/absolute/) == null && node.offsetParent && u.gcs(node.offsetParent, "position").match(/relative|absolute|fixed/) == null) {
-		return node.offsetTop + u.relY(node.offsetParent);
-	}
-	return node.offsetTop;
-}
-Util.actualWidth = u.actualW = function(node) {
-	return parseInt(u.gcs(node, "width"));
-}
-Util.actualHeight = u.actualH = function(node) {
-	return parseInt(u.gcs(node, "height"));
-}
-Util.eventX = function(event){
-	return (event.targetTouches ? event.targetTouches[0].pageX : event.pageX);
-}
-Util.eventY = function(event){
-	return (event.targetTouches ? event.targetTouches[0].pageY : event.pageY);
-}
-Util.browserWidth = u.browserW = function() {
-	return document.documentElement.clientWidth;
-}
-Util.browserHeight = u.browserH = function() {
-	return document.documentElement.clientHeight;
-}
-Util.htmlWidth = u.htmlW = function() {
-	return document.body.offsetWidth + parseInt(u.gcs(document.body, "margin-left")) + parseInt(u.gcs(document.body, "margin-right"));
-}
-Util.htmlHeight = u.htmlH = function() {
-	return document.body.offsetHeight + parseInt(u.gcs(document.body, "margin-top")) + parseInt(u.gcs(document.body, "margin-bottom"));
-}
-Util.pageScrollX = u.scrollX = function() {
-	return window.pageXOffset;
-}
-Util.pageScrollY = u.scrollY = function() {
-	return window.pageYOffset;
-}
+/*ga.js*/
+u.ga_account = 'UA-17394677-1';
+u.ga_domain = 'kaestel.dk';
+u.gapi_key = 'AIzaSyDDcI1nS5XiY3pfMQnlGVU4Ev2aAQZ8Wog';
 
-
-/*u-form.js*/
-Util.Form = u.f = new function() {
-	this.customInit = {};
-	this.customValidate = {};
-	this.customSend = {};
-	this.init = function(form, settings) {
-		var i, j, field, action, input;
-		form.form_send = "params";
-		form.ignore_inputs = "ignoreinput";
-		if(typeof(settings) == "object") {
-			var argument;
-			for(argument in settings) {
-				switch(argument) {
-					case "ignore_inputs"	: form.ignore_inputs	= settings[argument]; break;
-					case "form_send"		: form.form_send		= settings[argument]; break;
-				}
-			}
+/*u-googleanalytics.js*/
+if(u.ga_account) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', u.ga_account, u.ga_domain);
+    ga('send', 'pageview');
+	u.stats = new function() {
+		this.pageView = function(url) {
+			ga('send', 'pageview', url);
 		}
-		form.onsubmit = function(event) {return false;}
-		form.setAttribute("novalidate", "novalidate");
-		form._submit = this._submit;
-		form.fields = {};
-		form.tab_order = [];
-		form.actions = {};
-		var fields = u.qsa(".field", form);
-		for(i = 0; field = fields[i]; i++) {
-			var abbr = u.qs("abbr", field);
-			if(abbr) {
-				abbr.parentNode.removeChild(abbr);
-			}
-			var error_message = field.getAttribute("data-error");
-			if(error_message) {
-				u.ae(field, "div", {"class":"error", "html":error_message})
-			}
-			field._indicator = u.ae(field, "div", {"class":"indicator"});
-			// 
-			field._help = u.qs(".help", field);
-			field._hint = u.qs(".hint", field);
-			field._error = u.qs(".error", field);
-			var not_initialized = true;
-			var custom_init;
-			for(custom_init in this.customInit) {
-				if(field.className.match(custom_init)) {
-					this.customInit[custom_init](field);
-					not_initialized = false;
-				}
-			}
-			if(not_initialized) {
-				if(u.hc(field, "string|email|tel|number|integer|password")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.inputOnEnter(field._input);
-					this.activateField(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "text")) {
-					field._input = u.qs("textarea", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.activateField(field._input);
-					this.validate(field._input);
-					if(u.hc(field, "autoexpand")) {
-						this.autoExpand(field._input);
-					}
-				}
-				else if(u.hc(field, "html")) {
-					field._input = u.qs("textarea", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value;
-					this.textEditor(field);
-				}
-				else if(u.hc(field, "select")) {
-					field._input = u.qs("select", field);
-					field._input.field = field;
-					form.fields[field._input.name] = field._input;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					field._input.val = this._value_select;
-					u.e.addEvent(field._input, "change", this._updated);
-					u.e.addEvent(field._input, "keyup", this._updated);
-					u.e.addEvent(field._input, "change", this._changed);
-					this.activateField(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "checkbox|boolean")) {
-					field._input = u.qs("input[type=checkbox]", field);
-					field._input.field = field;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					form.fields[field._input.name] = field._input;
-					field._input.val = this._value_checkbox;
-					if(u.browser("explorer", "<=8")) {
-						field._input.pre_state = field._input.checked;
-						field._input._changed = this._changed;
-						field._input._updated = this._updated;
-						field._input._clicked = function(event) {
-							if(this.checked != this.pre_state) {
-								this._changed(window.event);
-								this._updated(window.event);
-							}
-							this.pre_state = this.checked;
-						}
-						u.e.addEvent(field._input, "click", field._input._clicked);
-					}
-					else {
-						u.e.addEvent(field._input, "change", this._updated);
-						u.e.addEvent(field._input, "change", this._changed);
-					}
-					this.inputOnEnter(field._input);
-					this.activateField(field._input);
-					this.validate(field._input);
-				}
-				else if(u.hc(field, "radio|radio_buttons")) {
-					field._input = u.qsa("input", field);
-					form.fields[field._input[0].name] = field._input;
-					for(j = 0; input = field._input[j]; j++) {
-						input.field = field;
-						input._label = u.qs("label[for="+input.id+"]", field);
-						input.val = this._value_radio;
-						if(u.browser("explorer", "<=8")) {
-							input.pre_state = iN.checked;
-							input._changed = this._changed;
-							input._updated = this._updated;
-							input._clicked = function(event) {
-								var i, input;
-								if(this.checked != this.pre_state) {
-									this._changed(window.event);
-									this._updated(window.event);
-								}
-								for(i = 0; input = this.field._input[i]; i++) {
-									input.pre_state = input.checked;
-								}
-							}
-							u.e.addEvent(input, "click", input._clicked);
-						}
-						else {
-							u.e.addEvent(input, "change", this._updated);
-							u.e.addEvent(input, "change", this._changed);
-						}
-						this.inputOnEnter(input);
-						this.activateField(input);
-						this.validate(field._input);
-					}
-				}
-				else if(u.hc(field, "date|datetime")) {
-					field._input = u.qsa("select,input", field);
-					for(j = 0; input = field._input[j]; j++) {
-						input.field = field;
-						input._label = u.qs("label[for="+input.id+"]", field);
-						this.formIndex(form, input);
-					}
-				}
-				else if(u.hc(field, "tags")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					field._input._label = u.qs("label\[for\="+field._input.id+"\]", field);
-					this.formIndex(form, field._input);
-				}
-				else if(u.hc(field, "prices")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					this.formIndex(form, field._input);
-				}
-				else if(u.hc(field, "files")) {
-					field._input = u.qs("input", field);
-					field._input.field = field;
-					field._input._label = u.qs("label[for="+field._input.id+"]", field);
-					this.formIndex(form, field._input);
-				}
-				else if(u.hc(field, "location")) {
-					field._input = u.qsa("input", field);
-					for(j = 0; input = field._input[j]; j++) {
-						input.field = field;
-						input._label = u.qs("label[for="+input.id+"]", field);
-						this.formIndex(form, input);
-					}
-					if(navigator.geolocation) {
-						this.geoLocation(field);
-					}
-				}
-			}
+		this.event = function(node, action, label) {
+			ga('_trackEvent', location.href.replace(document.location.protocol + "//" + document.domain, ""), action, (label ? label : this.nodeSnippet(node)));
 		}
-		var hidden_fields = u.qsa("input[type=hidden]", form);
-		for(i = 0; hidden_field = hidden_fields[i]; i++) {
-			if(!form.fields[hidden_field.name]) {
-				form.fields[hidden_field.name] = hidden_field;
-				hidden_field.val = this._value;
-			}
+		this.customVar = function(slot, name, value, scope) {
+			//       slot,		
+			//       name,		
+			//       value,	
+			//       scope		
 		}
-		var actions = u.qsa(".actions li, .actions", form);
-		for(i = 0; action = actions[i]; i++) {
-			action._input = u.qs("input,a", action);
-			if(action._input.type && action._input.type == "submit") {
-				action._input.onclick = function(event) {
-					u.e.kill(event ? event : window.event);
-				}
-			}
-			u.ce(action._input);
-			action._input.clicked = function(event) {
-				u.e.kill(event);
-				if(!u.hc(this, "disabled")) {
-					if(this.type && this.type.match(/submit/i)) {
-						this.form._submit_button = this;
-						this.form._submit_input = false;
-						this.form._submit(event, this);
-					}
-				}
-			}
-			this.buttonOnEnter(action._input);
-			this.activateButton(action._input);
-			var action_name = action._input.name ? action._input.name : action.className;
-				form.actions[action_name] = action._input;
-			if(typeof(u.k) == "object" && u.hc(action._input, "key:[a-z0-9]+")) {
-				u.k.addKey(u.cv(action._input, "key"), action._input);
-			}
-		}
-		if(!actions.length) {
-			var p_ul = u.pn(form, "ul");
-			if(u.hc(p_ul, "actions")) {
-				var input = u.qs("input:NOT([type=hidden]),a", form);
-				if(input.type && input.type == "submit") {
-					input.onclick = function(event) {
-						u.e.kill(event ? event : window.event);
-					}
-				}
-				u.ce(input);
-				input.clicked = function(event) {
-					u.e.kill(event);
-					if(!u.hc(this, "disabled")) {
-						if(this.type && this.type.match(/submit/i)) {
-							this.form._submit_button = this;
-							this.form._submit_input = false;
-							this.form._submit(event, this);
-						}
-					}
-				}
-				this.buttonOnEnter(input);
-				this.activateButton(input);
-				if(input.name) {
-					form.actions[input.name] = input;
-				}
-				if(typeof(u.k) == "object" && u.hc(input, "key:[a-z0-9]+")) {
-					u.k.addKey(u.cv(input, "key"), input);
-				}
-			}
-		}
-	}
-	this._value = function(value) {
-		if(value !== undefined) {
-			this.value = value;
-			u.f.validate(this);
-		}
-		return this.value;
-	}
-	this._value_radio = function(value) {
-		if(value) {
-			for(i = 0; option = this.form[this.name][i]; i++) {
-				if(option.value == value) {
-					option.checked = true;
-					u.f.validate(this);
-				}
-			}
-		}
-		else {
-			var i, option;
-			for(i = 0; option = this.form[this.name][i]; i++) {
-				if(option.checked) {
-					return option.value;
-				}
-			}
-		}
-		return false;
-	}
-	this._value_checkbox = function(value) {
-		if(value) {
-			this.checked = true
-			u.f.validate(this);
-		}
-		else {
-			if(this.checked) {
-				return this.value;
-			}
-		}
-		return false;
-	}
-	this._value_select = function(value) {
-		if(value !== undefined) {
-			var i, option;
-			for(i = 0; option = this.options[i]; i++) {
-				if(option.value == value) {
-					this.selectedIndex = i;
-					u.f.validate(this);
-					return i;
-				}
-			}
-			return false;
-		}
-		else {
-			return this.options[this.selectedIndex].value;
-		}
-	}
-	this.inputOnEnter = function(node) {
-		node.keyPressed = function(event) {
-			if(this.nodeName.match(/input/i) && (event.keyCode == 40 || event.keyCode == 38)) {
-				this._submit_disabled = true;
-			}
-			else if(this.nodeName.match(/input/i) && this._submit_disabled && (
-				event.keyCode == 46 || 
-				(event.keyCode == 39 && u.browser("firefox")) || 
-				(event.keyCode == 37 && u.browser("firefox")) || 
-				event.keyCode == 27 || 
-				event.keyCode == 13 || 
-				event.keyCode == 9 ||
-				event.keyCode == 8
-			)) {
-				this._submit_disabled = false;
-			}
-			else if(event.keyCode == 13 && !this._submit_disabled) {
-				u.e.kill(event);
-				this.blur();
-				this.form.submitInput = this;
-				this.form.submitButton = false;
-				this.form._submit(event, this);
-			}
-		}
-		u.e.addEvent(node, "keydown", node.keyPressed);
-	}
-	this.buttonOnEnter = function(node) {
-		node.keyPressed = function(event) {
-			if(event.keyCode == 13 && !u.hc(this, "disabled")) {
-				u.e.kill(event);
-				this.form.submit_input = false;
-				this.form.submit_button = this;
-				this.form._submit(event);
-			}
-		}
-		u.e.addEvent(node, "keydown", node.keyPressed);
-	}
-	this.formIndex = function(form, iN) {
-		iN.tab_index = form.tab_order.length;
-		form.tab_order[iN.tab_index] = iN;
-		if(iN.field && iN.name) {
-			form.fields[iN.name] = iN;
-			if(iN.nodeName.match(/input/i) && iN.type && iN.type.match(/text|email|tel|number|password|datetime|date/)) {
-				iN.val = this._value;
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
-				this.inputOnEnter(iN);
-			}
-			else if(iN.nodeName.match(/textarea/i)) {
-				iN.val = this._value;
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
-			}
-			else if(iN.nodeName.match(/select/i)) {
-				iN.val = this._value_select;
-				u.e.addEvent(iN, "change", this._updated);
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
-			}
-			else if(iN.type && iN.type.match(/checkbox/)) {
-				iN.val = this._value_checkbox;
-				if(u.browser("explorer", "<=8")) {
-					iN.pre_state = iN.checked;
-					iN._changed = u.f._changed;
-					iN._updated = u.f._updated;
-					iN._clicked = function(event) {
-						if(this.checked != this.pre_state) {
-							this._changed(window.event);
-							this._updated(window.event);
-						}
-						this.pre_state = this.checked;
-					}
-					u.e.addEvent(iN, "click", iN._clicked);
-				}
-				else {
-					u.e.addEvent(iN, "change", this._updated);
-					u.e.addEvent(iN, "change", this._changed);
-				}
-				this.inputOnEnter(iN);
-			}
-			else if(iN.type && iN.type.match(/radio/)) {
-				iN.val = this._value_radio;
-				if(u.browser("explorer", "<=8")) {
-					iN.pre_state = iN.checked;
-					iN._changed = u.f._changed;
-					iN._updated = u.f._updated;
-					iN._clicked = function(event) {
-						var i, input;
-						if(this.checked != this.pre_state) {
-							this._changed(window.event);
-							this._updated(window.event);
-						}
-						for(i = 0; input = this.field._input[i]; i++) {
-							input.pre_state = input.checked;
-						}
-					}
-					u.e.addEvent(iN, "click", iN._clicked);
-				}
-				else {
-					u.e.addEvent(iN, "change", this._updated);
-					u.e.addEvent(iN, "change", this._changed);
-				}
-				this.inputOnEnter(iN);
-			}
-			else if(iN.type && iN.type.match(/file/)) {
-				iN.val = function(value) {
-					if(value !== undefined) {
-						alert('adding values manually to input type="file" is not supported')
-					}
-					else {
-						var i, file, files = [];
-						for(i = 0; file = this.files[i]; i++) {
-							files.push(file);
-						}
-						return files.join(",");
-					}
-				}
-				u.e.addEvent(iN, "keyup", this._updated);
-				u.e.addEvent(iN, "change", this._changed);
-			}
-			this.activateField(iN);
-			this.validate(iN);
-		}
-	}
-	this._changed = function(event) {
-		this.used = true;
-		if(typeof(this.changed) == "function") {
-			this.changed(this);
-		}
-		if(typeof(this.form.changed) == "function") {
-			this.form.changed(this);
-		}
-	}
-	this._updated = function(event) {
-		if(event.keyCode != 9 && event.keyCode != 13 && event.keyCode != 16 && event.keyCode != 17 && event.keyCode != 18) {
-			if(this.used || u.hc(this.field, "error")) {
-				u.f.validate(this);
-			}
-			if(typeof(this.updated) == "function") {
-				this.updated(this);
-			}
-			if(typeof(this.form.updated) == "function") {
-				this.form.updated(this);
-			}
-		}
-	}
-	this._validate = function() {
-		u.f.validate(this);
-	}
-	this._submit = function(event, iN) {
-		for(name in this.fields) {
-			if(this.fields[name].field) {
-				this.fields[name].used = true;
-				u.f.validate(this.fields[name]);
-			}
-		}
-		if(u.qs(".field.error", this)) {
-			if(typeof(this.validationFailed) == "function") {
-				this.validationFailed();
-			}
-		}
-		else {
-			if(typeof(this.submitted) == "function") {
-				this.submitted(iN);
+		this.nodeSnippet = function(e) {
+			if(e.textContent != undefined) {
+				return u.cutString(e.textContent.trim(), 20) + "(<"+e.nodeName+">)";
 			}
 			else {
-				this.submit();
+				return u.cutString(e.innerText.trim(), 20) + "(<"+e.nodeName+">)";
 			}
 		}
 	}
-	this._focus = function(event) {
-		this.field.focused = true;
-		u.ac(this.field, "focus");
-		u.ac(this, "focus");
-		u.as(this.field, "zIndex", 99);
-		if(this.field._help) {
-			var f_h =  this.field.offsetHeight;
-			var f_p_t = parseInt(u.gcs(this.field, "padding-top"));
-			var f_p_b = parseInt(u.gcs(this.field, "padding-bottom"));
-			var f_h_h = this.field._help.offsetHeight;
-			u.as(this.field._help, "top", (((f_h - (f_p_t + f_p_b)) / 2) + 2) - (f_h_h / 2) + "px");
-		}
-		if(typeof(this.focused) == "function") {
-			this.focused();
-		}
-		if(typeof(this.form.focused) == "function") {
-			this.form.focused(this);
-		}
-	}
-	this._blur = function(event) {
-		this.field.focused = false;
-		u.rc(this.field, "focus");
-		u.rc(this, "focus");
-		u.as(this.field, "zIndex", 90);
-		if(this.field._help) {
-			u.as(this.field._help, "top", ((this.offsetTop + this.offsetHeight/2 + 2) - (this.field._help.offsetHeight/2)) + "px")
-		}
-		this.used = true;
-		if(typeof(this.blurred) == "function") {
-			this.blurred();
-		}
-		if(typeof(this.form.blurred) == "function") {
-			this.form.blurred(this);
-		}
-	}
-	this._button_focus = function(event) {
-		u.ac(this, "focus");
-		if(typeof(this.focused) == "function") {
-			this.focused();
-		}
-		if(typeof(this.form.focused) == "function") {
-			this.form.focused(this);
-		}
-	}
-	this._button_blur = function(event) {
-		u.rc(this, "focus");
-		if(typeof(this.blurred) == "function") {
-			this.blurred();
-		}
-		if(typeof(this.form.blurred) == "function") {
-			this.form.blurred(this);
-		}
-	}
-	this._default_value_focus = function() {
-		u.rc(this, "default");
-		if(this.val() == this.default_value) {
-			this.val("");
-		}
-	}
-	this._default_value_blur = function() {
-		if(this.val() == "") {
-			u.ac(this, "default");
-			this.val(this.default_value);
-		}
-	}
-	this.activateField = function(iN) {
-		u.e.addEvent(iN, "focus", this._focus);
-		u.e.addEvent(iN, "blur", this._blur);
-		u.e.addEvent(iN, "blur", this._validate);
-		if(iN.form.labelstyle || u.hc(iN.form, "labelstyle:[a-z]+")) {
-			iN.form.labelstyle = iN.form.labelstyle ? iN.form.labelstyle : u.cv(iN.form, "labelstyle");
-			if(iN.form.labelstyle == "inject" && (!iN.type || !iN.type.match(/file|radio|checkbox/))) {
-				iN.default_value = iN._label.innerHTML;
-				u.e.addEvent(iN, "focus", this._default_value_focus);
-				u.e.addEvent(iN, "blur", this._default_value_blur);
-				if(iN.val() == "") {
-					iN.val(iN.default_value);
-					u.ac(iN, "default");
-				}
-			}
-		}
-	}
-	this.activateButton = function(button) {
-		u.e.addEvent(button, "focus", this._button_focus);
-		u.e.addEvent(button, "blur", this._button_blur);
-	}
- 	this.isDefault = function(iN) {
-		if(iN.default_value && iN.val() == iN.default_value) {
-			return true;
-		}
-		return false;
-	}
-	this.fieldError = function(iN) {
-		u.rc(iN, "correct");
-		u.rc(iN.field, "correct");
-		if(iN.used || !this.isDefault(iN) && iN.val()) {
-			u.ac(iN, "error");
-			u.ac(iN.field, "error");
-			if(iN.field._help) {
-				u.as(iN.field._help, "top", ((iN.offsetTop + iN.offsetHeight/2 + 2) - (iN.field._help.offsetHeight/2)) + "px")
-			}
-			if(typeof(iN.validationFailed) == "function") {
-				iN.validationFailed();
-			}
-		}
-	}
-	this.fieldCorrect = function(iN) {
-		if(!this.isDefault(iN) && iN.val()) {
-			u.ac(iN, "correct");
-			u.ac(iN.field, "correct");
-			u.rc(iN, "error");
-			u.rc(iN.field, "error");
-		}
-		else {
-			u.rc(iN, "correct");
-			u.rc(iN.field, "correct");
-			u.rc(iN, "error");
-			u.rc(iN.field, "error");
-		}
-	}
-	this.autoExpand = function(iN) {
-		var current_height = parseInt(u.gcs(iN, "height"));
-		var current_value = iN.val();
-		iN.val("");
-		u.as(iN, "overflow", "hidden");
-		iN.autoexpand_offset = 0;
-		if(parseInt(u.gcs(iN, "height")) != iN.scrollHeight) {
-			iN.autoexpand_offset = iN.scrollHeight - parseInt(u.gcs(iN, "height"));
-		}
-		iN.val(current_value);
-		iN.setHeight = function() {
-			var textarea_height = parseInt(u.gcs(this, "height"));
-			if(this.val()) {
-				if(u.browser("webkit") || u.browser("firefox", ">=29")) {
-					if(this.scrollHeight - this.autoexpand_offset > textarea_height) {
-						u.a.setHeight(this, this.scrollHeight);
-					}
-				}
-				else if(u.browser("opera") || u.browser("explorer")) {
-					if(this.scrollHeight > textarea_height) {
-						u.a.setHeight(this, this.scrollHeight);
-					}
-				}
-				else {
-					u.a.setHeight(this, this.scrollHeight);
-				}
-			}
-		}
-		u.e.addEvent(iN, "keyup", iN.setHeight);
-		iN.setHeight();
-	}
-	this.geoLocation = function(field) {
-		u.ac(field, "geolocation");
-		field.lat_input = u.qs("div.latitude input", field);
-		field.lat_input.autocomplete = "off";
-		field.lat_input.field = field;
-		field.lon_input = u.qs("div.longitude input", field);
-		field.lon_input.autocomplete = "off";
-		field.lon_input.field = field;
-		field.showMap = function() {
-			if(!window._mapsiframe) {
-				var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
-				var html = '<html><head>';
-				html += '<style type="text/css">body {margin: 0;}#map {width: 300px; height: 300px;}</style>';
-				html += '<script type="text/javascript" src="'+maps_url+'"></script>';
-				html += '<script type="text/javascript">';
-				html += 'var map, marker;';
-				html += 'var initialize = function() {';
-				html += '	window._map_loaded = true;';
-				html += '	var mapOptions = {center: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'),zoom: 15};';
-				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
-				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.lat_input.val()+', '+this.lon_input.val()+'), draggable:true});';
-				html += '	marker.setMap(map);';
-				html += '	marker.dragend = function(event_type) {';
-				html += '		var lat_marker = Math.round(marker.getPosition().lat()*100000)/100000;';
-				html += '		var lon_marker = Math.round(marker.getPosition().lng()*100000)/100000;';
-				html += '		field.lon_input.val(lon_marker);';
-				html += '		field.lat_input.val(lat_marker);';
-				html += '	};';
-				html += '	marker.addListener("dragend", marker.dragend);';
-				html += '};';
-				html += 'var centerMap = function(lat, lon) {';
-				html += '	var loc = new google.maps.LatLng(lat, lon);';
-				html += '	map.setCenter(loc);';
-				html += '	marker.setPosition(loc);';
-				html += '};';
-				html += 'google.maps.event.addDomListener(window, "load", initialize);';
-				html += '</script>';
-				html += '</head><body><div id="map"></div></body></html>';
-				window._mapsiframe = u.ae(document.body, "iframe", {"id":"geolocationmap"});
-				window._mapsiframe.doc = window._mapsiframe.contentDocument? window._mapsiframe.contentDocument: window._mapsiframe.contentWindow.document;
-				window._mapsiframe.doc.open();
-				window._mapsiframe.doc.write(html);
-				window._mapsiframe.doc.close();
-			}
-			else {
-				this.updateMap();
-			}
-			window._mapsiframe.contentWindow.field = this;
-			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
-			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
-		}
-		field.updateMap = function() {
-			if(window._mapsiframe && window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
-				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
-			}
-		}
-		field.move_map = function(event) {
-			var factor;
-			if(this._move_direction) {
-				if(event && event.shiftKey) {
-					factor = 0.001;
-				}
-				else {
-					factor = 0.0001;
-				}
-				if(this._move_direction == "38") {
-					this.lat_input.val(u.round(parseFloat(this.lat_input.val())+factor, 6));
-				}
-				else if(this._move_direction == "40") {
-					this.lat_input.val(u.round(parseFloat(this.lat_input.val())-factor, 6));
-				}
-				else if(this._move_direction == "39") {
-					this.lon_input.val(u.round(parseFloat(this.lon_input.val())+factor, 6));
-				}
-				else if(this._move_direction == "37") {
-					this.lon_input.val(u.round(parseFloat(this.lon_input.val())-factor, 6));
-				}
-				this.updateMap();
-			}
-		}
-		field._end_move_map = function(event) {
-			this.field._move_direction = false;
-		}
-		field._start_move_map = function(event) {
-			if(event.keyCode.toString().match(/37|38|39|40/)) {
-				this.field._move_direction = event.keyCode;
-				this.field.move_map(event);
-			}
-		}
-		u.e.addEvent(field.lat_input, "keydown", field._start_move_map);
-		u.e.addEvent(field.lon_input, "keydown", field._start_move_map);
-		u.e.addEvent(field.lat_input, "keyup", field._end_move_map);
-		u.e.addEvent(field.lon_input, "keyup", field._end_move_map);
-		field.lat_input.updated = field.lon_input.updated = function() {
-			this.field.updateMap();
-		}
-		field.lat_input.focused = field.lon_input.focused = function() {
-			this.field.showMap();
-		}
-		field.bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
-		field.bn_geolocation.field = field;
-		u.ce(field.bn_geolocation);
-		field.bn_geolocation.clicked = function() {
-			u.a.transition(this, "all 0.5s ease-in-out");
-			this.transitioned = function() {
-				var new_scale;
-				if(this._scale == 1.4) {
-					new_scale = 1;
-				}
-				else {
-					new_scale = 1.4;
-				}
-				u.a.scale(this, new_scale);
-			}
-			this.transitioned();
-			window._geoLocationField = this.field;
-			window._foundLocation = function(position) {
-				var lat = position.coords.latitude;
-				var lon = position.coords.longitude;
-				window._geoLocationField.lat_input.val(u.round(lat, 6));
-				window._geoLocationField.lon_input.val(u.round(lon, 6));
-				window._geoLocationField.lat_input.focus();
-				window._geoLocationField.lon_input.focus();
-				window._geoLocationField.showMap();
-				u.a.transition(window._geoLocationField.bn_geolocation, "none");
-				u.a.scale(window._geoLocationField.bn_geolocation, 1);
-			}
-			window._noLocation = function() {
-				alert('Could not find location');
-			}
-			navigator.geolocation.getCurrentPosition(window._foundLocation, window._noLocation);
-		}
-	}
-	this.textEditor = function(field) {
-		field._viewer = u.ae(field, "div", {"class":"viewer"});
-		field._editor = u.ae(field, "div", {"class":"editor targets:tag"});
-		field.add = function(type, value) {
-			var div = u.ae(this._editor, "div", {"class":"tag "+type});
-			div._drag = u.ae(div, "div", {"class":"drag"});
-			div._drag.field = this;
-			div._select = u.ae(div, "ul", {"class":"type"});
-			u.ae(div._select, "li", {"html":"p"});
-			u.ae(div._select, "li", {"html":"h1"});
-			u.ae(div._select, "li", {"html":"h2"});
-			u.ae(div._select, "li", {"html":"h3"});
-			u.ae(div._select, "li", {"html":"h4"});
-			u.ae(div._select, "li", {"html":"h5"});
-			u.ae(div._select, "li", {"html":"h6"});
-			div._select.field = this;
-			div._select.div = div;
-			div._select.val = function(value) {
-				if(value !== undefined) {
-					var i, option;
-					for(i = 0; option = this.childNodes[i]; i++) {
-						if(u.text(option) == value) {
-							if(this.selected_option) {
-								u.rc(this.selected_option, "selected");
-								u.rc(this.div, u.text(this.selected_option));
-							}
-							u.ac(option, "selected");
-							this.selected_option = option;
-							u.ac(this.div, value);
-							return option;
-						}
-					}
-					return false;
-				}
-				else {
-					return u.text(this.selected_option);
-				}
-			}
-			div._select.val(type);
-			u.ce(div._select);
-			div._select.clicked = function(event) {
-				if(u.hc(this, "open")) {
-					u.rc(this, "open");
-					u.rc(this.div, "focus");
-					u.as(this, "top", 0);
-					if(event.target) {
-						this.val(u.text(event.target));
-					}
-					u.e.removeEvent(this, "mouseout", this.autohide);
-					u.e.removeEvent(this, "mouseover", this.delayautohide);
-					u.t.resetTimer(this.t_autohide);
-					this.div._input.focus();
-					this.field.update();
-				}
-				else {
-					u.ac(this, "open");
-					u.ac(this.div, "focus");
-					u.as(this, "top", -(this.selected_option.offsetTop) + "px");
-					u.e.addEvent(this, "mouseout", this.autohide);
-					u.e.addEvent(this, "mouseover", this.delayautohide);
-				}
-			}
-			div._select.hide = function() {
-				u.rc(this, "open");
-				u.rc(this.div, "focus");
-				u.as(this, "top", 0);
-				u.e.removeEvent(this, "mouseout", this.autohide);
-				u.e.removeEvent(this, "mouseover", this.delayautohide);
-				u.t.resetTimer(this.t_autohide);
-				this.div._input.focus();
-			}
-			div._select.autohide = function(event) {
-				u.t.resetTimer(this.t_autohide);
-				this.t_autohide = u.t.setTimer(this, this.hide, 800);
-			}
-			div._select.delayautohide = function(event) {
-				u.t.resetTimer(this.t_autohide);
-			}
-			div._input = u.ae(div, "div", {"class":"text", "contentEditable":true});
-			div._input.div = div;
-			div._input.field = this;
-			div._input.val = function(value) {
-				if(value !== undefined) {
-					this.innerHTML = value;
-				}
-				return this.innerHTML;
-			}
-			div._input.val(u.stringOr(value));
-			u.e.addEvent(div._input, "keydown", this._changing_content);
-			u.e.addEvent(div._input, "keyup", this._changed_content);
-			u.e.addEvent(div._input, "mouseup", this._changed_content);
-			u.e.addEvent(div._input, "focus", this._focused_content);
-			u.e.addEvent(div._input, "blur", this._blurred_content);
-			return div;
-		}
-		field._focused_content = function(event) {
-			u.ac(this.div, "focus");
-			if(event.rangeOffset == 1) {
-				var range = document.createRange();
-				range.selectNodeContents(this);
-				range.collapse(false);
-				var selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(range);
-			}
-		}
-		field._blurred_content = function() {
-			u.rc(this.div, "focus");
-			this.field.hideSelectionOptions();
-		}
-		field._changed_type = function(event) {
-			this.field.update();
-		}
-		field._changing_content = function(event) {
-			if(event.keyCode == 13) {
-				u.e.kill(event);
-			}
-		}
-		field._changed_content = function(event) {
-			var selection = window.getSelection(); 
-			if(event.keyCode == 13) {
-				u.e.kill(event);
-				if(!event.ctrlKey && !event.metaKey) {
-					var new_tag = this.field.add("p");
-					var next_tag = u.ns(this.div);
-					if(next_tag) {
-						this.div.parentNode.insertBefore(new_tag, next_tag);
-					}
-					else {
-						this.div.parentNode.appendChild(new_tag);
-					}
-					new_tag._input.focus();
-					u.s.sortable(this.field._editor);
-				}
-				else {
-					if(selection && selection.isCollapsed) {
-						var br = document.createElement("br");
-						range = selection.getRangeAt(0);
-						range.insertNode(br);
-						range.collapse(false);
-						var selection = window.getSelection();
-						selection.removeAllRanges();
-						selection.addRange(range);
-					}
-				}
-			}
-			if(event.keyCode == 8) {
-				if(this.is_deletable) {
-					u.e.kill(event);
-					var prev_tag = u.ps(this.div);
-					var all_tags = u.qsa("div.tag", this.field);
-					if(all_tags.length > 1) {
-						this.div.parentNode.removeChild(this.div);
-						if(prev_tag) {
-							prev_tag._input.focus();
-							var range = document.createRange();
-							range.selectNodeContents(prev_tag._input);
-							range.collapse(false);
-							var selection = window.getSelection();
-							selection.removeAllRanges();
-							selection.addRange(range);
-						}
-						else {
-							u.qs("div.tag", this.field)._input.focus();
-						}
-					}
-				}
-				else if(!this.val()) {
-					this.is_deletable = true;
-				}
-				else if(selection.anchorNode != this && selection.anchorNode.innerHTML == "") {
-					selection.anchorNode.parentNode.removeChild(selection.anchorNode);
-				}
-			}
-			else {
-				this.is_deletable = false;
-			}
-			this.field.hideSelectionOptions();
-			if(selection && !selection.isCollapsed) {
-				var node = selection.anchorNode;
-				while(node != this) {
-					if(node.nodeName == "HTML" || !node.parentNode) {
-						break;
-					}
-					node = node.parentNode;
-				}
-				if(node == this) {
-					this.field.showSelectionOptions(this, selection);
-				}
-			}
-			// 	
-			this.field.update();
-		}
-		field.hideSelectionOptions = function() {
-			if(this.options && !this.options.is_active) {
-				this.options.parentNode.removeChild(this.options);
-				this.options = null;
-			}
-			this.update();
-		}
-		field.showSelectionOptions = function(node, selection) {
-			var x = u.absX(node);
-			var y = u.absY(node);
-			this.options = u.ae(document.body, "div", {"id":"selection_options"});
-			u.as(this.options, "top", y+"px");
-			u.as(this.options, "left", (x + node.offsetWidth) +"px");
-			var ul = u.ae(this.options, "ul", {"class":"options"});
-			this.options._link = u.ae(ul, "li", {"class":"link", "html":"Link"});
-			this.options._link.field = this;
-			this.options._link.selection = selection;
-			u.ce(this.options._link);
-			this.options._link.inputStarted = function(event) {
-				u.e.kill(event);
-				this.field.options.is_active = true;
-			}
-			this.options._link.clicked = function(event) {
-				u.e.kill(event);
-				this.field.addAnchorTag(this.selection);
-			}
-			this.options._em = u.ae(ul, "li", {"class":"em", "html":"Itallic"});
-			this.options._em.field = this;
-			this.options._em.selection = selection;
-			u.ce(this.options._em);
-			this.options._em.inputStarted = function(event) {
-				u.e.kill(event);
-			}
-			this.options._em.clicked = function(event) {
-				u.e.kill(event);
-				this.field.addEmTag(this.selection);
-			}
-			this.options._strong = u.ae(ul, "li", {"class":"strong", "html":"Bold"});
-			this.options._strong.field = this;
-			this.options._strong.selection = selection;
-			u.ce(this.options._strong);
-			this.options._strong.inputStarted = function(event) {
-				u.e.kill(event);
-			}
-			this.options._strong.clicked = function(event) {
-				u.e.kill(event);
-				this.field.addStrongTag(this.selection);
-			}
-		}
-		field.deleteOption = function(node) {
-			node.over = function(event) {
-				u.t.resetTimer(this.t_out);
-				if(!this.bn_delete) {
-					this.bn_delete = u.ae(document.body, "span", {"class":"delete_selection", "html":"X"});
-					this.bn_delete.node = this;
-					this.bn_delete.over = function(event) {
-						u.t.resetTimer(this.node.t_out);
-					}
-					this.bn_delete.out = function(event) {
-						this.node.t_out = u.t.setTimer(this, this.node.reallyout, 300);
-					}
-					u.e.addEvent(this.bn_delete, "mouseover", this.bn_delete.over);
-					u.e.addEvent(this.bn_delete, "mouseout", this.bn_delete.out);
-					u.ce(this.bn_delete);
-					this.bn_delete.clicked = function() {
-						u.e.kill(event);
-						var fragment = document.createTextNode(this.node.innerHTML);
-						this.node.parentNode.replaceChild(fragment, this.node);
-						this.node.reallyout();
-						this.node.field.update();
-					}
-					u.as(this.bn_delete, "top", (u.absY(this)-5)+"px");
-					u.as(this.bn_delete, "left", (u.absX(this)+this.offsetWidth-5)+"px");
-				}
-			}
-			node.out = function(event) {
-				u.t.resetTimer(this.t_out);
-				this.t_out = u.t.setTimer(this, this.reallyout, 300);
-			}
-			node.reallyout = function(event) {
-				if(this.bn_delete) {
-					document.body.removeChild(this.bn_delete);
-					this.bn_delete = null;
-				}
-			}
-			u.e.addEvent(node, "mouseover", node.over);
-			u.e.addEvent(node, "mouseout", node.out);
-		}
-		field.activateInlineFormatting = function(input) {
-			var i, node;
-			var inline_tags = u.qsa("a,strong,em", input);
-			for(i = 0; node = inline_tags[i]; i++) {
-				node.field = input.field;
-				this.deleteOption(node);
-			}
-		}
-		field.anchorOptions = function(node) {
-			var form = u.f.addForm(this.options, {"class":"labelstyle:inject"});
-			u.ae(form, "h3", {"html":"Link options"});
-			var fieldset = u.f.addFieldset(form);
-			var input_url = u.f.addField(fieldset, {"label":"url", "name":"url"});
-			var input_target = u.f.addField(fieldset, {"label":"target", "name":"target"});
-			var bn_save = u.f.addAction(form, {"value":"Create link", "class":"button"});
-			u.f.init(form);
-			// 
-			form.a = node;
-			form.field = this;
-			form.submitted = function() {
-				if(this.fields["url"].val() && this.fields["url"].val() != this.fields["url"].default_value) {
-					this.a.href = this.fields["url"].val();
-				}
-				if(this.fields["target"].val() && this.fields["target"].val() != this.fields["target"].default_value) {
-					this.a.target = this.fields["target"].val();
-				}
-				this.field.options.is_active = false;
-				this.field.hideSelectionOptions();
-			}
-		}
-		field.addAnchorTag = function(selection) {
-			var range, a, url, target;
-			var a = document.createElement("a");
-			a.field = this;
-			range = selection.getRangeAt(0);
-			range.surroundContents(a);
-			selection.removeAllRanges();
-			this.anchorOptions(a);
-			this.deleteOption(a);
-		}
-		field.addStrongTag = function(selection) {
-			var range, a, url, target;
-			var strong = document.createElement("strong");
-			strong.field = this;
-			range = selection.getRangeAt(0);
-			range.surroundContents(strong);
-			selection.removeAllRanges();
-			this.deleteOption(strong);
-			this.hideSelectionOptions();
-		}
-		field.addEmTag = function(selection) {
-			var range, a, url, target;
-			var em = document.createElement("em");
-			em.field = this;
-			range = selection.getRangeAt(0);
-			range.surroundContents(em);
-			selection.removeAllRanges();
-			this.deleteOption(em);
-			this.hideSelectionOptions();
-		}
-		field._viewer.innerHTML = field._input.val();
-		field._fields = new Array();
-		var value, node, i, tag;
-		var nodes = u.cn(field._viewer, "br");
-		if(nodes.length) {
-			for(i = 0; node = field._viewer.childNodes[i]; i++) {
-				if(node.nodeName == "#text") {
-					if(node.nodeValue.trim()) {
-						var fragments = node.nodeValue.trim().split(/\n\r\n\r|\n\n|\r\r/g);
-						if(fragments) {
-							for(index in fragments) {
-								value = fragments[index].replace(/\n\r|\n|\r/g, "<br>");
-								tag = field.add("p", fragments[index]);
-								field.activateInlineFormatting(tag._input);
-							}
-						}
-						else {
-							value = node.nodeValue; 
-							tag = field.add("p", value);
-							field.activateInlineFormatting(tag._input);
-						}
-					}
-				}
-				else if(node.nodeName.toLowerCase().match(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/)) {
-					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
-					tag = field.add(node.nodeName.toLowerCase(), value);
-					field.activateInlineFormatting(tag._input);
-				}
-				else {
-					alert("invalid node:" + node.nodeName);
-				}
-			}
-		}
-		else {
-			value = field._viewer.innerHTML.replace(/\<br[\/]?\>/g, "\n");
-			tag = field.add("p", value);
-			field.activateInlineFormatting(tag._input);
-		}
-		u.s.sortable(field._editor);
-		field.update = function() {
-			this.updateViewer();
-			this.updateContent();
-		}
-		field.updateViewer = function() {
-			var tag_fields = u.qsa("div.tag", this);
-			var i, node, value;
-			this._viewer.innerHTML = "";
-			for(i = 0; node = tag_fields[i]; i++) {
-				value = node._input.val();
-				u.ae(this._viewer, node._select.val(), {"html":value});
-			}
-		}
-		field.updateContent = function() {
-			var tags = u.qsa("div.tag", this);
-			this._input.val("");
-			var i, node, tag, value, html = "";
-			for(i = 0; node = tags[i]; i++) {
-				u.bug(u.nodeId(node));
-				value = node._input.val();
-				tag = node._select.val();
-				html += "<"+tag+">"+value+"</"+tag+">\n";
-			}
-			this._input.val(html);
-		}
-		field.updateViewer();
-	}
-	this.validate = function(iN) {
-		var min, max, pattern;
-		var not_validated = true;
-		if(!u.hc(iN.field, "required") && (iN.val() == "" || this.isDefault(iN))) {
-			this.fieldCorrect(iN);
-			return true;
-		}
-		else if(u.hc(iN.field, "required") && (iN.val() == "" || this.isDefault(iN))) {
-			this.fieldError(iN);
-			return false;
-		}
-		var custom_validate;
-		for(custom_validate in u.f.customValidate) {
-			if(u.hc(iN.field, custom_validate)) {
-				u.f.customValidate[custom_validate](iN);
-				not_validated = false;
-			}
-		}
-		if(not_validated) {
-			if(u.hc(iN.field, "password")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 8;
-				max = max ? max : 20;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min && 
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "number")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 0;
-				max = max ? max : 99999999999999999999999999999;
-				pattern = iN.getAttribute("pattern");
-				if(
-					!isNaN(iN.val()) && 
-					iN.val() >= min && 
-					iN.val() <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "integer")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 0;
-				max = max ? max : 99999999999999999999999999999;
-				pattern = iN.getAttribute("pattern");
-				if(
-					!isNaN(iN.val()) && 
-					Math.round(iN.val()) == iN.val() && 
-					iN.val() >= min && 
-					iN.val() <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "tel")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\+0-9\-\.\s\(\)]){5,18}$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "email")) {
-				if(
-					!pattern && iN.val().match(/^([^<>\\\/%$])+\@([^<>\\\/%$])+\.([^<>\\\/%$]{2,20})$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "text")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 10000000;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min && 
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "html")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 10000000;
-				pattern = iN.getAttribute("pattern");
-				if(
-					u.text(iN.field._viewer) &&
-					u.text(iN.field._viewer).length >= min && 
-					u.text(iN.field._viewer).length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "select")) {
-				if(iN.val()) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "checkbox|boolean|radio|radio_buttons")) {
-				if(iN.val()) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "string")) {
-				min = Number(u.cv(iN.field, "min"));
-				max = Number(u.cv(iN.field, "max"));
-				min = min ? min : 1;
-				max = max ? max : 255;
-				pattern = iN.getAttribute("pattern");
-				if(
-					iN.val().length >= min &&
-					iN.val().length <= max && 
-					(!pattern || iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "date")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\d]{4}[\-\/\ ]{1}[\d]{2}[\-\/\ ][\d]{2})$/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "datetime")) {
-				pattern = iN.getAttribute("pattern");
-				if(
-					!pattern && iN.val().match(/^([\d]{4}[\-\/\ ]{1}[\d]{2}[\-\/\ ][\d]{2} [\d]{2}[\-\/\ \:]{1}[\d]{2}[\-\/\ \:]{0,1}[\d]{0,2})$/) ||
-					(pattern && iN.val().match(pattern))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "tags")) {
-				if(
-					!pattern && iN.val().match(/\:/) ||
-					(pattern && iN.val().match("^"+pattern+"$"))
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "prices")) {
-				if(
-					!isNaN(iN.val())
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-			else if(u.hc(iN.field, "location")) {
-				if(u.hc(iN, "location")) {
-					min = min ? min : 1;
-					max = max ? max : 255;
-					if(
-						iN.val().length >= min &&
-						iN.val().length <= max
-					) {
-						this.fieldCorrect(iN);
-					}
-					else {
-						this.fieldError(iN);
-					}
-				}
-				if(u.hc(iN, "latitude")) {
-					min = min ? min : -90;
-					max = max ? max : 90;
-					if(
-						!isNaN(iN.val()) && 
-						iN.val() >= min && 
-						iN.val() <= max
-					) {
-						this.fieldCorrect(iN);
-					}
-					else {
-						this.fieldError(iN);
-					}
-				}
-				if(u.hc(iN, "longitude")) {
-					min = min ? min : -180;
-					max = max ? max : 180;
-					if(
-						!isNaN(iN.val()) && 
-						iN.val() >= min && 
-						iN.val() <= max
-					) {
-						this.fieldCorrect(iN);
-					}
-					else {
-						this.fieldError(iN);
-					}
-				}
-				if(u.qsa(".correct", iN.field).length != 3) {
-					u.rc(iN.field, "correct");
-					u.ac(iN.field, "error");
-				}
-			}
-			else if(u.hc(iN.field, "files")) {
-				u.bug("files:" + iN.files.length);
-				if(
-					1
-				) {
-					this.fieldCorrect(iN);
-				}
-				else {
-					this.fieldError(iN);
-				}
-			}
-		}
-		if(u.hc(iN.field, "error")) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-	this.getParams = function(form, settings) {
-		var send_as = "params";
-		var ignore_inputs = "ignoreinput";
-		if(typeof(settings) == "object") {
-			var argument;
-			for(argument in settings) {
-				switch(argument) {
-					case "ignore_inputs"	: ignore_inputs		= settings[argument]; break;
-					case "send_as"			: send_as			= settings[argument]; break;
-				}
-			}
-		}
-		var i, input, select, textarea, param;
-			var params = new Object();
-		if(form._submit_button && form._submit_button.name) {
-			params[form._submit_button.name] = form._submit_button.value;
-		}
-		var inputs = u.qsa("input", form);
-		var selects = u.qsa("select", form)
-		var textareas = u.qsa("textarea", form)
-		for(i = 0; input = inputs[i]; i++) {
-			if(!u.hc(input, ignore_inputs)) {
-				if((input.type == "checkbox" || input.type == "radio") && input.checked) {
-					if(!this.isDefault(input)) {
-						params[input.name] = input.value;
-					}
-				}
-				else if(input.type == "file") {
-					if(!this.isDefault(input)) {
-						params[input.name] = input.value;
-					}
-				}
-				else if(!input.type.match(/button|submit|reset|file|checkbox|radio/i)) {
-					if(!this.isDefault(input)) {
-						params[input.name] = input.value;
-					}
-					else {
-						params[input.name] = "";
-					}
-				}
-			}
-		}
-		for(i = 0; select = selects[i]; i++) {
-			if(!u.hc(select, ignore_inputs)) {
-				if(!this.isDefault(select)) {
-					params[select.name] = select.options[select.selectedIndex].value;
-				}
-			}
-		}
-		for(i = 0; textarea = textareas[i]; i++) {
-			if(!u.hc(textarea, ignore_inputs)) {
-				if(!this.isDefault(textarea)) {
-					params[textarea.name] = textarea.value;
-				}
-				else {
-					params[textarea.name] = "";
-				}
-			}
-		}
-		if(send_as && typeof(this.customSend[send_as]) == "function") {
-			return this.customSend[send_as](params, form);
-		}
-		else if(send_as == "json") {
-			return u.f.convertNamesToJsonObject(params);
-		}
-		else if(send_as == "object") {
-			return params;
-		}
-		else {
-			var string = "";
-			for(param in params) {
-					string += (string ? "&" : "") + param + "=" + encodeURIComponent(params[param]);
-			}
-			return string;
-		}
-	}
-}
-u.f.convertNamesToJsonObject = function(params) {
- 	var indexes, root, indexes_exsists, param;
-	var object = new Object();
-	for(param in params) {
-	 	indexes_exsists = param.match(/\[/);
-		if(indexes_exsists) {
-			root = param.split("[")[0];
-			indexes = param.replace(root, "");
-			if(typeof(object[root]) == "undefined") {
-				object[root] = new Object();
-			}
-			object[root] = this.recurseName(object[root], indexes, params[param]);
-		}
-		else {
-			object[param] = params[param];
-		}
-	}
-	return object;
-}
-u.f.recurseName = function(object, indexes, value) {
-	var index = indexes.match(/\[([a-zA-Z0-9\-\_]+)\]/);
-	var current_index = index[1];
-	indexes = indexes.replace(index[0], "");
- 	if(indexes.match(/\[/)) {
-		if(object.length !== undefined) {
-			var i;
-			var added = false;
-			for(i = 0; i < object.length; i++) {
-				for(exsiting_index in object[i]) {
-					if(exsiting_index == current_index) {
-						object[i][exsiting_index] = this.recurseName(object[i][exsiting_index], indexes, value);
-						added = true;
-					}
-				}
-			}
-			if(!added) {
-				temp = new Object();
-				temp[current_index] = new Object();
-				temp[current_index] = this.recurseName(temp[current_index], indexes, value);
-				object.push(temp);
-			}
-		}
-		else if(typeof(object[current_index]) != "undefined") {
-			object[current_index] = this.recurseName(object[current_index], indexes, value);
-		}
-		else {
-			object[current_index] = new Object();
-			object[current_index] = this.recurseName(object[current_index], indexes, value);
-		}
-	}
-	else {
-		object[current_index] = value;
-	}
-	return object;
-}
-u.f.addForm = function(node, settings) {
-u.bug("addform")
-	var form_name = "js_form";
-	var form_action = "#";
-	var form_method = "post";
-	var form_class = "";
-	if(typeof(settings) == "object") {
-		var argument;
-		for(argument in settings) {
-			switch(argument) {
-				case "name"			: form_name				= settings[argument]; break;
-				case "action"		: form_action			= settings[argument]; break;
-				case "method"		: form_method			= settings[argument]; break;
-				case "class"		: form_class			= settings[argument]; break;
-			}
-		}
-	}
-	var form = u.ae(node, "form", {"class":form_class, "name": form_name, "action":form_action, "method":form_method});
-	return form;
-}
-u.f.addFieldset = function(node) {
-	return u.ae(node, "fieldset");
-}
-u.f.addField = function(node, settings) {
-	var field_type = "string";
-	var field_label = "Value";
-	var field_name = "js_name";
-	var field_value = "";
-	var field_class = "";
-	if(typeof(settings) == "object") {
-		var argument;
-		for(argument in settings) {
-			switch(argument) {
-				case "type"			: field_type			= settings[argument]; break;
-				case "label"		: field_label			= settings[argument]; break;
-				case "name"			: field_name			= settings[argument]; break;
-				case "value"		: field_value			= settings[argument]; break;
-				case "class"		: field_class			= settings[argument]; break;
-			}
-		}
-	}
-	var input_id = "input_"+field_type+"_"+field_name;
-	var field = u.ae(node, "div", {"class":"field "+field_type+" "+field_class});
-	if(field_type == "string") {
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
-		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":"text"});
-	}
-	else if(field_type == "email" || field_type == "number" || field_type == "tel") {
-		var label = u.ae(field, "label", {"for":input_id, "html":field_label});
-		var input = u.ae(field, "input", {"id":input_id, "value":field_value, "name":field_name, "type":field_type});
-	}
-	else if(field_type == "select") {
-		u.bug("Select not implemented yet")
-	}
-	else {
-		u.bug("input type not implemented yet")
-	}
-	return field;
-}
-u.f.addAction = function(node, settings) {
-	var action_type = "submit";
-	var action_name = "js_name";
-	var action_value = "";
-	var action_class = "";
-	if(typeof(settings) == "object") {
-		var argument;
-		for(argument in settings) {
-			switch(argument) {
-				case "type"			: action_type			= settings[argument]; break;
-				case "name"			: action_name			= settings[argument]; break;
-				case "value"		: action_value			= settings[argument]; break;
-				case "class"		: action_class			= settings[argument]; break;
-			}
-		}
-	}
-	var p_ul = node.nodeName.toLowerCase() == "ul" ? node : u.pn(node, "ul");
-	if(!u.hc(p_ul, "actions")) {
-		p_ul = u.ae(node, "ul", {"class":"actions"});
-	}
-	var p_li = node.nodeName.toLowerCase() == "li" ? node : u.pn(node, "li");
-	if(p_ul != p_li.parentNode) {
-		p_li = u.ae(p_ul, "li", {"class":action_name});
-	}
-	else {
-		p_li = node;
-	}
-	var action = u.ae(p_li, "input", {"type":action_type, "class":action_class, "value":action_value, "name":action_name})
-	return action;
 }
 
 
@@ -8493,8 +7670,3 @@ Util.Objects["generic"] = new function() {
 	}
 }
 
-
-/*ga.js*/
-u.ga_account = 'UA-17394677-1';
-u.ga_domain = 'kaestel.dk';
-u.gapi_key = 'AIzaSyDDcI1nS5XiY3pfMQnlGVU4Ev2aAQZ8Wog';

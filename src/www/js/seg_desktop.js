@@ -3254,7 +3254,8 @@ u.e.addWindowResizeEvent = function(node, action) {
 	return id;
 }
 u.e.removeWindowResizeEvent = function(node, id) {
-	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
+	u.rc(node, id);
+	u.e.removeEvent(window, "resize", window["_Onresize_" + id]);
 }
 u.e.addWindowScrollEvent = function(node, action) {
 	var id = u.randomString();
@@ -3264,7 +3265,30 @@ u.e.addWindowScrollEvent = function(node, action) {
 	return id;
 }
 u.e.removeWindowScrollEvent = function(node, id) {
-	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
+	u.rc(node, id);
+	u.e.removeEvent(window, "scroll", window["_Onscroll_" + id]);
+}
+u.e.addWindowMoveEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onmove_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onmove_'+id+' = '+action+'; node._Onmove_'+id+'(event);}');
+	u.e.addMoveEvent(window, window["_Onmove_" + id]);
+	return id;
+}
+u.e.removeWindowMoveEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeMoveEvent(window, window["_Onmove_" + id]);
+}
+u.e.addWindowEndEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onend_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onend_'+id+' = '+action+'; node._Onend_'+id+'(event);}');
+	u.e.addEndEvent(window, window["_Onend_" + id]);
+	return id;
+}
+u.e.removeWindowEndEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeEndEvent(window, window["_Onend_" + id]);
 }
 
 
@@ -3614,9 +3638,11 @@ Util.Objects["wishes"] = new function() {
 	this.init = function(scene) {
 		scene.image_width = 250;
 		scene.resized = function() {
-			var text_width = this.nodes[0].offsetWidth - this.image_width;
-			for(i = 0; node = this.nodes[i]; i++) {
-				u.as(node.text_mask, "width", text_width+"px", false);
+			if(this.nodes.length) {
+				var text_width = this.nodes[0].offsetWidth - this.image_width;
+				for(i = 0; node = this.nodes[i]; i++) {
+					u.as(node.text_mask, "width", text_width+"px", false);
+				}
 			}
 			this.offsetHeight;
 		}
@@ -3630,11 +3656,12 @@ Util.Objects["wishes"] = new function() {
 				for(i = 0; node = this.nodes[i]; i++) {
 					node.item_id = u.cv(node, "id");
 					node.image_format = u.cv(node, "format");
+					node.image_variant = u.cv(node, "variant");
 					node.image_mask = u.ae(node, "div", {"class":"image"});
 					node.text_mask = u.ae(node, "div", {"class":"text"});
 					u.as(node.text_mask, "width", text_width+"px", false);
 					if(node.image_format) {
-						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+this.image_width+"x."+node.image_format+")");
+						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+node.image_variant+"/"+this.image_width+"x."+node.image_format+")");
 					}
 					else {
 						u.as(node.image_mask, "backgroundImage", "url(/images/0/missing/"+this.image_width+"x.png)");
@@ -3644,36 +3671,58 @@ Util.Objects["wishes"] = new function() {
 					node.actions = u.ae(node.text_mask, u.qs("ul.actions", node));
 					u.ae(node.text_mask, u.qs("div.description", node));
 					node.reserve_form = u.qs("li.reserve form", node);
-					u.f.init(node.reserve_form);
-					node.bn_reserve = u.qs("input", node.reserve_form);
-					node.bn_reserve.node = node;
-					u.e.click(node.bn_reserve)
-					node.bn_reserve.clicked = function(event) {
-						u.e.kill(event);
-						this.response = function(response) {
-							if(response.cms_status == "success") {
-								u.ac(this.node.actions, "reserved");
-							}
-							else {
-							}
+					if(node.reserve_form) {
+						u.f.init(node.reserve_form);
+						node.bn_reserve = u.qs("input[type=submit]", node.reserve_form);
+						node.bn_reserve.node = node;
+						node.bn_reserve.over = function() {
+							this.org_text = this.value;
+							this.value = "Click to reserve";
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						node.bn_reserve.out = function() {
+							this.value = this.org_text;
+						}
+						u.e.addEvent(node.bn_reserve, "mouseover", node.bn_reserve.over);
+						u.e.addEvent(node.bn_reserve, "mouseout", node.bn_reserve.out);
+						u.e.click(node.bn_reserve)
+						node.bn_reserve.clicked = function(event) {
+							u.e.kill(event);
+							this.response = function(response) {
+								if(response.cms_status == "success") {
+									u.ac(this.node.actions, "reserved");
+								}
+								else {
+								}
+							}
+							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+						}
 					}
 					node.unreserve_form = u.qs("li.unreserve form", node);
-					u.f.init(node.unreserve_form);
-					node.bn_unreserve = u.qs("input", node.unreserve_form);
-					node.bn_unreserve.node = node;
-					u.e.click(node.bn_unreserve)
-					node.bn_unreserve.clicked = function(event) {
-						u.e.kill(event);
-						this.response = function(response) {
-							if(response.cms_status == "success") {
-								u.rc(this.node.actions, "reserved");
-							}
-							else {
-							}
+					if(node.unreserve_form) {
+						u.f.init(node.unreserve_form);
+						node.bn_unreserve = u.qs("input[type=submit]", node.unreserve_form);
+						node.bn_unreserve.node = node;
+						node.bn_unreserve.over = function() {
+							this.org_text = this.value;
+							this.value = "Click to make available";
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						node.bn_unreserve.out = function() {
+							this.value = this.org_text;
+						}
+						u.e.addEvent(node.bn_unreserve, "mouseover", node.bn_unreserve.over);
+						u.e.addEvent(node.bn_unreserve, "mouseout", node.bn_unreserve.out);
+						u.e.click(node.bn_unreserve)
+						node.bn_unreserve.clicked = function(event) {
+							u.e.kill(event);
+							this.response = function(response) {
+								if(response.cms_status == "success") {
+									u.rc(this.node.actions, "reserved");
+								}
+								else {
+								}
+							}
+							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+						}
 					}
 				}
 			}
@@ -3706,7 +3755,7 @@ Util.Objects["todolist"] = new function() {
 					node.actions = u.qs("ul.actions", node);
 					node.close_form = u.qs("li.close form", node);
 					u.f.init(node.close_form);
-					node.bn_close = u.qs("input", node.close_form);
+					node.bn_close = u.qs("input[type=submit]", node.close_form);
 					node.bn_close.node = node;
 					u.e.click(node.bn_close)
 					node.bn_close.clicked = function(event) {
@@ -3718,11 +3767,11 @@ Util.Objects["todolist"] = new function() {
 							else {
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 					node.open_form = u.qs("li.open form", node);
 					u.f.init(node.open_form);
-					node.bn_open = u.qs("input", node.open_form);
+					node.bn_open = u.qs("input[type=submit]", node.open_form);
 					node.bn_open.node = node;
 					u.e.click(node.bn_open)
 					node.bn_open.clicked = function(event) {
@@ -3734,7 +3783,7 @@ Util.Objects["todolist"] = new function() {
 							else {
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 				}
 			}
