@@ -9,12 +9,12 @@ include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 $action = $page->actions();
 $IC = new Item();
-$itemtype = "wish";
+$itemtype = "page";
 $model = $IC->typeObject($itemtype);
 
 
 $page->bodyClass($itemtype);
-$page->pageTitle("Wishes");
+$page->pageTitle("Pages");
 
 
 if(is_array($action) && count($action)) {
