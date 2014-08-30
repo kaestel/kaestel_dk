@@ -83,3 +83,9 @@ ffmpeg -y -i Dot2.mov -an -r 20 -g 40 -vcodec libtheora -b 600k -vf crop=540:540
 ffmpeg -y -i Screensizes4.mov -an -vcodec libx264 -b 1000k screen.mp4
 ffmpeg -y -i Screensizes4.mov -an -r 20 -g 40 -vcodec libtheora -b 600k screen.ogv
 
+
+ffmpeg -y -i Udvikling_ipad_cover_landscape.mp4 -an -qmin 0 -qmax 25 -crf 30 -vcodec libx264 -b 1400k Udvikling_ipad_cover_landscape_comp.mp4
+
+ffmpeg -y -i Udvikling_ipad_cover_portrait.mp4 -an -qmin 0 -qmax 25 -crf 30 -vcodec libx264 -b 1400k Udvikling_ipad_cover_portrait_comp.mp4
+
+ffmpeg -y -i Udvikling_ipad_cover_square.mp4 -an -qmin 0 -qmax 25 -crf 30 -vcodec libx264 -b 1400k Udvikling_ipad_cover_square_comp.mp4

@@ -20,6 +20,10 @@ sudo chown -R www-data:deploy src/library
 sudo chmod -R 770 src/library
 
 
+Add user for HTACCESS
+sudo htpasswd -m /srv/auth-file _username_
+
+
 
 Add connect_db+mail if needed
 sudo vi src/config/connect_db.php
