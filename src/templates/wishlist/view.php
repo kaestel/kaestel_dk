@@ -33,17 +33,17 @@ endif;
 			</div>
 			<dl>
 				<dt>Pris</dt>
-				<dd><?= $item["price"] ?></dd>
+				<dd>DKK <?= $item["price"] ?></dd>
 			</dl>
 			<ul class="actions <?= ($item["reserved"] == 1 ? "reserved" : "") ?>">
 				<li class="reserve">
 					<?= $model->formStart("/wishlist/reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
-						<?= $model->submit("Reserve", array("class" => "primary")) ?>
+						<?= $model->submit("Available", array("class" => "primary")) ?>
 					<?= $model->formEnd() ?>
 				</li>
 				<li class="unreserve">
 					<?= $model->formStart("/wishlist/unreserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
-						<?= $model->submit("Un-reserve", array("class" => "secondary")) ?>
+						<?= $model->submit("Reserved", array("class" => "secondary")) ?>
 					<?= $model->formEnd() ?>
 				</li>
 			</ul>
