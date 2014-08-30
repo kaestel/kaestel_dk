@@ -2,7 +2,6 @@
 
 	<div id="navigation">
 		<ul>
-			<? $HTML = new HTML() ?>
 			<?= $HTML->link("Logs", "/admin/log/list", array("wrapper" => "li.log")) ?>
 			<?= $HTML->link("Posts", "/admin/post/list", array("wrapper" => "li.post")) ?>
 
@@ -11,16 +10,11 @@
 			<?= $HTML->link("Todo", "/admin/todo/list", array("wrapper" => "li.todo")) ?>
 			<?= $HTML->link("Todolist", "/admin/todolist/list", array("wrapper" => "li.todolist")) ?>
 
-			<?= $HTML->link("user", "/admin/user/list", array("wrapper" => "li.user")) ?>
-			<?= $HTML->link("Tags", "/admin/tag/list", array("wrapper" => "li.tags")) ?>
+			<?= $HTML->link("Pages", "/admin/page/list", array("wrapper" => "li.page")) ?>
+			<?= $HTML->link("Navigations", "/admin/navigation/list", array("wrapper" => "li.navigation")) ?>
 
-			<!--li class="log"><a href="/admin/log/list">Logs</a></li>
-			<li class="wish"><a href="/admin/wish/list">Wishes</a></li>
-			<li class="wishlist"><a href="/admin/wishlist/list">Wishlists</a></li>
-			<li class="todo"><a href="/admin/todo/list">Todo</a></li>
-			<li class="todolist"><a href="/admin/todolist/list">Todolist</a></li>
-			<li class="user"><a href="/admin/user/list">Users</a></li>
-			<li class="tags"><a href="/admin/tag/list">Tags</a></li-->
+			<?= $HTML->link("Tags", "/admin/tag/list", array("wrapper" => "li.tags")) ?>
+			<?= $HTML->link("Users", "/admin/user/list", array("wrapper" => "li.user")) ?>
 		</ul>
 	</div>
 

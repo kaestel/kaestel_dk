@@ -26,7 +26,7 @@
 <div id="page" class="i:page">
 	<div id="header">
 		<ul class="servicenavigation">
-			<li class="keynav front"><a href="/admin">Kæstel Admin</a></li>
+			<li class="keynav front"><a href="/admin"><?= SITE_NAME ?> Admin</a></li>
 <?			if(session()->value("user_id") && session()->value("user_group_id")): ?>
 			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
 <?			else: ?>
