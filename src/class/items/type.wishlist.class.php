@@ -1,12 +1,9 @@
 <?php
 /**
 * @package janitor.items
-* This file contains item frontpage text maintenance functionality
+* This file contains item type functionality
 */
 
-/**
-* TypeCategory
-*/
 class TypeWishlist extends Model {
 
 	/**
@@ -23,7 +20,7 @@ class TypeWishlist extends Model {
 			"required" => true,
 			"unique" => $this->db,
 			"hint_message" => "Name of the wishlist", 
-			"error_message" => "Category name must be unique"
+			"error_message" => "Wishlist name must be unique"
 		));
 
 		// Class
@@ -36,15 +33,21 @@ class TypeWishlist extends Model {
 		// Tags
 		$this->addToModel("tags", array(
 			"type" => "tags",
-			"label" => "Add tag",
-			"hint_message" => "Start typing to get suggestions"
+			"label" => "Tag",
+			"hint_message" => "Start typing to filter available tags. A correct tag has this format: context:value.",
+			"error_message" => "Tag must conform to tag format: context:value."
 		));
 
 		parent::__construct();
 	}
 
 
+	// CMS SECTION
+	// custom loopback function
 
+
+	// Update item order
+	// /admin/wishlist/updateOrder (order comma-separated in POST)
 	function updateOrder($action) {
 
 		$order_list = getPost("order");

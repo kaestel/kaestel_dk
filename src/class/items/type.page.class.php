@@ -4,7 +4,7 @@
 * This file contains item type functionality
 */
 
-class TypeLog extends Model {
+class TypePage extends Model {
 
 	/**
 	* Init, set varnames, validation rules
@@ -12,8 +12,8 @@ class TypeLog extends Model {
 	function __construct() {
 
 		// itemtype database
-		$this->db = SITE_DB.".item_log";
-		$this->db_mediae = SITE_DB.".item_log_mediae";
+		$this->db = SITE_DB.".item_page";
+		$this->db_mediae = SITE_DB.".item_page_mediae";
 
 
 		// Published
@@ -21,17 +21,17 @@ class TypeLog extends Model {
 			"type" => "datetime",
 			"label" => "Publish date (yyyy-mm-dd hh:mm:ss)",
 			"pattern" => "^[\d]{4}-[\d]{2}-[\d]{2}[0-9\-\/ \:]*$",
-			"hint_message" => "Date of the log entry. Leave empty for current time", 
+			"hint_message" => "Publication date and time of page. This will be shown on website. Leave empty for current time", 
 			"error_message" => "Date must be of format (yyyy-mm-dd hh:mm:ss)"
 		));
 
 		// Name
 		$this->addToModel("name", array(
 			"type" => "string",
-			"label" => "Name",
+			"label" => "Title",
 			"required" => true,
-			"hint_message" => "Name your log entry", 
-			"error_message" => "Name must be filled out."
+			"hint_message" => "Title of your page", 
+			"error_message" => "Title must be filled out."
 		));
 
 		// description
@@ -39,46 +39,38 @@ class TypeLog extends Model {
 			"type" => "text",
 			"label" => "Short description",
 			"required" => true,
-			"hint_message" => "Write a short description of the log entry",
-			"error_message" => "A short description without any words? How weird."
+			"hint_message" => "Write a short description of the page. It is used for page listings and SEO.",
+			"error_message" => "Your page needs a description"
 		));
 
 		// HTML
 		$this->addToModel("html", array(
 			"type" => "html",
-			"label" => "HTML",
-			"required" => true,
+			"label" => "HTML content",
+			"allowed_tags" => "h2,h3,h4,p",
 			"hint_message" => "Write the log entry",
-			"error_message" => "A log without any words? How weird."
+			"error_message" => "A page without any words? How weird."
 		));
 
 
-		// Location
-		$this->addToModel("location", array(
-			"type" => "string",
-			"label" => "Location",
-			"required" => true,
-			"hint_message" => "Name and Geo coordinates of location",
-			"error_message" => "Name and Geo coordinates must be filled out"
-		));
-		// latitude
-		$this->addToModel("latitude", array(
-			"type" => "number",
-			"label" => "Latitude"
-		));
-		// longitude
-		$this->addToModel("longitude", array(
-			"type" => "number",
-			"label" => "Longitude"
-		));
-
-		// Files
-		$this->addToModel("files", array(
+		// Primary images
+		$this->addToModel("main_media", array(
 			"type" => "files",
-			"label" => "Drag image here to add",
+			"label" => "Drag main image here",
 			"allowed_formats" => "png,jpg",
-			"hint_message" => "Add image here. Use png or jpg in any proportion.",
-			"error_message" => "File does not fit requirements."
+			"allowed_sizes" => "960x540",
+			"max" => 1,
+			"hint_message" => "Add primary page image by dragging it here. Image must be jpg or png format in 960x540 pixels.",
+			"error_message" => "Media does not fit requirements."
+		));
+
+		// HTML images
+		$this->addToModel("mediae", array(
+			"type" => "files",
+			"label" => "Add media here",
+			"allowed_formats" => "png,jpg",
+			"hint_message" => "Add images or videos here. Use png, jpg or mp4.",
+			"error_message" => "Media does not fit requirements."
 		));
 
 
@@ -129,12 +121,12 @@ class TypeLog extends Model {
 
 
 	// CMS SECTION
-	// custom loopback function
+	// custom loopback functions
 
 
-	// custom function to add media
-	// /admin/log/addMedia/#item_id# (post image)
-	function addMedia($action) {
+	// custom function to add main media
+	// /admin/page/addMain/#item_id#
+	function addMain($action) {
 
 		if(count($action) == 2) {
 			$query = new Query();
@@ -143,26 +135,21 @@ class TypeLog extends Model {
 
 			$query->checkDbExistance($this->db_mediae);
 
-			if($this->validateList(array("files"), $item_id)) {
-				$uploads = $IC->upload($item_id, array("input_name" => "files", "auto_add_variant" => true));
+			// Image main_media
+			if($this->validateList(array("main_media"), $item_id)) {
+				$uploads = $IC->upload($item_id, array("input_name" => "main_media", "variant" => "main"));
 				if($uploads) {
+					$query->sql("DELETE FROM ".$this->db_mediae." WHERE item_id = $item_id AND variant = '".$uploads[0]["variant"]."'");
+					$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$uploads[0]["name"]."', '".$uploads[0]["format"]."', '".$uploads[0]["variant"]."', '".$uploads[0]["width"]."', '".$uploads[0]["height"]."', 0)");
 
-					$return_values = array();
-
-					foreach($uploads as $upload) {
-						$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$upload["name"]."', '".$upload["format"]."', '".$upload["variant"]."', '".$upload["width"]."', '".$upload["height"]."', 0)");
-
-						$return_values[] = array(
-							"item_id" => $item_id, 
-							"media_id" => $query->lastInsertId(), 
-							"variant" => $upload["variant"], 
-							"format" => $upload["format"], 
-							"width" => $upload["width"], 
-							"height" => $upload["height"]
-						);
-					}
-
-					return $return_values;
+					return array(
+						"item_id" => $item_id, 
+						"media_id" => $query->lastInsertId(), 
+						"variant" => $uploads[0]["variant"], 
+						"format" => $uploads[0]["format"], 
+						"width" => $uploads[0]["width"], 
+						"height" => $uploads[0]["height"]
+					);
 				}
 			}
 		}
@@ -172,7 +159,7 @@ class TypeLog extends Model {
 
 
 	// delete image - 3 parameters exactly
-	// /admin/log/deleteImage/#item_id#/#variant#
+	// /admin/page/deleteImage/#item_id#/#variant#
 	function deleteMedia($action) {
 
 		if(count($action) == 3) {
@@ -192,32 +179,6 @@ class TypeLog extends Model {
 
 		message()->addMessage("Media could not be deleted", array("type" => "error"));
 		return false;
-	}
-
-
-	// update media order
-	// /admin/log/updateMediaOrder (comma-separated order in POST)
-	function updateMediaOrder($action) {
-
-		$order_list = getPost("order");
-		if(count($action) == 1 && $order_list) {
-
-			$query = new Query();
-			$order = explode(",", $order_list);
-
-			for($i = 0; $i < count($order); $i++) {
-				$media_id = $order[$i];
-				$sql = "UPDATE ".$this->db_mediae." SET position = ".($i+1)." WHERE id = ".$media_id;
-				$query->sql($sql);
-			}
-
-			message()->addMessage("Media order updated");
-			return true;
-		}
-
-		message()->addMessage("Media order could not be updated - refresh your browser", array("type" => "error"));
-		return false;
-
 	}
 
 }
