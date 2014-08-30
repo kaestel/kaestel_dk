@@ -38,9 +38,11 @@ Util.Objects["wishes"] = new function() {
 
 
 			// resize text nodes
-			var text_width = this.nodes[0].offsetWidth - this.image_width;
-			for(i = 0; node = this.nodes[i]; i++) {
-				u.as(node.text_mask, "width", text_width+"px", false);
+			if(this.nodes.length) {
+				var text_width = this.nodes[0].offsetWidth - this.image_width;
+				for(i = 0; node = this.nodes[i]; i++) {
+					u.as(node.text_mask, "width", text_width+"px", false);
+				}
 			}
 
 			// refresh dom
@@ -63,6 +65,7 @@ Util.Objects["wishes"] = new function() {
 
 					node.item_id = u.cv(node, "id");
 					node.image_format = u.cv(node, "format");
+					node.image_variant = u.cv(node, "variant");
 
 					// restructure content
 					node.image_mask = u.ae(node, "div", {"class":"image"});
@@ -70,10 +73,12 @@ Util.Objects["wishes"] = new function() {
 
 					u.as(node.text_mask, "width", text_width+"px", false);
 					if(node.image_format) {
-						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+this.image_width+"x."+node.image_format+")");
+//						node._image = u.ie(node.image_mask, "img", {"src":"/images/"+node.item_id+"/"+node.image_variant+"/"+this.image_width+"x."+node.image_format});
+						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+node.image_variant+"/"+this.image_width+"x."+node.image_format+")");
 					}
 					// or fallback image
 					else {
+//						node._image = u.ie(node.image_mask, "img", {"src":"/images/0/missing/"+this.image_width+"x.png"});
 						u.as(node.image_mask, "backgroundImage", "url(/images/0/missing/"+this.image_width+"x.png)");
 					}
 
@@ -86,7 +91,7 @@ Util.Objects["wishes"] = new function() {
 					// initialize forms
 					node.reserve_form = u.qs("li.reserve form", node);
 					u.f.init(node.reserve_form);
-					node.bn_reserve = u.qs("input", node.reserve_form);
+					node.bn_reserve = u.qs("input[type=submit]", node.reserve_form);
 					node.bn_reserve.node = node;
 					u.e.click(node.bn_reserve)
 					node.bn_reserve.clicked = function(event) {
@@ -100,12 +105,12 @@ Util.Objects["wishes"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 
 					node.unreserve_form = u.qs("li.unreserve form", node);
 					u.f.init(node.unreserve_form);
-					node.bn_unreserve = u.qs("input", node.unreserve_form);
+					node.bn_unreserve = u.qs("input[type=submit]", node.unreserve_form);
 					node.bn_unreserve.node = node;
 					u.e.click(node.bn_unreserve)
 					node.bn_unreserve.clicked = function(event) {
@@ -119,7 +124,7 @@ Util.Objects["wishes"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 				}
 			}

@@ -44,7 +44,7 @@ Util.Objects["todolist"] = new function() {
 					// initialize forms
 					node.close_form = u.qs("li.close form", node);
 					u.f.init(node.close_form);
-					node.bn_close = u.qs("input", node.close_form);
+					node.bn_close = u.qs("input[type=submit]", node.close_form);
 					node.bn_close.node = node;
 					u.e.click(node.bn_close)
 					node.bn_close.clicked = function(event) {
@@ -62,12 +62,12 @@ Util.Objects["todolist"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 
 					node.open_form = u.qs("li.open form", node);
 					u.f.init(node.open_form);
-					node.bn_open = u.qs("input", node.open_form);
+					node.bn_open = u.qs("input[type=submit]", node.open_form);
 					node.bn_open.node = node;
 					u.e.click(node.bn_open)
 					node.bn_open.clicked = function(event) {
@@ -83,7 +83,7 @@ Util.Objects["todolist"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method});
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 				}
 			}
