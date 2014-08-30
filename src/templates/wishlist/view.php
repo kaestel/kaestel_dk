@@ -24,8 +24,9 @@ endif;
 <?	if($items): ?>
 	<ul class="items">
 <?		foreach($items as $item): 
-			$item = $IC->extendItem($item); ?>
-		<li class="item id:<?= $item["id"] ?> format:<?= $item["files"] ?>">
+			$item = $IC->extendItem($item);
+			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
+		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 			<h3><?= $item["name"] ?></h3>
 			<div class="description">
 				<p><?= $item["description"] ?></p>
@@ -36,14 +37,14 @@ endif;
 			</dl>
 			<ul class="actions <?= ($item["reserved"] == 1 ? "reserved" : "") ?>">
 				<li class="reserve">
-					<form action="/wishlist/reserve/<?= $item["id"] ?>" method="post" enctype="multipart/form-data">
-						<input type="submit" value="Reserve" class="button primary" />
-					</form>
+					<?= $model->formStart("/wishlist/reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
+						<?= $model->submit("Reserve", array("class" => "primary")) ?>
+					<?= $model->formEnd() ?>
 				</li>
 				<li class="unreserve">
-					<form action="/wishlist/unreserve/<?= $item["id"] ?>" method="post" enctype="multipart/form-data">
-						<input type="submit" value="Un-reserve" class="button secondary" />
-					</form>
+					<?= $model->formStart("/wishlist/unreserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
+						<?= $model->submit("Un-reserve", array("class" => "secondary")) ?>
+					<?= $model->formEnd() ?>
 				</li>
 			</ul>
 		 </li>

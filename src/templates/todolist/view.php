@@ -38,14 +38,14 @@ endif;
 			</dl>
 			<ul class="actions <?= ($item["status"] == 1 ? "open" : "closed") ?>">
 				<li class="close">
-					<form action="/todolist/close/<?= $item["id"] ?>" method="post" enctype="multipart/form-data">
-						<input type="submit" value="Close" class="button primary" />
-					</form>
+					<?= $model->formStart("/todolist/close/".$item["id"], array("class" => "labelstyle:inject")) ?>
+						<?= $model->submit("Close", array("class" => "primary")) ?>
+					<?= $model->formEnd() ?>
 				</li>
 				<li class="open">
-					<form action="/todolist/open/<?= $item["id"] ?>" method="post" enctype="multipart/form-data">
-						<input type="submit" value="Open" class="button primary" />
-					</form>
+					<?= $model->formStart("/todolist/open/".$item["id"], array("class" => "labelstyle:inject")) ?>
+						<?= $model->submit("Open", array("class" => "primary")) ?>
+					<?= $model->formEnd() ?>
 				</li>
 			</ul>
 		 </li>

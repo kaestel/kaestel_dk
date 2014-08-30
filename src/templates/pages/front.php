@@ -24,16 +24,68 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	</p>
 	<p>No <a href="/geek">geek</a> is <a href="/plain">plain</a>. Normal is weird.</p>
 
+
+<? if($post_items): ?>
+
+	<h2>Recent postings</h2>
+	<ul class="postings i:articlelist">
+<?		foreach($post_items as $item):
+			$item = $IC->extendItem($item, array("tags" => true));
+			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
+		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+
+<?			if($media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+<?			endif; ?>
+
+<?			if($item["tags"]): ?>
+			<ul class="tags">
+<?				foreach($item["tags"] as $tag): ?>
+				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				endforeach; ?>
+			</ul>
+<?			endif; ?>
+
+			<h3 itemprop="name"><?= $item["name"] ?></h3>
+
+			<dl class="info">
+				<dt class="published_at">Date published</dt>
+				<dd class="published_at" itemprop="datePublished" content="2015-07-27"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dt class="author">Author</dt>
+				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+			</dl>
+
+			<div class="description" itemprop="description">
+				<?= $item["html"] ?>
+			</div>
+
+<?			if(count($item["mediae"])):
+				foreach($item["mediae"] as $media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+<? 				endforeach;
+			endif; ?>
+
+		</li>
+<?		endforeach; ?>
+	</ul>
+
+	<ul class="actions">
+		<li class="more"><a href="/geek">More postings</a></li>
+	</ul>
+<? endif; ?>
+
+
 <? if($log_items): ?>
 
 	<h2>Recents log entries</h2>
 	<ul class="logs i:articlelist">
 <?		foreach($log_items as $item):
-			$item = $IC->extendItem($item, array("tags" => true)); ?>
+			$item = $IC->extendItem($item, array("tags" => true));
+			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
 
-<?			if($item["files"]): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["files"] ?>"></div>
+<?			if($media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 <?			endif; ?>
 
 <?			if($item["tags"]): ?>
@@ -76,56 +128,5 @@ $log_tags = $IC->getTags(array("context" => "log"));
 		<li class="more"><a href="/geek">More log entries</a></li>
 	</ul>
 <?	endif; ?>
-
-
-<? if($post_items): ?>
-
-	<h2>Recent postings</h2>
-	<ul class="postings i:articlelist">
-<?		foreach($post_items as $item):
-			$item = $IC->extendItem($item, array("tags" => true)); ?>
-		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
-
-<?			if($item["mediae"]): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $item["mediae"][0]["format"] ?> variant:<?= $item["mediae"][0]["variant"] ?>"></div>
-<?			endif; ?>
-
-<?			if($item["tags"]): ?>
-			<ul class="tags">
-<?				foreach($item["tags"] as $tag): ?>
-				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
-<?				endforeach; ?>
-			</ul>
-<?			endif; ?>
-
-			<h3 itemprop="name"><?= $item["name"] ?></h3>
-
-			<dl class="info">
-				<dt class="published_at">Date published</dt>
-				<dd class="published_at" itemprop="datePublished" content="2015-07-27"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
-			</dl>
-
-			<div class="description" itemprop="description">
-				<?= $item["html"] ?>
-			</div>
-
-<?			if(count($item["mediae"]) > 1):
-				array_shift($item["mediae"]);
-				foreach($item["mediae"] as $media): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
-<? 				endforeach;
-			endif; ?>
-
-		</li>
-<?		endforeach; ?>
-	</ul>
-
-	<ul class="actions">
-		<li class="more"><a href="/geek">More postings</a></li>
-	</ul>
-<? endif; ?>
-
 
 </div>
