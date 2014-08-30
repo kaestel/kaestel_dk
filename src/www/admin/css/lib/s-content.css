@@ -13,11 +13,26 @@
 #content .postList ul.items > li {min-height: 100px; padding-left: 160px;}
 
 
+/* PAGE */
+#content .pageList ul.items > li {min-height: 100px; padding-left: 160px;}
+
+#content .pageEdit div.main_media {position: relative;}
+#content .pageEdit div.main_media form.upload {position: relative; z-index: 10;}
+#content .pageEdit div.main_media form.upload input[type=file] {height: 198px;}
+#content .pageEdit div.main_media form.upload label {padding-top: 90px;}
+#content .pageEdit div.main_media img {margin: 0 28px; position: absolute; top: 47px; left: 0; z-index: 9; width: 384px; height: 216px;}
+
+#content .pageEdit div.main_media form.delete {left: 412px; right: auto !important; top: 47px !important; z-index: 11;}
+#content .pageEdit div.main_media form.delete input {position: absolute; top: 0; right: 0;}
+
 
 /* NAVIGATION */
 body.wish #navigation .wish a,
 body.wishlist #navigation .wishlist a,
 body.todo #navigation .todo a,
 body.todolist #navigation .todolist a,
-body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
+body.log #navigation .log a,
+body.post #navigation .post a,
+body.navigation #navigation .navigation a,
+body.page #navigation .page a {padding-left: 35px; color: #ffffff;}
 
