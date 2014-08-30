@@ -1,4 +1,4 @@
-CREATE TABLE `SITE_DB`.`item_post` (
+CREATE TABLE `SITE_DB`.`item_page` (
   `id` int(11) NOT NULL auto_increment,
   `item_id` int(11) NOT NULL,
 
@@ -8,5 +8,5 @@ CREATE TABLE `SITE_DB`.`item_post` (
 
   PRIMARY KEY  (`id`),
   KEY `item_id` (`item_id`),
-  CONSTRAINT `item_post_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `item_page_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
