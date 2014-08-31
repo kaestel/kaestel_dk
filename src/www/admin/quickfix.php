@@ -80,16 +80,18 @@ foreach($results as $result) {
 		print $variant . ", " . $format . "<br>";
 //		print_r($files);
 
-		// $image = new Imagick(PRIVATE_FILE_PATH."/".$item_id."/".$format);
+		$image = new Imagick($files[0]);
 		// //
 		// // // check if we can get relevant info about image
-		// $width = $image->getImageWidth();
-		// $height = $image->getImageHeight();
-		// $variant = randomKey(8);
-		// $name = $format;
+		$width = $image->getImageWidth();
+		$height = $image->getImageHeight();
+		$variant = randomKey(8);
+		$name = $format;
 		//
 		// // insert into new table
-		// $sql = "INSERT INTO ".$model->db_mediae." VALUES(DEFAULT, $item_id, '$name', '$format', '$variant', '$width', '$height', 0)";
+		$sql = "INSERT INTO ".$model->db_mediae." VALUES(DEFAULT, $item_id, '$name', '$format', '$variant', '$width', '$height', 0)";
+		print $sql."<br>";
+
 		// $query->sql($sql);
 		//
 		// // move image to new folder
