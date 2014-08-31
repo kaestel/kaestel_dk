@@ -60,7 +60,7 @@ $fs = new FileSystem();
 $itemtype = "wish";
 $model = $IC->typeObject($itemtype);
 $query->checkDbExistance($model->db_mediae);
-$query->sql("SELECT item_id, files FROM ".$model->db);
+$query->sql("SELECT item_id, name, files FROM ".$model->db);
 $results = $query->results();
 
 foreach($results as $result) {
@@ -70,6 +70,10 @@ foreach($results as $result) {
 
 		$item_id = $result["item_id"];
 		$format = $result["files"];
+
+		$sindex = $IC->sindex($result["files"]);
+		$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+		print $sql."<br>";
 
 		$files = $fs->files(PRIVATE_FILE_PATH."/".$item_id);
 
