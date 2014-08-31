@@ -71,7 +71,7 @@ foreach($results as $result) {
 		$item_id = $result["item_id"];
 		$format = $result["files"];
 
-		$sindex = $IC->sindex($result["files"]);
+		$sindex = $IC->sindex($result["name"]);
 		$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 		print $sql."<br>";
 
