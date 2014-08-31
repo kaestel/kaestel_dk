@@ -17,7 +17,7 @@ $limit = stringOr(getVar("limit"), 5);
 $sindex = isset($action[3]) ? $action[3] : false;
 $direction = isset($action[4]) ? $action[4] : false; 
 
-$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag));
+$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "order" => "published_at ASC");
 $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
 ?>
