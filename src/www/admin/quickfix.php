@@ -63,6 +63,7 @@ $query->checkDbExistance($model->db_mediae);
 $query->sql("SELECT item_id, name, files FROM ".$model->db);
 $results = $query->results();
 
+//print_r($results);
 foreach($results as $result) {
 
 //	print $result["files"] . "<br>";
@@ -71,7 +72,7 @@ foreach($results as $result) {
 		$item_id = $result["item_id"];
 		$format = $result["files"];
 
-		$sindex = $IC->sindex($result["name"]);
+		$sindex = $IC->sindex($item_id, $result["name"]);
 		$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 		print $sql."<br>";
 
