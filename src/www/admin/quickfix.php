@@ -75,6 +75,7 @@ foreach($results as $result) {
 		$sindex = $IC->sindex($item_id, $result["name"]);
 		$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 		print $sql."<br>";
+		$query->sql($sql);
 
 		$files = $fs->files(PRIVATE_FILE_PATH."/".$item_id);
 
@@ -97,7 +98,7 @@ foreach($results as $result) {
 		$sql = "INSERT INTO ".$model->db_mediae." VALUES(DEFAULT, $item_id, '$name', '$format', '$variant', '$width', '$height', 0)";
 		print $sql."<br>";
 
-		// $query->sql($sql);
+		$query->sql($sql);
 		//
 		// // move image to new folder
 		// $fs->makeDirRecursively(PRIVATE_FILE_PATH."/".$item_id."/".$variant);
