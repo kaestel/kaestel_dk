@@ -102,7 +102,7 @@ $fs = new FileSystem();
 // recreating lost items
 $itemtype = "wishlist";
 $model = $IC->typeObject($itemtype);
-$query->checkDbExistance($model->db_mediae);
+//$query->checkDbExistance($model->db_mediae);
 $query->sql("SELECT item_id, name FROM ".$model->db);
 $results = $query->results();
 
