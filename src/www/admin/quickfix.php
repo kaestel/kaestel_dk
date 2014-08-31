@@ -100,7 +100,7 @@ $fs = new FileSystem();
 
 
 // recreating lost items
-$itemtype = "wish_list";
+$itemtype = "wishlist";
 $model = $IC->typeObject($itemtype);
 $query->checkDbExistance($model->db_mediae);
 $query->sql("SELECT item_id, name FROM ".$model->db);
@@ -114,7 +114,7 @@ foreach($results as $result) {
 	$sindex = $IC->sindex($item_id, $result["name"]);
 	$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish_list', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 	print $sql."<br>";
-	$query->sql($sql);
+//	$query->sql($sql);
 
 }
 
