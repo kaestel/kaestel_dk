@@ -102,7 +102,6 @@ $fs = new FileSystem();
 // recreating lost items
 $itemtype = "wishlist";
 $model = $IC->typeObject($itemtype);
-//$query->checkDbExistance($model->db_mediae);
 $query->sql("SELECT item_id, name FROM ".$model->db);
 $results = $query->results();
 
@@ -112,9 +111,43 @@ foreach($results as $result) {
 	$item_id = $result["item_id"];
 
 	$sindex = $IC->sindex($item_id, $result["name"]);
-	$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wish_list', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+	$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'wishlist', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
 	print $sql."<br>";
-//	$query->sql($sql);
+	$query->sql($sql);
+
+}
+
+$itemtype = "todolist";
+$model = $IC->typeObject($itemtype);
+$query->sql("SELECT item_id, name FROM ".$model->db);
+$results = $query->results();
+
+//print_r($results);
+foreach($results as $result) {
+
+	$item_id = $result["item_id"];
+
+	$sindex = $IC->sindex($item_id, $result["name"]);
+	$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'todolist', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+	print $sql."<br>";
+	$query->sql($sql);
+
+}
+
+$itemtype = "todo";
+$model = $IC->typeObject($itemtype);
+$query->sql("SELECT item_id, name FROM ".$model->db);
+$results = $query->results();
+
+//print_r($results);
+foreach($results as $result) {
+
+	$item_id = $result["item_id"];
+
+	$sindex = $IC->sindex($item_id, $result["name"]);
+	$sql = "INSERT INTO ".UT_ITEMS." VALUES($item_id, '$sindex', 1, 'todo', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
+	print $sql."<br>";
+	$query->sql($sql);
 
 }
 
