@@ -76,8 +76,8 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <? if($pagination["next"] || $pagination["prev"]): ?>
 	<div class="pagination">
 		<ul class="actions">
-<? if($pagination["prev"]): ?><li class="previous"><a href="/geek/posts/<?= $pagination["first_sindex"] ?>/prev">Previous page</a></li><? endif; ?>
-<? if($pagination["next"]): ?><li class="next"><a href="/geek/posts/<?= $pagination["last_sindex"] ?>/next">Next page</a></li><? endif; ?>
+<? if($pagination["prev"]): ?><li class="previous"><a href="/geek/logs/tag/<?= $action[2] ?>/<?= $pagination["first_sindex"] ?>/prev">Previous page</a></li><? endif; ?>
+<? if($pagination["next"]): ?><li class="next"><a href="/geek/logs/tag/<?= $action[2] ?>/<?= $pagination["last_sindex"] ?>/next">Next page</a></li><? endif; ?>
 		</ul>
 	</div>
 <? endif; ?>
