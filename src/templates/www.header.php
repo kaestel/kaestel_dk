@@ -7,7 +7,6 @@
 	<title><?= SITE_URL ?> - <?= $this->pageTitle() ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="keywords" content="think for yourself live free get in trouble" />
-	<meta name="language" content="<?= strtolower($this->language()) ?>" />
 	<meta name="description" content="<?= $this->pageDescription() ?>" />
 	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />

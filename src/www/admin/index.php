@@ -12,7 +12,7 @@ $page->pageTitle("the Janitor @ ".SITE_URL)
 <? $page->header(array("type" => "admin")) ?>
 
 <div class="scene front">
-	<h1><?= SITE_NAME ?> Admin</h1>
+	<h1><?= SITE_NAME ?></h1>
 
 
 </div>
