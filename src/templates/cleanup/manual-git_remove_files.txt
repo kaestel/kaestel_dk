@@ -1,6 +1,10 @@
 // to remove old file from history
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/connect_db.php' --prune-empty --tag-name-filter cat -- --all
 
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/_connect_db.php' --prune-empty --tag-name-filter cat -- --all
+
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/_connect_mail.php' --prune-empty --tag-name-filter cat -- --all
+
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/connect.php' --prune-empty --tag-name-filter cat -- --all
 
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/connect_mail.php' --prune-empty --tag-name-filter cat -- --all
