@@ -62,7 +62,7 @@ class TypeWish extends Model {
 		// Files
 		$this->addToModel("files", array(
 			"type" => "files",
-			"label" => "Drag image here to add",
+			"label" => "Drag image here",
 			"allowed_formats" => "png,jpg",
 			"hint_message" => "Add image here. Use png or jpg in any proportion.",
 			"error_message" => "File does not fit requirements."
