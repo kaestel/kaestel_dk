@@ -1,0 +1,18 @@
+Class mapped requests
+
+/admin/cms/save/#itemtype# (post values)
+/admin/cms/update/#item_id# (post values)
+/admin/cms/delete/#item_id#
+/admin/cms/status/#item_id#/#status#
+
+/admin/cms/tags
+/admin/cms/tags/#context#
+/admin/cms/tags/add/#item_id# (post tag)
+/admin/cms/tags/delete/#item_id#/#tag_id#
+
+
+/admin/cms/prices/delete/#item_id#/#price_id#
+
+
+/admin/#itemtype#/deleteMedia
+/admin/#itemtype#/updateMedia
