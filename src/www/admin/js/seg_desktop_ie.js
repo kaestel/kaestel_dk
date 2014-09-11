@@ -3722,7 +3722,6 @@ Util.Form = u.f = new function() {
 	this.customValidate = {};
 	this.customSend = {};
 	this.init = function(form, settings) {
-		u.bug("init form:" + u.nodeId(form));
 		var i, j, field, action, input;
 		form.form_send = "params";
 		form.ignore_inputs = "ignoreinput";
@@ -4151,14 +4150,20 @@ Util.Form = u.f = new function() {
 		}
 	}
 	this.positionHint = function(field) {
-		if(field._help) {
-			var f_h =  field.offsetHeight;
-			var f_p_t = parseInt(u.gcs(field, "padding-top"));
-			var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
-			var f_b_t = parseInt(u.gcs(field, "border-top-width"));
-			var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
-			var f_h_h = field._help.offsetHeight;
-			u.as(field._help, "top", (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2) + "px");
+		var f_h =  field.offsetHeight;
+		var f_p_t = parseInt(u.gcs(field, "padding-top"));
+		var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
+		var f_b_t = parseInt(u.gcs(field, "border-top-width"));
+		var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
+		var f_h_h = field._help.offsetHeight;
+		if(field._help && u.hc(field, "html")) {
+			var l_h = field._input._label.offsetHeight;
+			var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2)) - (f_h_h / 2) + l_h;
+			u.as(field._help, "top", help_top + "px");
+		}
+		else if(field._help) {
+			var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2)
+			u.as(field._help, "top", help_top + "px");
 		}
 	}
 	this._mouseenter = function(event) {
@@ -4267,9 +4272,7 @@ Util.Form = u.f = new function() {
 		if(iN.used || !this.isDefault(iN) && iN.val()) {
 			u.ac(iN, "error");
 			u.ac(iN.field, "error");
-			if(iN.field._help) {
-				u.as(iN.field._help, "top", ((iN.offsetTop + iN.offsetHeight/2 + 2) - (iN.field._help.offsetHeight/2)) + "px")
-			}
+			this.positionHint(iN.field);
 			if(typeof(iN.validationFailed) == "function") {
 				iN.validationFailed();
 			}
@@ -4477,13 +4480,20 @@ Util.Form = u.f = new function() {
 	this.textEditor = function(field) {
 		u.bug("init editor")
 		field._viewer = u.ae(field, "div", {"class":"viewer"});
-		field._editor = u.ae(field, "div", {"class":"editor targets:tag"});
+		field._editor = u.ae(field, "div", {"class":"editor"});
 		field._input.val = this._value;
 		field.allowed_tags = u.cv(field, "tags");
 		field.allowed_tags = field.allowed_tags ? field.allowed_tags.split(",") : false;
 		u.xInObject(field.allowed_tags)
-		field.add = function(type, value) {
-			this._tag_restrictions = new RegExp(/^(p|h1|h2|h3|h4|h5|h6|ul|dl|code)$/);
+		field.makeTextInput = function() {}
+		field.makeImageInput = function() {}
+		field.makeValueInput = function() {}
+		field.addObject = function(type, value) {
+		if(type.match(/vimeo|youtube|img/)) {
+		}
+		}
+		field.addText = function(type, value) {
+			this._tag_restrictions = new RegExp(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/);
 			var div = u.ae(this._editor, "div", {"class":"tag "+type});
 			div._drag = u.ae(div, "div", {"class":"drag"});
 			div._drag.field = this;
@@ -4520,6 +4530,7 @@ Util.Form = u.f = new function() {
 			div._select.val(type);
 			u.ce(div._select);
 			div._select.clicked = function(event) {
+				u.bug("select clicked");
 				if(u.hc(this, "open")) {
 					u.rc(this, "open");
 					u.rc(this.div, "focus");
@@ -4572,11 +4583,19 @@ Util.Form = u.f = new function() {
 			u.e.addEvent(div._input, "mouseup", this._changed_content);
 			u.e.addEvent(div._input, "focus", this._focused_content);
 			u.e.addEvent(div._input, "blur", this._blurred_content);
+			if(u.e.event_pref == "mouse") {
+				u.e.addEvent(div._input, "mouseenter", u.f._mouseenter);
+				u.e.addEvent(div._input, "mouseleave", u.f._mouseleave);
+			}
 			u.e.addEvent(div._input, "paste", this._pasted_content);
 			return div;
 		}
 		field._focused_content = function(event) {
 			u.ac(this.div, "focus");
+			this.field.focused = true;
+			u.ac(this.field, "focus");
+			u.as(this.field, "zIndex", 99);
+			u.f.positionHint(this.field);
 			if(event.rangeOffset == 1) {
 				var range = document.createRange();
 				range.selectNodeContents(this);
@@ -4588,6 +4607,10 @@ Util.Form = u.f = new function() {
 		}
 		field._blurred_content = function() {
 			u.rc(this.div, "focus");
+			this.field.focused = false;
+			u.rc(this.field, "focus");
+			u.as(this.field, "zIndex", 90);
+			u.f.positionHint(this.field);
 			this.field.hideSelectionOptions();
 		}
 		field._changed_type = function(event) {
@@ -4626,7 +4649,7 @@ Util.Form = u.f = new function() {
 			if(event.keyCode == 13) {
 				u.e.kill(event);
 				if(!event.ctrlKey && !event.metaKey) {
-					var new_tag = this.field.add("p");
+					var new_tag = this.field.addText("p");
 					var next_tag = u.ns(this.div);
 					if(next_tag) {
 						this.div.parentNode.insertBefore(new_tag, next_tag);
@@ -4635,7 +4658,7 @@ Util.Form = u.f = new function() {
 						this.div.parentNode.appendChild(new_tag);
 					}
 					new_tag._input.focus();
-					u.s.sortable(this.field._editor);
+					u.sortable(this.field._editor, {"draggables":"tag", "targets":"editor"});
 				}
 				else {
 					if(selection && selection.isCollapsed) {
@@ -4668,6 +4691,7 @@ Util.Form = u.f = new function() {
 						else {
 							u.qs("div.tag", this.field)._input.focus();
 						}
+						u.sortable(this.field._editor, {"draggables":"tag", "targets":"editor"});
 					}
 				}
 				else if(!this.val() || !this.val().replace(/<br>/, "")) {
@@ -4856,20 +4880,20 @@ Util.Form = u.f = new function() {
 						if(fragments) {
 							for(index in fragments) {
 								value = fragments[index].replace(/\n\r|\n|\r/g, "<br>");
-								tag = field.add("p", fragments[index]);
+								tag = field.addText("p", fragments[index]);
 								field.activateInlineFormatting(tag._input);
 							}
 						}
 						else {
 							value = node.nodeValue; 
-							tag = field.add("p", value);
+							tag = field.addText("p", value);
 							field.activateInlineFormatting(tag._input);
 						}
 					}
 				}
 				else if(node.nodeName.toLowerCase().match(field._tag_restrictions)) {
 					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
-					tag = field.add(node.nodeName.toLowerCase(), value);
+					tag = field.addText(node.nodeName.toLowerCase(), value);
 					field.activateInlineFormatting(tag._input);
 				}
 				else {
@@ -4879,10 +4903,10 @@ Util.Form = u.f = new function() {
 		}
 		else {
 			value = field._viewer.innerHTML.replace(/\<br[\/]?\>/g, "\n");
-			tag = field.add("p", value);
+			tag = field.addText("p", value);
 			field.activateInlineFormatting(tag._input);
 		}
-		u.sortable(field._editor);
+		u.sortable(field._editor, {"draggables":"tag", "targets":"editor"});
 		field.update = function() {
 			this.updateViewer();
 			this.updateContent();
@@ -6035,187 +6059,7 @@ Util.validateResponse = function(response){
 
 
 /*beta-u-sortable.js*/
-Util.Sort = u.s = new function() {
-	this.sortable = function(list) {
-		var i, j, node;
-		var target_class = u.cv(list, "targets");
-		if(!target_class) {
-			list.sortable_nodes = u.qsa("li", list);
-		}
-		else {
-			list.sortable_nodes = u.qsa("."+target_class, list);
-		}
-		if(list.sortable_nodes.length) {
-			list.list_type = list.offsetWidth < list.sortable_nodes[0].offsetWidth*2 ? "vertical" : "horizontal";
-		}
-		for(i = 0; node = list.sortable_nodes[i]; i++) {
-			node.list = list;
-			node.dragme = true;
-			node.rel_ox = u.absX(node) - u.relX(node);
-			node.rel_oy = u.absY(node) - u.relY(node);
-			node.drag = u.qs(".drag", node);
-			if(!node.drag) {
-				node.drag = node;
-			}
-			node.drag.node = node;
-			var drag_children = u.qsa("*", node.drag);
-			if(drag_children) {
-				for(j = 0; child = drag_children[j]; j++) {
-					child.node = node;
-				}
-			}
-			u.e.addStartEvent(node.drag , this._pick);
-		}
-	}
-	this._pick = function(event) {
-		if(!this._sorting_disabled) {
-			u.e.kill(event);
-			if(!this.node.list.dragged) {
-				var node = this.node.list.dragged = this.node;
-				node.start_opacity = u.gcs(node, "opacity");
-				node.start_position = u.gcs(node, "position");
-				node.start_width = u.gcs(node, "opacity");
-				node.start_height = u.gcs(node, "position");
-				if(!node.list.tN) {
-					node.list.tN = document.createElement(node.nodeName);
-				}
-				u.sc(node.list.tN, "target " + node.className);
-				u.as(node.list.tN, "height", u.actualHeight(node)+"px");
-				u.as(node.list.tN, "width", u.actualWidth(node)+"px");
-				u.as(node.list.tN, "opacity", node.start_opacity - 0.5);
-				node.list.tN.innerHTML = node.innerHTML;
-				u.as(node, "width", u.actualWidth(node) + "px");
-				u.as(node, "opacity", node.start_opacity - 0.3);
-				u.as(node.list, "width", u.actualWidth(node.list) + "px");
-				u.as(node.list, "height", u.actualHeight(node.list) + "px");
-				node.mouse_ox = u.eventX(event) - u.absX(node);
-				node.mouse_oy = u.eventY(event) - u.absY(node);
-				u.as(node, "position", "absolute");
-				u.e.addMoveEvent(document.body , u.s._drag);
-				u.e.addEndEvent(document.body , u.s._drop);
-				document.body.list = node.list;
-				u.as(node, "left", (u.eventX(event) - node.rel_ox) - node.mouse_ox+"px");
-				u.as(node, "top", (u.eventY(event) - node.rel_oy) - node.mouse_oy+"px");
-				u.ac(node, "dragged");
-				node.list.insertBefore(node.list.tN, node);
-				if(typeof(node.list.picked) == "function") {
-					node.list.picked(event);
-				}
-			}
-		}
-	}
-	this._drag = function(event) {
-		var i, node;
-		u.e.kill(event);
-		if(this.list.dragged) {
-			var d_left = u.eventX(event) - this.list.dragged.mouse_ox;
-			var d_top = u.eventY(event) - this.list.dragged.mouse_oy;
-			if(u.scrollY() >= d_top && 0) {
-				if(u.browserH() < u.htmlH()) {
-					u.as(this.list.dragged, "position", "fixed");
-					u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-					u.as(this.list.dragged, "top", 0);
-					u.as(this.list.dragged, "bottom", "auto");
-					this.list.scroll_speed = Math.round((d_top - u.scrollY()));
-					this.list._scrollWindowY();
-				}
-			}
-			else if(u.browserH() + u.scrollY() < d_top + this.list.dragged.offsetHeight && 0) {
-				if(u.browserH() < u.htmlH()) {
-					u.as(this.list.dragged, "position", "fixed");
-					u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-					u.as(this.list.dragged, "top", "auto");
-					u.as(this.list.dragged, "bottom", 0);
-					this.list.scroll_speed = -(Math.round((u.browserH() + u.scrollY() - d_top - this.list.dragged.offsetHeight)));
-					this.list._scrollWindowY();
-				}
-			}
-			else {
-				var d_center_x = d_left + (this.list.dragged.offsetWidth/2);
-				var d_center_y = d_top + (this.list.dragged.offsetHeight/2);
-				u.as(this.list.dragged, "position", "absolute");
-				u.as(this.list.dragged, "left", d_left - this.list.dragged.rel_ox+"px");
-				u.as(this.list.dragged, "top", d_top - this.list.dragged.rel_oy+"px");
-				u.as(this.list.dragged, "bottom", "auto");
-				for(i = 0; node = this.list.sortable_nodes[i]; i++) {
-					if(node != this.list.dragged && node != this.list.tN) {
-						if(this.list.list_type == "vertical") {
-							var o_top = u.absY(node);
-							var o_height = node.offsetHeight; 
-						 	if(o_top < d_center_y && (o_top + o_height) > d_center_y) {
-								if(o_top < d_center_y && o_top + (o_height/2) > d_center_y) {
-									this.list.insertBefore(this.list.tN, node);
-								}
-								else {
-									var next = u.ns(node);
-									if(next) {
-										this.list.insertBefore(this.list.tN, next);
-									}
-									else {
-										this.list.appendChild(this.list.tN);
-									}
-								}
-								break;
-							}
-						}
-						else {
-							var o_left = u.absX(node);
-							var o_top = u.absY(node);
-							var o_width = node.offsetWidth;
-							var o_height = node.offsetHeight;
-						 	if(o_left < d_center_x && (o_left + o_width) > d_center_x && o_top < d_center_y && (o_top + o_height) > d_center_y) {
-								if(o_left < d_center_x && o_left + (o_width/2) > d_center_x) {
-									this.list.insertBefore(this.list.tN, node);
-								}
-								else {
-									var next = u.ns(node);
-									if(next) {
-										this.list.insertBefore(this.list.tN, next);
-									}
-									else {
-										this.list.appendChild(this.list.tN);
-									}
-								}
-								break;
-							}
-						}
-					}
-				}
-			}
-		}
-		if(typeof(this.list.moved) == "function") {
-			this.list.moved(event);
-		}
-	}
-	this._drop = function(event) {
-		u.e.kill(event);
-		u.e.removeMoveEvent(document.body , u.s._drag);
-		u.e.removeEndEvent(document.body , u.s._drop);
-		this.list.tN = this.list.replaceChild(this.list.dragged, this.list.tN);
-		u.as(this.list.dragged, "position", this.list.dragged.start_position);
-		u.as(this.list.dragged, "opacity", this.list.dragged.start_opacity);
-		u.as(this.list.dragged, "left", "");
-		u.as(this.list.dragged, "top", "");
-		u.as(this.list.dragged, "bottom", "");
-		u.as(this.list.dragged, "width", "");
-		u.as(this.list, "width", "");
-		u.as(this.list, "height", "");
-		u.rc(this.list.dragged, "dragged");
-		this.list.dragged = false;
-		var target_class = u.getIJ(this.list, "targets");
-		if(!target_class) {
-			this.list.sortable_nodes = u.qsa("li", this.list);
-		}
-		else {
-			this.list.sortable_nodes = u.qsa("."+target_class, this.list);
-		}
-		if(typeof(this.list.dropped) == "function") {
-			this.list.dropped(event);
-		}
-	}
-}
 u.sortable = function(scope, options) {
-	u.bug("u.sortable init")
 	scope.callback_picked = "picked";
 	scope.callback_moved = "moved";
 	scope.callback_dropped = "dropped";
@@ -6455,7 +6299,7 @@ u.sortable = function(scope, options) {
 	else {
 		scope.target_nodes = u.qsa("."+scope.targets, scope);
 	}
-	if(scope.nodeName == "UL" && (!scope.targets || u.hc(scope, scope.targets))) {
+	if((!scope.targets || u.hc(scope, scope.targets))) {
 		if(scope.target_nodes.length) {
 			var temp_scope = scope.target_nodes;
 			scope.target_nodes = [scope];
@@ -6472,7 +6316,6 @@ u.sortable = function(scope, options) {
 		scope.layout = scope.offsetWidth < scope.draggable_nodes[0].offsetWidth*2 ? "vertical" : "horizontal";
 	}
 	for(i = 0; d_node = scope.draggable_nodes[i]; i++) {
-		u.bug("d_node:" + u.nodeId(d_node));
 		d_node.scope = scope;
 		d_node.dragme = true;
 		d_node.rel_ox = u.absX(d_node) - u.relX(d_node);
@@ -6910,9 +6753,32 @@ Util.Objects["page"] = new function() {
 			page.nN = page.hN.appendChild(page.nN);
 		}
 		page.fN = u.qs("#footer", page);
-		u.notifier(page);
-		u.navigation(page);
-		u.addClass(page, "ready");
+		page.resized = function() {
+			if(page.cN && page.cN.scene && typeof(page.cN.scene.resized) == "function") {
+				page.cN.scene.resized();
+			}
+		}
+		page.scrolled = function() {
+			if(page.cN && page.cN.scene && typeof(page.cN.scene.scrolled) == "function") {
+				page.cN.scene.scrolled();
+			}
+		}
+		page.ready = function() {
+			if(!this.is_ready) {
+				this.is_ready = true;
+				u.e.addEvent(window, "resize", page.resized);
+				u.e.addEvent(window, "scroll", page.scrolled);
+				u.notifier(page);
+				u.navigation(page);
+			}
+		}
+		page.svgIcon = function(icon) {
+			var path;
+			if(icon == "youtube") {
+				path = "";
+			}
+		}
+		page.ready();
 	}
 }
 u.e.addDOMReadyEvent(u.init)
@@ -6930,6 +6796,21 @@ Util.Objects["addPrices"] = new function() {
 			}
 			u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
 		}
+	}
+}
+Util.Objects["login"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this._form = u.qs("form", this);
+			u.f.init(this._form);
+			page.cN.scene = this;
+			page.resized();
+		}
+		scene.ready();
 	}
 }
 
@@ -7047,6 +6928,7 @@ Util.Objects["defaultList"] = new function() {
 										else {
 											this.node.parentNode.removeChild(this.node);
 											this.node.div.scrolled();
+											u.sortable(this.node.div.list, {"targets":"items", "draggables":"draggable"});
 										}
 									}
 								}
@@ -7258,7 +7140,7 @@ Util.Objects["defaultList"] = new function() {
 		if(u.hc(div, "sortable") && div.list) {
 			div.save_order_url = div.getAttribute("data-save-order");
 			if(div.save_order_url) {
-				u.s.sortable(div.list);
+				u.sortable(div.list, {"targets":"items", "draggables":"draggable"});
 				div.list.picked = function() {}
 				div.list.dropped = function() {
 					var order = new Array();
@@ -7564,7 +7446,7 @@ Util.Objects["addMedia"] = new function() {
 	this.init = function(div) {
 		div.form = u.qs("form.upload", div);
 		div.form.div = div;
-		div.media_list = u.qs("ul.media", div);
+		div.media_list = u.qs("ul.mediae", div);
 		div.item_id = u.cv(div, "item_id");
 		u.f.init(div.form);
 		div.csrf_token = div.form.fields["csrf-token"].val();
@@ -7607,11 +7489,12 @@ Util.Objects["addMedia"] = new function() {
 			var bn_delete = u.f.addAction(delete_form, {"class":"button delete"});
 			delete_form.deleted = function() {
 				this.li.parentNode.removeChild(this.li);
+				u.sortable(div.media_list, {"targets":"mediae", "draggables":"media"});
 			}
 			u.o.deleteMedia.init(delete_form);
 		}
 		if(!div.media_list) {
-			u.ae(div, "ul", {"class":"media"});
+			u.ae(div, "ul", {"class":"mediae"});
 		}
 		div.media_list.nodes = u.qsa("li.media", div.media_list);
 		div.media_list.div = div;
@@ -7622,7 +7505,7 @@ Util.Objects["addMedia"] = new function() {
 		if(u.hc(div, "sortable") && div.media_list) {
 			div.save_order_url = div.getAttribute("data-save-order");
 			if(div.save_order_url) {
-				u.sortable(div.media_list);
+				u.sortable(div.media_list, {"targets":"mediae", "draggables":"media"});
 				div.media_list.picked = function() {}
 				div.media_list.dropped = function() {
 					var order = new Array();
@@ -7723,7 +7606,15 @@ Util.Objects["addMediaSingle"] = new function() {
 						this.div.image = u.ae(this.div, "img");
 						this.div.addDeleteForm();
 					}
-					this.div.image.src = "/images/"+response.cms_object.item_id+"/"+response.cms_object.variant+"/x"+this.div.image.offsetHeight+"."+response.cms_object.format+"?"+u.randomString(4);
+					if(response.cms_object.format == "pdf") {
+						this.div.image.src = "/images/0/pdf/x"+this.div.image.offsetHeight+".png?"+u.randomString(4);
+					}
+					else if(response.cms_object.format == "zip") {
+						this.div.image.src = "/images/0/zip/x"+this.div.image.offsetHeight+".png?"+u.randomString(4);
+					}
+					else {
+						this.div.image.src = "/images/"+response.cms_object.item_id+"/"+response.cms_object.variant+"/x"+this.div.image.offsetHeight+"."+response.cms_object.format+"?"+u.randomString(4);
+					}
 				}
 				u.rc(this.file_input.field, "loading");
 				this.file_input.val("");
@@ -7784,7 +7675,7 @@ Util.Objects["navigationNodes"] = new function() {
 									page.notify(response);
 									if(response.cms_status == "success") {
 										this.node.parentNode.removeChild(this.node);
-										this.updateNodeStructure();
+										this.node.list.updateNodeStructure();
 									}
 								}
 								u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});

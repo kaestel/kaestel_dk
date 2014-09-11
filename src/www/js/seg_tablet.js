@@ -3401,7 +3401,6 @@ Util.Objects["login"] = new function() {
 		scene.ready();
 	}
 }
-u.e.addDOMReadyEvent(u.init);
 
 
 /*i-generic-desktop.js*/

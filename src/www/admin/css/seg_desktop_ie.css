@@ -100,7 +100,7 @@ input, select, textarea {font-size: 14px;}
 /*s-header.css*/
 #header {background-color: #313942; position: fixed; top: 0; left: 0; width: 230px; height: 100%;}
 #header .servicenavigation {display: block; background-color: #64ad8e; height: 140px; padding: 0;}
-#header .servicenavigation li.front {display: block; color: #ffffff; padding: 30px 20px;}
+#header .servicenavigation li.front {display: block; color: #ffffff; padding: 20px; text-transform: uppercase; font-size: 18px;}
 #header .servicenavigation li.navigation {display: none;}
 #header .servicenavigation li.help {display: none;}
 #header .servicenavigation li.user {display: block; color: #8C9399; border-top: 1px solid #404A56; position: absolute; bottom: 0; left: 0; width: 230px;}
@@ -128,7 +128,8 @@ input, select, textarea {font-size: 14px;}
 #content .scene > ul.actions li {padding: 0 10px 10px 0;}
 #content .scene > div.prices {padding: 10px 0 20px; border-bottom: 1px solid #bbbbbb;}
 #content .todo * {color: orange !important;}
-
+#content .scene.login h1 {padding-bottom: 74px; border-bottom: 1px solid #bbbbbb;}
+#content .scene.login form {padding-top: 30px;}
 
 /*s-navigation.css*/
 #navigation {}
@@ -137,6 +138,8 @@ input, select, textarea {font-size: 14px;}
 #navigation ul li:hover {color: #ffffff;}
 #navigation ul li a {display: block;  padding: 14px 20px 15px;}
 #navigation ul li.selected {}
+body.navigation #navigation .navigation a,
+body.page #navigation .page a,
 body.tags #navigation .tags a,
 body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
 
@@ -181,10 +184,10 @@ body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
 	-webkit-appearance: none;
 	margin: 0;
 }
-#content form.upload {padding: 0 30px; text-align: left; width: 374px;}
+#content form.upload {padding: 0 30px; text-align: left; width: 374px; position: relative; z-index: 10;}
 #content .field.files {border: 3px dashed #dedede; display: inline-block; border-radius: 5px; position: relative; padding: 0;}
 #content .field.files input {opacity: 0; width: 356px;}
-#content .field.files label {display: block; color: #aaaaaa; position: absolute; width: 100%; padding-top: 8px; text-align: center;}
+#content .field.files label {display: inline-block; position: absolute; width: 120px; left: 50%; padding: 1px 4px 3px; margin: 8px 0 0 -60px; text-align: center; border-radius: 6px; background: #dedede;}
 #content .field.location {}
 #content .field.location div.location {padding-bottom: 2px;}
 #content .field.location div.latitude {padding-right: 2px;}
@@ -211,6 +214,7 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field.location.focus input {margin: 2px; border: 1px solid #dcdcdc;}
 #content .field.location.focus input.focus {margin: 0; border: 3px solid #5c5c5c;}
 #content .field.files.focus {border-color: #c8e183;}
+#content .field.files.focus label {background-color: #c8e183;}
 #content .field input.default,
 #content .field select.default,
 #content .field textarea.default {color: #aaaaaa;}
@@ -276,14 +280,10 @@ iframe#geolocationmap {width: 300px; height: 300px; position: absolute; top: 0; 
 #content .field.focus div.hint,
 #content .field.hover div.hint {display: block;}
 #content .field.html label {display: block;}
-#content .field.html {border-top: 1px solid #dedede; padding-top: 10px;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #dedede; 
-	margin-bottom: 10px;
-}
+#content .field.html {border-top: 1px solid #dedede; padding-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #dedede; margin-bottom: 10px;}
 #content .field.html .viewer {display: none;}
 #content .field.html .editor {width: 382px; position: relative; z-index: 50;}
-body #selection_options {position: absolute; background-color: #F5F7F8; border: 3px solid #5c5c5c; margin: 0px 0 0 10px; padding: 15px; border-radius: 5px;}
+body #selection_options {z-index: 100; position: absolute; background-color: #F5F7F8; border: 3px solid #5c5c5c; margin: 0px 0 0 10px; padding: 15px; border-radius: 5px;}
 body #selection_options h3 {padding: 10px 0 10px; text-align: left; font-size: 13px; margin-top: 10px; border-top: 1px solid #5c5c5c;}
 body #selection_options li {display: block; font-size: 13px; padding: 5px 0; cursor: pointer;}
 body #selection_options li.link {text-decoration: underline;}
@@ -305,22 +305,19 @@ body #selection_options ul.actions input.button:hover,
 body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .field.html .editor div.tag {margin: 0 0 1px; padding: 0 0 0 30px; background-color: #dcdcdc; position: relative; border-radius: 3px; border: 2px solid #f5f7f8;}
 #content .field.html .editor div.dragged {z-index: 15;}
-#content .field.html .editor div.tag .drag {display: none;
-	position: absolute; top: 0px; left: -20px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background: #dedede; width: 30px; height: 30px;
-	cursor: move;
-}
+#content .field.html .editor div.tag .drag {display: none; position: absolute; top: 0px; left: -20px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; background: #dedede; width: 30px; height: 30px; cursor: move;}
 #content .field.html .editor div.tag:hover .drag {display: block;}
 #content .field.html .editor div.tag ul.type {display: block; z-index: 5; position: absolute; width: 30px; top: 0px; left: 0px;}
 #content .field.html .editor div.tag ul.type li {display: none; text-transform: uppercase; padding: 9px 4px; text-align: center; cursor: pointer; font-size: 11px;}
 #content .field.html .editor div.tag ul.type li.code {font-size: 8px; padding-top: 11px;}
+#content .field.html .editor div.tag ul.type li.img {font-size: 9px; padding-top: 10px;}
+#content .field.html .editor div.tag ul.type li.youtube {font-size: 8px; padding-top: 11px;}
 #content .field.html .editor div.tag ul.type li.selected {display: block;}
 #content .field.html .editor div.tag ul.type.open {z-index: 10; border: 2px solid #5c5c5c; margin: -2px; background-color: #F5F7F8;}
 #content .field.html .editor div.tag ul.type.open li {display: block; color: #5c5c5c !important;}
 #content .field.html .editor div.tag ul.type.open li:hover {background-color: #dedede;}
 #content .field.html .editor div.tag ul.type.open li.selected {background-color: #5c5c5c !important; color: #ffffff !important;}
-#content .field.html .editor div.tag div.text {display: inline-block; vertical-align: top; width: 334px; height: auto; padding: 4px 6px; line-height: 1.375em; 
-	border-radius: 3px; background-color: #F5F7F8; color: #333333; box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; min-height: 20px;
-}
+#content .field.html .editor div.tag div.text {display: inline-block; vertical-align: top; width: 334px; height: auto; padding: 4px 6px; line-height: 1.375em; border-radius: 3px; background-color: #F5F7F8; color: #333333; box-shadow: inset 0 1px 2px #dedede; background: #ffffff; border: 1px solid #dcdcdc; min-height: 20px;}
 #content .field.html .editor div.tag div.text em,
 #content .field.html .editor div.tag div.text strong,
 #content .field.html .editor div.tag div.text a {background-color: rgba(255, 0, 0, 0.3); cursor: default; font-size: inherit;}
@@ -476,7 +473,8 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 	background-color: transparent;
 	background-repeat: no-repeat;
 }
-#content .defaultEdit.navigationEdit ul.nodes > li span.link {padding: 10px 0 10px 20px; display: inline-block; vertical-align: bottom;}
+#content .defaultEdit.navigationEdit ul.nodes > li span.link,
+#content .defaultEdit.navigationEdit ul.nodes > li span.page {padding: 10px 0 10px 20px; display: inline-block; vertical-align: bottom;}
 #content .defaultEdit.navigationEdit ul.nodes > li {
 }
 #content .defaultEdit.navigationEdit ul.nodes > li.hover {background: red !important;}
@@ -554,31 +552,34 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.defaultEdit > div.prices ul.prices li form {display: inline-block; vertical-align: top;}
 #content .scene.defaultEdit > div.prices ul.prices li input.delete {padding: 0; margin: 0; line-height: 20px; cursor: pointer; color: #999999; text-decoration: underline; box-shadow: none; text-shadow: none; border: none; background: none; border-radius: 0;}
 #content .scene.defaultEdit > div.prices ul.prices li input.delete:hover {color: #000000;}
-#content .scene.defaultEdit > div.media {padding: 0 0 20px; border-bottom: 1px solid #bbbbbb;}
+#content .scene.defaultEdit > div.media {padding: 0 0 20px; border-bottom: 1px solid #bbbbbb; position: relative;}
 #content .scene.defaultEdit > div.media form.upload .actions {display: none;}
-#content .scene.defaultEdit > div.media ul.media {padding: 20px 20px 0; text-align: left;}
-#content .scene.defaultEdit > div.media ul.media > li {margin: 0 10px 20px; position: relative; text-align: center;}
-#content .scene.defaultEdit > div.media ul.media > li h4 {padding: 0 0 5px;}
 #content .scene.defaultEdit > div.media form.delete {padding: 0; position: absolute; top: 0; right: 0;}
 #content .scene.defaultEdit > div.media form.delete ul.actions {padding: 0;}
 #content .scene.defaultEdit > div.media form.delete ul.actions li {padding: 0;}
-#content .scene.defaultEdit > div.media form.delete input {font-size: 12px; color: #df0000; width: 30px; height: 30px; display: block; text-indent: -9999px; border: none; border-radius: none; cursor: pointer; border-bottom-left-radius: 5px;
+#content .scene.defaultEdit > div.media form.delete input {font-size: 12px; color: #df0000; width: 30px; height: 30px; display: block; text-indent: -9999px; border: none; border-radius: 0; cursor: pointer; border-bottom-left-radius: 5px;
 	background: #ffffff url(/janitor/img/bg_icons.png) no-repeat 8px -42px;
 	-webkit-appearance: none;
 }
 #content .scene.defaultEdit > div.media form.delete input:hover {background-position: 8px -67px;}
 #content .scene.defaultEdit > div.media form.delete input.confirm {text-indent: 0; width: auto; padding-left: 24px;}
-#content .scene.defaultEdit > div.media.sortable ul.media > li {cursor: move;}
-#content .scene.defaultEdit > div.media ul.media li.image {height: 150px;}
-#content .scene.defaultEdit > div.media ul.media li.audio {width: 50px; height: 70px;
+#content .scene.defaultEdit > div.media > img {margin: 0 28px; position: absolute; top: 47px; left: 0; z-index: 9; width: 384px;}
+#content .scene.defaultEdit > div.media > form.delete {left: 412px; right: auto; top: 47px; z-index: 11;}
+#content .scene.defaultEdit > div.media > form.delete input {position: absolute; top: 0; right: 0;}
+#content .scene.defaultEdit > div.media ul.mediae {padding: 20px 20px 0; text-align: left;}
+#content .scene.defaultEdit > div.media ul.mediae > li {margin: 0 10px 20px; position: relative; text-align: center;}
+#content .scene.defaultEdit > div.media ul.mediae > li h4 {padding: 0 0 5px;}
+#content .scene.defaultEdit > div.media.sortable ul.mediae > li {cursor: move;}
+#content .scene.defaultEdit > div.media ul.mediae li.image {height: 150px;}
+#content .scene.defaultEdit > div.media ul.mediae li.audio {width: 50px; height: 70px;
 	background: transparent url(/janitor/img/bg_bn_play_medium.png) no-repeat 0px 20px;
 }
-#content .scene.defaultEdit > div.media ul.media li.audio.playing {background-position: 0 -80px;}
-#content .scene.defaultEdit > div.media ul.media li.audio a {display: block; text-indent: -9999px;}
-#content .scene.defaultEdit > div.media ul.media li.video {width: 150px;
+#content .scene.defaultEdit > div.media ul.mediae li.audio.playing {background-position: 0 -80px;}
+#content .scene.defaultEdit > div.media ul.mediae li.audio a {display: block; text-indent: -9999px;}
+#content .scene.defaultEdit > div.media ul.mediae li.video {width: 150px;
 	background: transparent url(/janitor/img/bg_bn_play_medium.png) no-repeat center 40px;
 }
-#content .scene.defaultEdit > div.media ul.media li.video a {display: none;}
+#content .scene.defaultEdit > div.media ul.mediae li.video a {display: none;}
 
 
 /*s-default_new.css*/
@@ -612,7 +613,5 @@ body.wishlist #navigation .wishlist a,
 body.todo #navigation .todo a,
 body.todolist #navigation .todolist a,
 body.log #navigation .log a,
-body.post #navigation .post a,
-body.navigation #navigation .navigation a,
-body.page #navigation .page a {padding-left: 35px; color: #ffffff;}
+body.post #navigation .post a {padding-left: 35px; color: #ffffff;}
 

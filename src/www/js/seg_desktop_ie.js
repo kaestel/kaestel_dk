@@ -3680,7 +3680,6 @@ Util.Form = u.f = new function() {
 	this.customValidate = {};
 	this.customSend = {};
 	this.init = function(form, settings) {
-		u.bug("init form:" + u.nodeId(form));
 		var i, j, field, action, input;
 		form.form_send = "params";
 		form.ignore_inputs = "ignoreinput";
@@ -4109,14 +4108,20 @@ Util.Form = u.f = new function() {
 		}
 	}
 	this.positionHint = function(field) {
-		if(field._help) {
-			var f_h =  field.offsetHeight;
-			var f_p_t = parseInt(u.gcs(field, "padding-top"));
-			var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
-			var f_b_t = parseInt(u.gcs(field, "border-top-width"));
-			var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
-			var f_h_h = field._help.offsetHeight;
-			u.as(field._help, "top", (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2) + "px");
+		var f_h =  field.offsetHeight;
+		var f_p_t = parseInt(u.gcs(field, "padding-top"));
+		var f_p_b = parseInt(u.gcs(field, "padding-bottom"));
+		var f_b_t = parseInt(u.gcs(field, "border-top-width"));
+		var f_b_b = parseInt(u.gcs(field, "border-bottom-width"));
+		var f_h_h = field._help.offsetHeight;
+		if(field._help && u.hc(field, "html")) {
+			var l_h = field._input._label.offsetHeight;
+			var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2)) - (f_h_h / 2) + l_h;
+			u.as(field._help, "top", help_top + "px");
+		}
+		else if(field._help) {
+			var help_top = (((f_h - (f_p_t + f_p_b + f_b_b + f_b_t)) / 2) + 2) - (f_h_h / 2)
+			u.as(field._help, "top", help_top + "px");
 		}
 	}
 	this._mouseenter = function(event) {
@@ -4225,9 +4230,7 @@ Util.Form = u.f = new function() {
 		if(iN.used || !this.isDefault(iN) && iN.val()) {
 			u.ac(iN, "error");
 			u.ac(iN.field, "error");
-			if(iN.field._help) {
-				u.as(iN.field._help, "top", ((iN.offsetTop + iN.offsetHeight/2 + 2) - (iN.field._help.offsetHeight/2)) + "px")
-			}
+			this.positionHint(iN.field);
 			if(typeof(iN.validationFailed) == "function") {
 				iN.validationFailed();
 			}
@@ -4435,13 +4438,20 @@ Util.Form = u.f = new function() {
 	this.textEditor = function(field) {
 		u.bug("init editor")
 		field._viewer = u.ae(field, "div", {"class":"viewer"});
-		field._editor = u.ae(field, "div", {"class":"editor targets:tag"});
+		field._editor = u.ae(field, "div", {"class":"editor"});
 		field._input.val = this._value;
 		field.allowed_tags = u.cv(field, "tags");
 		field.allowed_tags = field.allowed_tags ? field.allowed_tags.split(",") : false;
 		u.xInObject(field.allowed_tags)
-		field.add = function(type, value) {
-			this._tag_restrictions = new RegExp(/^(p|h1|h2|h3|h4|h5|h6|ul|dl|code)$/);
+		field.makeTextInput = function() {}
+		field.makeImageInput = function() {}
+		field.makeValueInput = function() {}
+		field.addObject = function(type, value) {
+		if(type.match(/vimeo|youtube|img/)) {
+		}
+		}
+		field.addText = function(type, value) {
+			this._tag_restrictions = new RegExp(/^(p|h1|h2|h3|h4|h5|h6|ul|dl)$/);
 			var div = u.ae(this._editor, "div", {"class":"tag "+type});
 			div._drag = u.ae(div, "div", {"class":"drag"});
 			div._drag.field = this;
@@ -4478,6 +4488,7 @@ Util.Form = u.f = new function() {
 			div._select.val(type);
 			u.ce(div._select);
 			div._select.clicked = function(event) {
+				u.bug("select clicked");
 				if(u.hc(this, "open")) {
 					u.rc(this, "open");
 					u.rc(this.div, "focus");
@@ -4530,11 +4541,19 @@ Util.Form = u.f = new function() {
 			u.e.addEvent(div._input, "mouseup", this._changed_content);
 			u.e.addEvent(div._input, "focus", this._focused_content);
 			u.e.addEvent(div._input, "blur", this._blurred_content);
+			if(u.e.event_pref == "mouse") {
+				u.e.addEvent(div._input, "mouseenter", u.f._mouseenter);
+				u.e.addEvent(div._input, "mouseleave", u.f._mouseleave);
+			}
 			u.e.addEvent(div._input, "paste", this._pasted_content);
 			return div;
 		}
 		field._focused_content = function(event) {
 			u.ac(this.div, "focus");
+			this.field.focused = true;
+			u.ac(this.field, "focus");
+			u.as(this.field, "zIndex", 99);
+			u.f.positionHint(this.field);
 			if(event.rangeOffset == 1) {
 				var range = document.createRange();
 				range.selectNodeContents(this);
@@ -4546,6 +4565,10 @@ Util.Form = u.f = new function() {
 		}
 		field._blurred_content = function() {
 			u.rc(this.div, "focus");
+			this.field.focused = false;
+			u.rc(this.field, "focus");
+			u.as(this.field, "zIndex", 90);
+			u.f.positionHint(this.field);
 			this.field.hideSelectionOptions();
 		}
 		field._changed_type = function(event) {
@@ -4584,7 +4607,7 @@ Util.Form = u.f = new function() {
 			if(event.keyCode == 13) {
 				u.e.kill(event);
 				if(!event.ctrlKey && !event.metaKey) {
-					var new_tag = this.field.add("p");
+					var new_tag = this.field.addText("p");
 					var next_tag = u.ns(this.div);
 					if(next_tag) {
 						this.div.parentNode.insertBefore(new_tag, next_tag);
@@ -4593,7 +4616,7 @@ Util.Form = u.f = new function() {
 						this.div.parentNode.appendChild(new_tag);
 					}
 					new_tag._input.focus();
-					u.s.sortable(this.field._editor);
+					u.sortable(this.field._editor, {"draggables":"tag", "targets":"editor"});
 				}
 				else {
 					if(selection && selection.isCollapsed) {
@@ -4626,6 +4649,7 @@ Util.Form = u.f = new function() {
 						else {
 							u.qs("div.tag", this.field)._input.focus();
 						}
+						u.sortable(this.field._editor, {"draggables":"tag", "targets":"editor"});
 					}
 				}
 				else if(!this.val() || !this.val().replace(/<br>/, "")) {
@@ -4814,20 +4838,20 @@ Util.Form = u.f = new function() {
 						if(fragments) {
 							for(index in fragments) {
 								value = fragments[index].replace(/\n\r|\n|\r/g, "<br>");
-								tag = field.add("p", fragments[index]);
+								tag = field.addText("p", fragments[index]);
 								field.activateInlineFormatting(tag._input);
 							}
 						}
 						else {
 							value = node.nodeValue; 
-							tag = field.add("p", value);
+							tag = field.addText("p", value);
 							field.activateInlineFormatting(tag._input);
 						}
 					}
 				}
 				else if(node.nodeName.toLowerCase().match(field._tag_restrictions)) {
 					value = node.innerHTML.replace(/\n\r|\n|\r/g, "<br>"); 
-					tag = field.add(node.nodeName.toLowerCase(), value);
+					tag = field.addText(node.nodeName.toLowerCase(), value);
 					field.activateInlineFormatting(tag._input);
 				}
 				else {
@@ -4837,10 +4861,10 @@ Util.Form = u.f = new function() {
 		}
 		else {
 			value = field._viewer.innerHTML.replace(/\<br[\/]?\>/g, "\n");
-			tag = field.add("p", value);
+			tag = field.addText("p", value);
 			field.activateInlineFormatting(tag._input);
 		}
-		u.sortable(field._editor);
+		u.sortable(field._editor, {"draggables":"tag", "targets":"editor"});
 		field.update = function() {
 			this.updateViewer();
 			this.updateContent();
@@ -5502,7 +5526,6 @@ Util.Objects["login"] = new function() {
 		scene.ready();
 	}
 }
-u.e.addDOMReadyEvent(u.init);
 
 
 /*i-generic-desktop.js*/
