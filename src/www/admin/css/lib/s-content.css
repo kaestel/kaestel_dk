@@ -32,7 +32,5 @@ body.wishlist #navigation .wishlist a,
 body.todo #navigation .todo a,
 body.todolist #navigation .todolist a,
 body.log #navigation .log a,
-body.post #navigation .post a,
-body.navigation #navigation .navigation a,
-body.page #navigation .page a {padding-left: 35px; color: #ffffff;}
+body.post #navigation .post a {padding-left: 35px; color: #ffffff;}
 
