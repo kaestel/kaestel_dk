@@ -27,8 +27,8 @@
 	</p>
 	<p>
 		I use Google Analytics for statistics on my website. I like statistics because it tells me how many 
-		people visit my website and if any pages are more popular than others. This information is cruzial to providing
-		improvements where improvements are needed. 
+		people visit my website and if any pages are more popular than others. This information is cruzial to provide
+		improvements where needed. 
 		<a href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage" target="_blank">Google Analytics use cookies</a>
 		to provide me with this information. I do not allow Google to share this information with third parties.
 	</p>
