@@ -88,7 +88,7 @@ $this->pageDescription($item["description"]);
 			</ul>
 		<?= $model->formEnd() ?>
 
-		<ul class="media targets:media">
+		<ul class="mediae">
 <?		if($item["mediae"]): ?>
 <?			foreach($item["mediae"] as $index => $media): ?>
 			<li class="media image variant:<?= $index ?> media_id:<?= $media["id"] ?>">
