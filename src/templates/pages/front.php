@@ -40,8 +40,10 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 <?			if($item["tags"]): ?>
 			<ul class="tags">
-<?				foreach($item["tags"] as $tag): ?>
-				<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				foreach($item["tags"] as $item_tag): ?>
+<?	 				if($item_tag["context"] == "post"): ?>
+				<li><a href="/geek/posts/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
+<?					endif; ?>
 <?				endforeach; ?>
 			</ul>
 <?			endif; ?>
@@ -90,8 +92,10 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 <?			if($item["tags"]): ?>
 			<ul class="tags">
-<?				foreach($item["tags"] as $tag): ?>
-				<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				foreach($item["tags"] as $item_tag): ?>
+<?	 				if($item_tag["context"] == "post"): ?>
+				<li><a href="/geek/logs/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
+<?					endif; ?>
 <?				endforeach; ?>
 			</ul>
 <?			endif; ?>

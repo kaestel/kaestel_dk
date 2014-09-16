@@ -40,6 +40,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 	<ul class="postings i:articlelist">
 <?		foreach($pagination["range_items"] as $item):
 			$item = $IC->extendItem($item, array("tags" => true));
+			$hardlink = (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]."/geek/logs/".$item["sindex"];
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
 
@@ -50,11 +51,13 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 			<ul class="tags">
 				<li><a href="/geek/logs">Logs</a></li>
 <?			if($item["tags"]): ?>
-<?				foreach($item["tags"] as $tag): ?>
-				<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>" itemprop="articleSection"><?= $tag["value"] ?></a></li>
+<?				foreach($item["tags"] as $item_tag): ?>
+<?	 				if($item_tag["context"] == $itemtype): ?>
+				<li><a href="/geek/logs/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
+<?					endif; ?>
 <?				endforeach; ?>
 <?			endif; ?>
-			</ul>			
+			</ul>
 
 			<h2 itemprop="name"><?= $item["name"] ?></h2>
 
@@ -63,6 +66,8 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<dd class="published_at" itemprop="datePublished"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
 				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+				<dt class="hardlink">Hardlink</dt>
+				<dd class="hardlink" itemprop="url"><a href="<?= $hardlink ?>" target="_blank"><?= $hardlink ?></a></dd>
 			</dl>
 
 			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
