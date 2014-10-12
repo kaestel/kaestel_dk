@@ -3,16 +3,8 @@ Util.Objects["todolist"] = new function() {
 //		u.bug("scene init:" + u.nodeId(scene))
 
 
-
 		scene.resized = function() {
 //			u.bug("scene.resized:" + u.nodeId(this));
-
-
-			// resize text nodes
-			// var text_width = this.nodes[0].offsetWidth - this.image_width;
-			// for(i = 0; node = this.nodes[i]; i++) {
-			// 	u.as(node.text_mask, "width", text_width+"px", false);
-			// }
 
 			// refresh dom
 //			this.offsetHeight;
@@ -23,7 +15,7 @@ Util.Objects["todolist"] = new function() {
 		}
 
 		scene.ready = function() {
-			u.bug("scene.ready:" + u.nodeId(this));
+//			u.bug("scene.ready:" + u.nodeId(this));
 
 			this.nodes = u.qsa("li.item", this);
 			if(this.nodes.length) {
@@ -32,13 +24,6 @@ Util.Objects["todolist"] = new function() {
 				for(i = 0; node = this.nodes[i]; i++) {
 
 					node.item_id = u.cv(node, "id");
-
-					// restructure content
-					// node.text_mask = u.ae(node, "div", {"class":"text"});
-					// u.ae(node.text_mask, u.qs("h3", node));
-					// u.ae(node.text_mask, u.qs("dl", node));
-					// u.ae(node.text_mask, u.qs("div.description", node));
-					//
 					node.actions = u.qs("ul.actions", node);
 
 					// initialize forms

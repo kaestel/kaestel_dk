@@ -11,6 +11,6 @@ document.write('<script type="text/javascript" src="http://parentnode.local/js/l
 document.write('<script type="text/javascript" src="http://parentnode.local/js/lib/desktop/i-generic-desktop.js"></script>');
 document.write('<script type="text/javascript" src="http://parentnode.local/js/lib/desktop/i-article-desktop.js"></script>');
 
+document.write('<script type="text/javascript" src="/js/lib/desktop/i-front-desktop.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-wishlist-desktop.js"></script>');
 document.write('<script type="text/javascript" src="/js/lib/desktop/i-todolist-desktop.js"></script>');
-document.write('<script type="text/javascript" src="/js/lib/desktop/i-logbook-desktop.js"></script>');
