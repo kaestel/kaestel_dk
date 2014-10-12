@@ -4,7 +4,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DESC"));
+$all_items = $IC->getItems(array("itemtype" => $itemtype, "order" => "status DESC, wish.name ASC"));
 ?>
 <div class="scene defaultList <?= $itemtype ?>List">
 	<h1>Wishes</h1>
