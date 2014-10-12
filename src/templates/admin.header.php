@@ -27,7 +27,7 @@
 	<div id="header">
 		<ul class="servicenavigation">
 			<li class="keynav front"><a href="/admin"><?= SITE_NAME ?></a></li>
-<?			if(session()->value("user_id") && session()->value("user_group_id")): ?>
+<?			if(session()->value("user_id") && session()->value("user_group_id") > 1): ?>
 			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
 <?			else: ?>
 			<li class="keynav user nofollow"><a href="/login">Login</a></li>
