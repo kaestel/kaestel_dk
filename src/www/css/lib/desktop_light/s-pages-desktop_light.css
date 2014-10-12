@@ -1,45 +1,20 @@
+/* LOGO */
 #header .logo {font-size: 20px; text-transform: uppercase;}
-
-#content .scene li h3 {padding: 0 0 5px;}
-#content .scene li h2 {padding: 0 0 5px;}
-
-#content .scene li.log,
-#content .scene li.post {padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #dedede;}
-
-#content .scene li ul.tags {padding-left: 0;}
-#content .scene li ul.tags li {font-size: 12px;}
-
-#content .scene dt,
-#content .scene dd {width: auto; font-size: 12px;}
-#content .scene dd {color: #999999; padding: 0 5px 0 0;}
-
-#content .scene dl.info dt {display: none;}
-#content .scene dl.info dd.author {display: none;}
-
-
-#content .scene dl.info {padding-bottom: 20px;}
-#content .scene dl.geo {padding-bottom: 20px;}
-
-#content .scene ul.logs dl.info {padding-bottom: 0;}
-#content .scene ul.logs dl.geo dt {display: none;}
-#content .scene ul.logs dl.geo .latitude,
-#content .scene ul.logs dl.geo .longitude {display: none;}
-
-
-#content .scene div.vcard {padding: 0 50px 25px;}
-#content .scene div.vcard .name {padding: 0 0 15px;}
-#content .scene div.vcard .tel,
-#content .scene div.vcard .email {font-size: 13px;}
 
 
 /* FRONT */
-#content .scene ul.logs,
-#content .scene ul.postings {padding-bottom: 0;}
-
 #content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
 
-/* GEEK */
-#content .scene.geek div.categories {padding-bottom: 20px;}
-#content .scene.tag li.log,
-#content .scene.tag li.post {padding-top: 40px;}
+
+/* GEEK FRONT */
+#content .scene.geek.lists div.logbooks,
+#content .scene.geek.lists div.posts {padding-top: 20px;}
+
+
+/* WISHLIST */
+#content .scene.wishlist {}
+
+/* WISH RESERVE / UN-RESERVE */
+#content .scene.wishes ul.items > li ul.actions {display: none;}
+

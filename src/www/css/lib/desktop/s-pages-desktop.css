@@ -1,59 +1,36 @@
+/* LOGO */
 #header .logo {font-size: 20px; text-transform: uppercase;}
-
-/*#content .scene li h3 {padding: 0 0 5px;}*/
-#content .scene li.log,
-#content .scene li.post {padding-top: 20px; padding-bottom: 20px; border-top: 1px solid #dedede;}
-
-
-
-
-#content .scene div.vcard {padding: 0 50px 25px;}
-#content .scene div.vcard .name {padding: 0 0 15px;}
-#content .scene div.vcard .tel,
-#content .scene div.vcard .email {font-size: 13px;}
 
 
 /* FRONT */
-#content .scene ul.logs,
-#content .scene ul.postings {padding-bottom: 0;}
-
 #content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
 
-/* GEEK */
+
+/* GEEK FRONT */
 #content .scene.geek.lists div.logbooks,
 #content .scene.geek.lists div.posts {padding-top: 20px; display: inline-block; vertical-align: top; width: 250px;}
-
 #content .scene.geek.lists div.logbooks ul,
 #content .scene.geek.lists div.posts ul {padding-right: 0;}
-
-#content .scene.geek div.categories {padding-bottom: 20px;}
-
 
 
 /* WISHLIST */
 #content .scene.wishlist {}
-#content .scene.wishlist ul.items > li {display: block; padding: 5px 0; font-size: 14px;}
 
 /* WISH */
-#content .scene.wishes {}
-#content .scene.wishes ul.items {}
-#content .scene.wishes ul.items > li {display: block; overflow: hidden; border-top: 1px solid #cccccc; padding: 20px 0 0;}
 #content .scene.wishes ul.items > li .image,
 #content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
-#content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 20px; cursor: default;}
-#content .scene.wishes ul.items > li .text {margin-bottom: 10px;}
+#content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 0px; cursor: default;}
 #content .scene.wishes ul.items > li h3 {padding: 0 25px 10px;}
-#content .scene.wishes ul.items > li div.description {}
-#content .scene.wishes ul.items > li div.description p {padding: 0 25px 10px;}
+#content .scene.wishes ul.items > li div.description p {padding: 0 25px;}
 
 /* WISH PRICE */
-#content .scene.wishes ul.items > li dl {padding: 0 25px 20px;}
-#content .scene.wishes ul.items > li dt {display: none;}
-#content .scene.wishes ul.items > li dd {font-size: 13px;}
+#content .scene.wishes ul.items dl.info {padding: 0 25px 20px;}
+#content .scene.wishes ul.items dl.info dd {font-size: 13px; display: block;}
+
 
 /* WISH RESERVE / UN-RESERVE */
-#content .scene.wishes ul.items > li ul.actions {padding: 0 25px 10px;}
+#content .scene.wishes ul.items > li ul.actions {padding: 0 25px;}
 #content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
