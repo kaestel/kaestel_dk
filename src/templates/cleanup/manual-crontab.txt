@@ -2,6 +2,7 @@ crontab -e
 
 
 EDITOR=vi; export EDITOR
+EDITOR=mate; export EDITOR
 
 wget -qO- http://tilbyen.local/admin/instagram/fetch --http-user=__USERNAME__ --http-password=__PASSWORD__
 

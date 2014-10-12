@@ -14,7 +14,7 @@ Markup should be
 
 
 
-Ideally one would always write HTML the meets all above requirements - but is that even worth considering. If you are a frontend developer you already know this is not an easily achieved goal. 
+Ideally one would always write HTML that meets all the requirements listed about - but is that even worth considering? If you are a frontend developer you already know this is not an easily achieved goal. 
 
 Let me briefly try to explain why I would make an effort, regardless of the challenges.
 
@@ -39,6 +39,7 @@ Search engine optimized
 I guess there is no real need to explain. By far the most websites are being built with the intent of being visited. The more, the merrier. And unless you are in an isolated ecosystem with no wish for additional attention or just plain ignorant, you want to please the search engines. Search engines lives by the quality of the search results they provide and you can help them, by limiting the markup they have to index and make sure it can be understood by a machine.
 
 Easy to implement
+When you markup is easy to implement less errors occur during implementation
 
 No inline js
 
