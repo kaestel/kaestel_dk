@@ -28,13 +28,22 @@ endif;
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 			<h3><?= $item["name"] ?></h3>
+
+<?			if($item["description"]): ?>
 			<div class="description">
 				<p><?= $item["description"] ?></p>
 			</div>
-			<dl>
-				<dt>Pris</dt>
-				<dd>DKK <?= $item["price"] ?></dd>
+<?			endif; ?>
+
+			<dl class="info">
+				<dt class="price">Pris</dt>
+				<dd class="price">DKK <?= $item["price"] ?></dd>
+<?			if($item["link"]): ?>
+				<dt class="link">Link</dt>
+				<dd class="link"><a href="<?= $item["link"] ?>" target="_blank"><?= $item["link"] ?></a></dd>
+<?			endif; ?>
 			</dl>
+
 			<ul class="actions <?= ($item["reserved"] == 1 ? "reserved" : "") ?>">
 				<li class="reserve">
 					<?= $model->formStart("/wishlist/reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>

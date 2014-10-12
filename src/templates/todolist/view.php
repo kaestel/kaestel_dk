@@ -22,20 +22,25 @@ endif;
 	<h1><?= $todolist["name"] ?></h1>
 
 <?	if($items): ?>
-	<ul class="todos">
+	<ul class="items todos">
 <?		foreach($items as $item): 
 			$item = $IC->extendItem($item); ?>
 		<li class="item id:<?= $item["id"] ?>">
 			<h3><?= $item["name"] ?></h3>
+
+			<dl class="info">
+				<dt>Deadline</dt>
+				<dd><?= date("Y-m-d", strtotime($item["deadline"])) ?></dd>
+				<dt>Priority</dt>
+				<dd><?= $model->todo_priority[$item["priority"]] ?></dd>
+			</dl>
+
+<?			if($item["description"]): ?>
 			<div class="description">
 				<p><?= $item["description"] ?></p>
 			</div>
-			<dl>
-				<dt>Priority</dt>
-				<dd><?= $model->todo_priority[$item["priority"]] ?></dd>
-				<dt>Deadline</dt>
-				<dd><?= date("Y-m-d", strtotime($item["deadline"])) ?></dd>
-			</dl>
+<?			endif; ?>
+
 			<ul class="actions <?= ($item["status"] == 1 ? "open" : "closed") ?>">
 				<li class="close">
 					<?= $model->formStart("/todolist/close/".$item["id"], array("class" => "labelstyle:inject")) ?>

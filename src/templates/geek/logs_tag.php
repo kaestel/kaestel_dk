@@ -26,7 +26,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 	<h1><?= $tag ?></h1>
 
 <? if($pagination["range_items"]): ?>
-	<ul class="postings i:articlelist">
+	<ul class="items postings i:articlelist">
 <?		foreach($pagination["range_items"] as $item):
 			$item = $IC->extendItem($item, array("tags" => true));
 			$hardlink = (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]."/geek/logs/tag/".$tag."/".$item["sindex"];
@@ -51,7 +51,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 
 			<dl class="info">
 				<dt class="published_at">Date published</dt>
-				<dd class="published_at" itemprop="datePublished"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
+				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
 				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 				<dt class="hardlink">Hardlink</dt>
