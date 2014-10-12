@@ -117,6 +117,7 @@ class TypeLog extends Model {
 					$item["mediae"][$variant]["format"] = $media["format"];
 					$item["mediae"][$variant]["width"] = $media["width"];
 					$item["mediae"][$variant]["height"] = $media["height"];
+					$item["mediae"][$variant]["filesize"] = $media["filesize"];
 				}
 			}
 
@@ -150,7 +151,7 @@ class TypeLog extends Model {
 					$return_values = array();
 
 					foreach($uploads as $upload) {
-						$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$upload["name"]."', '".$upload["format"]."', '".$upload["variant"]."', '".$upload["width"]."', '".$upload["height"]."', 0)");
+						$query->sql("INSERT INTO ".$this->db_mediae." VALUES(DEFAULT, $item_id, '".$upload["name"]."', '".$upload["format"]."', '".$upload["variant"]."', '".$upload["width"]."', '".$upload["height"]."', '".$upload["filesize"]."', 0)");
 
 						$return_values[] = array(
 							"item_id" => $item_id, 
@@ -158,7 +159,8 @@ class TypeLog extends Model {
 							"variant" => $upload["variant"], 
 							"format" => $upload["format"], 
 							"width" => $upload["width"], 
-							"height" => $upload["height"]
+							"height" => $upload["height"],
+							"filesize" => $upload["filesize"]
 						);
 					}
 
