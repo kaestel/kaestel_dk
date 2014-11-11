@@ -7,6 +7,11 @@ git remote add origin https://github.com/hvadhedderde/demo_br_gakgak.git
 git push -u origin master
 
 
+git remote rm origin
+git remote add origin https://github.com/kaestel/teisbruno_com.git
+git push -u origin master
+
+
 
 // set local path
 

@@ -7,7 +7,12 @@ git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/c
 
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/connect.php' --prune-empty --tag-name-filter cat -- --all
 
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/databases.php' --prune-empty --tag-name-filter cat -- --all
+
 git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch src/config/connect_mail.php' --prune-empty --tag-name-filter cat -- --all
+
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch wires/include/notifier.php' --prune-empty --tag-name-filter cat -- --all
+
 
 // clean up local repo after
 git push origin master --force
