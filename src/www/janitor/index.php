@@ -6,7 +6,10 @@ if(isset($read_access) && $read_access) {
 
 include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
+
 $page->pageTitle("the Janitor @ ".SITE_URL)
+
+
 ?>
 <? $page->header(array("type" => "janitor")) ?>
 
