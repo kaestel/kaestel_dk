@@ -59,8 +59,8 @@ class TypeWish extends Model {
 			"hint_message" => "Link to product"
 		));
 
-		// Files
-		$this->addToModel("files", array(
+		// Mediae
+		$this->addToModel("mediae", array(
 			"type" => "files",
 			"label" => "Drag image here",
 			"allowed_formats" => "png,jpg",
@@ -99,6 +99,7 @@ class TypeWish extends Model {
 				foreach($mediae as $i => $media) {
 					$variant = $media["variant"];
 					$item["mediae"][$variant]["id"] = $media["id"];
+					$item["mediae"][$variant]["name"] = $media["name"];
 					$item["mediae"][$variant]["variant"] = $variant;
 					$item["mediae"][$variant]["format"] = $media["format"];
 					$item["mediae"][$variant]["width"] = $media["width"];
@@ -150,7 +151,7 @@ class TypeWish extends Model {
 
 
 	// custom function to add media
-	// /admin/wish/addMedia/#item_id# (post image)
+	// /janitor/wish/addMedia/#item_id# (post image)
 	function addMedia($action) {
 
 		if(count($action) == 2) {
@@ -160,8 +161,8 @@ class TypeWish extends Model {
 
 			$query->checkDbExistance($this->db_mediae);
 
-			if($this->validateList(array("files"), $item_id)) {
-				$uploads = $IC->upload($item_id, array("input_name" => "files", "auto_add_variant" => true));
+			if($this->validateList(array("mediae"), $item_id)) {
+				$uploads = $IC->upload($item_id, array("input_name" => "mediae", "auto_add_variant" => true));
 				if($uploads) {
 
 					$return_values = array();
@@ -172,6 +173,7 @@ class TypeWish extends Model {
 						$return_values[] = array(
 							"item_id" => $item_id, 
 							"media_id" => $query->lastInsertId(), 
+							"name" => $upload["name"], 
 							"variant" => $upload["variant"], 
 							"format" => $upload["format"], 
 							"width" => $upload["width"], 
@@ -190,7 +192,7 @@ class TypeWish extends Model {
 
 
 	// delete image - 3 parameters exactly
-	// /admin/wish/deleteImage/#item_id#/#variant#
+	// /janitor/wish/deleteImage/#item_id#/#variant#
 	function deleteMedia($action) {
 
 		if(count($action) == 3) {
@@ -213,8 +215,29 @@ class TypeWish extends Model {
 	}
 
 
+	// Update media name
+	// /janitor/wish/updateMediaName
+	function updateMediaName($action) {
+
+		if(count($action) == 3) {
+
+			$query = new Query();
+			$name = getPost("name");
+
+			$sql = "UPDATE ".$this->db_mediae." SET name = '$name' WHERE item_id = ".$action[1]." AND variant = '".$action[2]."'";
+			if($query->sql($sql)) {
+				message()->addMessage("Media name updated");
+				return true;
+			}
+		}
+
+		message()->addMessage("Media name could not be updated - please refresh your browser", array("type" => "error"));
+		return false;
+	}
+
+
 	// update media order
-	// /admin/log/updateMediaOrder (comma-separated order in POST)
+	// /janitor/wish/updateMediaOrder (comma-separated order in POST)
 	function updateMediaOrder($action) {
 
 		$order_list = getPost("order");

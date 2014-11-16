@@ -85,7 +85,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 <?			if($item["tags"]): ?>
 			<ul class="tags">
 <?				foreach($item["tags"] as $item_tag): ?>
-<?	 				if($item_tag["context"] == "post"): ?>
+<?	 				if($item_tag["context"] == "log"): ?>
 				<li><a href="/geek/logs/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
 <?					endif; ?>
 <?				endforeach; ?>

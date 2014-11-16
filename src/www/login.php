@@ -20,26 +20,21 @@ if(is_array($action) && count($action)) {
 
 		$page->page(array(
 			"templates" => "pages/signup.php"
-			)
-		);
+		));
 		exit();
-
 	}
 	else if(count($action) == 1 && $action[0] == "forgot_password") {
 
 		$page->page(array(
 			"templates" => "pages/forgot_password.php"
-			)
-		);
+		));
 		exit();
-
 	}
 
 }
 
 $page->page(array(
 	"templates" => "pages/login.php"
-	)
-);
+));
 
 ?>

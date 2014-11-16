@@ -1,7 +1,5 @@
 <?php
 $access_item["/"] = true;
-$access_item["/view/"] = true;
-
 if(isset($read_access) && $read_access) {
 	return;
 }
@@ -11,22 +9,40 @@ include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
 
 $action = $page->actions();
 $IC = new Item();
-$itemtype = "todo";
+$itemtype = "log";
 $model = $IC->typeObject($itemtype);
 
 
-$page->bodyClass("todolist plain");
-$page->pageTitle("TODOs");
+$page->bodyClass($itemtype);
+$page->pageTitle("Logs");
 
 
 if(is_array($action) && count($action)) {
 
-	// VIEW
-	// /wishlist/view/[item_id]
-	if(count($action) > 0 && $action[0] == "view") {
+	// LIST ITEM
+	if(count($action) == 1 && $action[0] == "list") {
 
 		$page->page(array(
-			"templates" => "todolist/view.php"
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/list.php"
+		));
+		exit();
+	}
+	// NEW ITEM
+	else if(count($action) == 1 && $action[0] == "new") {
+
+		$page->page(array(
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/new.php"
+		));
+		exit();
+	}
+	// EDIT ITEM
+	else if(count($action) == 2 && $action[0] == "edit") {
+
+		$page->page(array(
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/edit.php"
 		));
 		exit();
 	}
@@ -46,8 +62,7 @@ if(is_array($action) && count($action)) {
 }
 
 $page->page(array(
-	"templates" => "todolist/list.php"
+	"templates" => "pages/404.php"
 ));
 
 ?>
- 

@@ -47,7 +47,7 @@ class TypeWishlist extends Model {
 
 
 	// Update item order
-	// /admin/wishlist/updateOrder (order comma-separated in POST)
+	// /janitor/wishlist/updateOrder (order comma-separated in POST)
 	function updateOrder($action) {
 
 		$order_list = getPost("order");

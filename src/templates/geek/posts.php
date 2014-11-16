@@ -6,7 +6,7 @@ $itemtype = "post";
 
 
 // get post tags for listing
-$post_tags = $IC->getTags(array("context" => "post"));
+$categories = $IC->getTags(array("context" => $itemtype));
 
 
 // get content pagination
@@ -26,7 +26,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 	<h1>Postings from the void of Banausia</h1>
 
 	<div class="categories">
-<?	if($post_tags): ?>
+<?	if($categories): ?>
 		<h2>Categories</h2>
 		<ul class="tags">
 <?		foreach($post_tags as $tag): ?>

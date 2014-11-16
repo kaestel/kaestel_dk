@@ -17,8 +17,7 @@ $page->pageTitle("Plain");
 
 $page->page(array(
 	"templates" => "pages/plain.php"
-	)
-);
+));
 
 ?>
  

@@ -3,15 +3,12 @@
 
 
 /* FRONT */
-#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
+#content .scene.front > h2 {padding-bottom: 20px;}
+#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
-
+#content .scene.front ul.tags {padding-bottom: 15px;}
 
 /* GEEK FRONT */
-#content .scene.geek.lists div.logbooks,
-#content .scene.geek.lists div.posts {padding-top: 20px; display: inline-block; vertical-align: top; width: 250px;}
-#content .scene.geek.lists div.logbooks ul,
-#content .scene.geek.lists div.posts ul {padding-right: 0;}
 
 
 /* WISHLIST */

@@ -5,7 +5,7 @@ global $action;
 $itemtype = "log";
 
 // get log tags for listing
-$log_tags = $IC->getTags(array("context" => "log"));
+$categories = $IC->getTags(array("context" => $itemtype));
 
 
 // get content pagination
@@ -25,7 +25,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 	<h1>I'd stay home if I could <br />... but I can't</h1>
 
 	<div class="categories">
-<?	if($log_tags): ?>
+<?	if($categories): ?>
 		<h2>Categories</h2>
 		<ul class="tags">
 <?		foreach($log_tags as $tag): ?>

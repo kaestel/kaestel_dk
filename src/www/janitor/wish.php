@@ -1,5 +1,5 @@
 <?php
-$access_item = false;
+$access_item["/"] = true;
 if(isset($read_access) && $read_access) {
 	return;
 }
@@ -13,18 +13,36 @@ $itemtype = "wish";
 $model = $IC->typeObject($itemtype);
 
 
-$page->bodyClass("wishlist plain");
+$page->bodyClass($itemtype);
 $page->pageTitle("Wishes");
 
 
 if(is_array($action) && count($action)) {
 
-	// VIEW
-	// /wishlist/view/[item_id]
-	if(count($action) > 0 && $action[0] == "view") {
+	// LIST ITEM
+	if(count($action) == 1 && $action[0] == "list") {
 
 		$page->page(array(
-			"templates" => "wishlist/view.php"
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/list.php"
+		));
+		exit();
+	}
+	// NEW ITEM
+	else if(count($action) == 1 && $action[0] == "new") {
+
+		$page->page(array(
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/new.php"
+		));
+		exit();
+	}
+	// EDIT ITEM
+	else if(count($action) == 2 && $action[0] == "edit") {
+
+		$page->page(array(
+			"type" => "janitor",
+			"templates" => "janitor/".$itemtype."/edit.php"
 		));
 		exit();
 	}
@@ -44,8 +62,7 @@ if(is_array($action) && count($action)) {
 }
 
 $page->page(array(
-	"templates" => "wishlist/list.php"
+	"templates" => "pages/404.php"
 ));
 
 ?>
- 

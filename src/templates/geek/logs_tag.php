@@ -6,7 +6,7 @@ $itemtype = "log";
 $tag = urldecode($action[2]);
 
 // get log tags for listing
-$log_tags = $IC->getTags(array("context" => "log"));
+$categories = $IC->getTags(array("context" => $itemtype));
 
 
 // get content pagination
@@ -88,7 +88,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <? endif; ?>
 
 
-<?	if($log_tags): ?>
+<?	if($categories): ?>
 	<h2>Categories</h2>
 	<ul class="tags">
 <?		foreach($log_tags as $tag): ?>
