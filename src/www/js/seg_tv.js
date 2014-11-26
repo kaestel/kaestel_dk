@@ -1,6 +1,8 @@
 
 /*seg_tv_include.js*/
 
+/*seg_tv_include.js*/
+
 /*seg_tv.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
@@ -4337,9 +4339,6 @@ if(String.prototype.substr == undefined || "ABC".substr(-1,1) == "A") {
 }
 
 
-/*u-settings.js*/
-u.site_name = "Kæstel";
-
 /*ga.js*/
 u.ga_account = 'UA-17394677-1';
 u.ga_domain = 'kaestel.dk';
@@ -4424,4 +4423,5 @@ Util.Objects["page"] = new function() {
 	}
 }
 window.onload = u.init;
+
 

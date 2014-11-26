@@ -1,6 +1,8 @@
 
 /*seg_mobile_touch_include.js*/
 
+/*seg_mobile_touch_include.js*/
+
 /*seg_mobile_touch.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
@@ -3155,6 +3157,7 @@ Util.getVar = function(param, url) {
 
 /*u-settings.js*/
 u.site_name = "Kæstel";
+u.facebook_app_id = "789445694430356";
 
 /*ga.js*/
 u.ga_account = 'UA-17394677-1';
@@ -3552,6 +3555,20 @@ Util.Objects["article"] = new function() {
 }
 
 
+
+/*i-front-mobile_touch.js*/
+Util.Objects["front"] = new function() {
+	this.init = function(scene) {
+		var nodes = u.qsa("li.item h3", scene);
+		var i, node
+		if(nodes) {
+			for(i = 0; node = nodes[i]; i++) {
+				u.ce(node, {"type":"link"});
+			}
+		}
+	}
+}
+
 /*i-wishlist-mobile_touch.js*/
 Util.Objects["wishlist"] = new function() {
 	this.init = function(scene) {
@@ -3655,6 +3672,62 @@ Util.Objects["wishes"] = new function() {
 							}
 							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 						}
+					}
+				}
+			}
+			page.cN.scene = this;
+			page.resized();
+		}
+		scene.ready();
+	}
+}
+
+
+/*i-todolist-mobile_touch.js*/
+Util.Objects["todolist"] = new function() {
+	this.init = function(scene) {
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this.nodes = u.qsa("li.item", this);
+			if(this.nodes.length) {
+				var i, node;
+				for(i = 0; node = this.nodes[i]; i++) {
+					node.item_id = u.cv(node, "id");
+					node.actions = u.qs("ul.actions", node);
+					node.close_form = u.qs("li.close form", node);
+					u.f.init(node.close_form);
+					node.bn_close = u.qs("input[type=submit]", node.close_form);
+					node.bn_close.node = node;
+					u.e.click(node.bn_close)
+					node.bn_close.clicked = function(event) {
+						u.e.kill(event);
+						this.response = function(response) {
+							if(response.cms_status == "success") {
+								u.ac(this.node.actions, "closed");
+							}
+							else {
+							}
+						}
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+					}
+					node.open_form = u.qs("li.open form", node);
+					u.f.init(node.open_form);
+					node.bn_open = u.qs("input[type=submit]", node.open_form);
+					node.bn_open.node = node;
+					u.e.click(node.bn_open)
+					node.bn_open.clicked = function(event) {
+						u.e.kill(event);
+						this.response = function(response) {
+							if(response.cms_status == "success") {
+								u.rc(this.node.actions, "closed");
+							}
+							else {
+							}
+						}
+						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
 					}
 				}
 			}

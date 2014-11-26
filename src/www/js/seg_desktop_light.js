@@ -1,6 +1,8 @@
 
 /*seg_desktop_light_include.js*/
 
+/*seg_desktop_light_include.js*/
+
 /*seg_desktop_light.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
@@ -4339,6 +4341,7 @@ if(String.prototype.substr == undefined || "ABC".substr(-1,1) == "A") {
 
 /*u-settings.js*/
 u.site_name = "Kæstel";
+u.facebook_app_id = "789445694430356";
 
 /*ga.js*/
 u.ga_account = 'UA-17394677-1';
@@ -4424,4 +4427,5 @@ Util.Objects["page"] = new function() {
 	}
 }
 window.onload = u.init;
+
 
