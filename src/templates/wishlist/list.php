@@ -3,7 +3,7 @@ global $action;
 global $IC;
 global $model;
 
-$items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist"));
+$items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist", "extend" => true));
 ?>
 <div class="scene wishlist i:wishlist">
 	<h1>Ønskesedler</h1>
@@ -11,8 +11,7 @@ $items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist"));
 
 <?	if($items): ?>
 	<ul class="items">
-<?		foreach($items as $item):
-			$item = $IC->extendItem($item); ?>
+<?		foreach($items as $item): ?>
 		<li<?= $HTML->attribute("class") ?>><a href="/wishlist/view/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></li>
 <?		endforeach; ?>
 	</ul>

@@ -10,15 +10,12 @@ $categories = $IC->getTags(array("context" => $itemtype));
 
 
 // get content pagination
-include_once("class/items/pagination.class.php");
-$PC = new Pagination();
-
 $limit = stringOr(getVar("limit"), 5);
 $sindex = isset($action[1]) ? $action[1] : false;
 $direction = isset($action[2]) ? $action[2] : false; 
 
-$pattern = array("itemtype" => $itemtype, "status" => 1);
-$pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
+$pattern = array("itemtype" => $itemtype, "status" => 1, "extend" => array("tags" => true, "user" => true));
+$pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
 ?>
 
@@ -29,7 +26,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <?	if($categories): ?>
 		<h2>Categories</h2>
 		<ul class="tags">
-<?		foreach($post_tags as $tag): ?>
+<?		foreach($categories as $tag): ?>
 			<li><a href="/geek/posts/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
 <?		endforeach; ?>
 		</ul>
@@ -39,9 +36,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <? if($pagination["range_items"]): ?>
 	<ul class="items postings i:articlelist">
 <?		foreach($pagination["range_items"] as $item):
-			$item = $IC->extendItem($item, array("tags" => true));
-			$hardlink = (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]."/geek/posts/".$item["sindex"];
-			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
+			$media = $IC->sliceMedia($item); ?>
 		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($media): ?>
@@ -65,12 +60,12 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<dt class="published_at">Date published</dt>
 				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
 				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
 				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><a href="<?= $hardlink ?>" target="_blank"><?= $hardlink ?></a></dd>
+				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/posts/".$item["sindex"]; ?>" target="_blank"><?= $hardlink ?></a></dd>
 			</dl>
 
-			<div class="description" itemprop="articleBody">
+			<div class="articlebody" itemprop="articleBody">
 				<?= $item["html"] ?>
 			</div>
 

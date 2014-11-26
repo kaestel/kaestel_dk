@@ -3,92 +3,106 @@ global $action;
 global $IC;
 global $model;
 ?>
-<div class="scene plain i:plainlist">
-	<h1>Plain as the Sun</h1>
-	<p>
-		I'm plain as a pancake and odd like nutella. I think it is a good combination, but admittedly I am not diet
-		material. Don't scrape, it won't help. I am like that.
-	</p>
-	<p>
-		I am a part time revolutionary. I spend the other part serving the system I revolt against. Surely, 
-		one day this will lead to a breakdown. I wonder who will win.
-	</p>
-	<p>
-		I am a coder. I am an expert within 
-		logic, numbers and connecting the dots. It's not random, it just looks random. I may suck at many 
-		things, but not this. 
-	</p>
-	<p>
-		I challenge conventions in search for better alternatives. Too many rules are blindly
-		accepted, even years after they have outlived themselves. I am uncompromisingly focused on 
-		my personal goals. They involve rethinking every aspect of our society, challenging every 
-		norm and finally providing a credible and achievable alternative to our current way of living. 
-	</p>
-	<p>
-		I'm trying to do right. Grasping the big picture. Being a good father. Thinking ahead, 
-		while being right here, right now. I walk, eat icecream in the rain. Hold her hand in mine, because 
-		it calms me and gives me direction. I explore random combinations of green, seemingly plain holes in 
-		the ground and find beauty in all this earth is giving us.
-	</p>
-	<p>
-		I scream at the sky, when overwhelmed by injustice. It happens too often to ignore, and it is being
-		ignored too often. What the fuck is wrong with you people. I am fighting back.
-	</p>
-	<p>
-		I love the sun, it shines upon me.<br />
-		I love the sea, it never fails to embrace me.<br />
-		I love the mountains, they lift me up.<br />
-		I love the sky, it has no end.<br />
-		I love the flowers, they bring me hope.<br />
-		I love the moon, she knows why.
-	</p>
-	<p>
-		I try to love everything <br />
-		but sometimes I fail.
-	</p>
-	<p>
-		I dream of things I can’t entirely explain.<br />
-		I feel an urge to make this world a better place.<br />
-		I contain solutions I cannot yet imagine.<br />
-		I believe everything and everyone is connected.<br />
-		I think we are all responsible though not all of us live up to our responsibility.<br />
-		I want to promote humanity.<br />
-		I fear the ignorance that threatens to end everything.
-	</p>
-	<p>
-		But ...
-	</p>
-	<p>
-		I envision global peace and unity.
-	</p>
-	<p>
-		And ...
-	</p>
-	<p>
-		I love life.
-	</p>
-	<p>
-		If you think I am full of shit. Look in the mirror. Get a job. One you like. Stop being a fucking ant.
-	</p>
+<div class="scene plain i:scene">
 
-	<h2>Side projects</h2>
-	<ul>
-		<li><a href="http://think.dk" target="_blank">think.dk</a></li>
-		<li><a href="http://e-types.com" target="_blank">e-Types</a></li>
-		<li><a href="http://parentnode.dk" target="_blank">parentNode</a></li>
-		<li><a href="http://detector.parentnode.dk" target="_blank">Detector</a></li>
-		<li><a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>
-		<li><a href="http://janitor.parentnode.dk" target="_blank">Janitor</a></li>
-		<li><a href="http://modulator.parentnode.dk" target="_blank">Modulator</a></li>
-	</ul>
-	
+	<div class="article" itemscope itemtype="http://schema.org/Article">
+		<h1 itemprop="name">Plain as the Sun</h1>
+
+		<dl class="info">
+			<dt class="published_at">Date published</dt>
+			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
+			<dt class="author">Author</dt>
+			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+		</dl>
+
+		<div class="articlebody" itemprop="articleBody">
+			<p>
+				I'm plain as a pancake and odd like nutella. I think it is a good combination, but admittedly I am not diet
+				material. Don't scrape, it won't help. I am like that.
+			</p>
+			<p>
+				I am a part time revolutionary. I spend the other part serving the system I revolt against. Surely, 
+				one day this will lead to a breakdown. I wonder who will win.
+			</p>
+			<p>
+				I am a coder. I am an expert within 
+				logic, numbers and connecting the dots. It's not random, it just looks random. I may suck at many 
+				things, but not this. 
+			</p>
+			<p>
+				I challenge conventions in search for better alternatives. Too many rules are blindly
+				accepted, even years after they have outlived themselves. I am uncompromisingly focused on 
+				my personal goals. They involve rethinking every aspect of our society, challenging every 
+				norm and finally providing a credible and achievable alternative to our current way of living. 
+			</p>
+			<p>
+				I'm trying to do right. Grasping the big picture. Being a good father. Thinking ahead, 
+				while being right here, right now. I walk, eat icecream in the rain. Hold her hand in mine, because 
+				it calms me and gives me direction. I explore random combinations of green, seemingly plain holes in 
+				the ground and find beauty in all this earth is giving us.
+			</p>
+			<p>
+				I scream at the sky, when overwhelmed by injustice. It happens too often to ignore, and it is being
+				ignored too often. What the fuck is wrong with you people. I am fighting back.
+			</p>
+			<p>
+				I love the sun, it shines upon me.<br />
+				I love the sea, it never fails to embrace me.<br />
+				I love the mountains, they lift me up.<br />
+				I love the sky, it has no end.<br />
+				I love the flowers, they bring me hope.<br />
+				I love the moon, she knows why.
+			</p>
+			<p>
+				I try to love everything <br />
+				but sometimes I fail.
+			</p>
+			<p>
+				I dream of things I can’t entirely explain.<br />
+				I feel an urge to make this world a better place.<br />
+				I contain solutions I cannot yet imagine.<br />
+				I believe everything and everyone is connected.<br />
+				I think we are all responsible though not all of us live up to our responsibility.<br />
+				I want to promote humanity.<br />
+				I fear the ignorance that threatens to end everything.
+			</p>
+			<p>
+				But ...
+			</p>
+			<p>
+				I envision global peace and unity.
+			</p>
+			<p>
+				And ...
+			</p>
+			<p>
+				I love life.
+			</p>
+			<p>
+				If you think I am full of shit. Look in the mirror. Get a job. One you like. Stop being a fucking ant.
+			</p>
+
+			<h2>Side projects</h2>
+			<ul>
+				<li><a href="http://think.dk" target="_blank">think.dk</a></li>
+				<li><a href="http://e-types.com" target="_blank">e-Types</a></li>
+				<li><a href="http://parentnode.dk" target="_blank">parentNode</a></li>
+				<li><a href="http://detector.parentnode.dk" target="_blank">Detector</a></li>
+				<li><a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>
+				<li><a href="http://janitor.parentnode.dk" target="_blank">Janitor</a></li>
+				<li><a href="http://modulator.parentnode.dk" target="_blank">Modulator</a></li>
+			</ul>
+		</div>
+	</div>
 
 	<h2>Contact info (for those who dare)</h2>
 
 	<div class="vcard company" itemscope itemtype="http://schema.org/Person">
-		<div class="name fn org" itemprop="name">Martin Kæstel Nielsen</div>
-		<div class="tel" itemprop="telephone"><a href="callto:+4520742819">+45 2074 2819</a></div>
-		<div class="email" itemprop="email"><a href="mailto:martin@kaestel.dk">martin@kaestel.dk</a></div>
+		<h3 class="name fn" itemprop="name">Martin Kæstel Nielsen</h3>
+		<ul>
+			<li class="tel" itemprop="telephone"><a href="callto:+4520742819">+45 2074 2819</a></li>
+			<li class="email" itemprop="email"><a href="mailto:martin@kaestel.dk">martin@kaestel.dk</a></li>
+		</ul>
 	</div>
 
 	<!-- 

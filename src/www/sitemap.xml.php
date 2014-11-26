@@ -5,7 +5,7 @@ if(isset($read_access) && $read_access) {
 }
 
 include_once($_SERVER["FRAMEWORK_PATH"]."/config/init.php");
-$IC = new Item();
+$IC = new Items();
 
 print '<?xml version="1.0" encoding="UTF-8"?>';
 ?>

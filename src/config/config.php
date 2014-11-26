@@ -12,7 +12,7 @@ error_reporting(E_STRICT);
 */
 define("SITE_UID", "MAK");
 define("SITE_NAME", "kaestel.dk");
-define("SITE_URL", $_SERVER["SERVER_NAME"]);
+define("SITE_URL", (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]);
 define("SITE_EMAIL", "martin@kaestel.dk");
 
 /**

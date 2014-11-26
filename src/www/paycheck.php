@@ -13,8 +13,8 @@ $action = $page->actions();
 $page->bodyClass("paycheck");
 $page->pageTitle("Penge er kun et-taller og nuller");
 
-$page->header();
-$page->template("paycheck/index.php");
-$page->footer();
+$page->page(array(
+	"templates" => "paycheck/index.php"
+));
 
 ?>

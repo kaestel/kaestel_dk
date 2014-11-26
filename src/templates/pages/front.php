@@ -2,8 +2,8 @@
 global $IC;
 global $action;
 
-$log_items = $IC->getItems(array("itemtype" => "log", "tags" => "on:frontpage", "limit" => 2, "status" => 1));
-$post_items = $IC->getItems(array("itemtype" => "post", "tags" => "on:frontpage", "limit" => 2, "status" => 1));
+$log_items = $IC->getItems(array("itemtype" => "log", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
+$post_items = $IC->getItems(array("itemtype" => "post", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
 
 $post_tags = $IC->getTags(array("context" => "post"));
 $log_tags = $IC->getTags(array("context" => "log"));
@@ -26,8 +26,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<h2>Recent postings</h2>
 	<ul class="items postings i:articlelist">
 <?		foreach($post_items as $item):
-			$item = $IC->extendItem($item, array("tags" => true, "user" => true));
-			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
+			$media = $IC->sliceMedia($item); ?>
 		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($media): ?>
@@ -74,9 +73,8 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<h2>Recents log entries</h2>
 	<ul class="items logs i:articlelist">
 <?		foreach($log_items as $item):
-			$item = $IC->extendItem($item, array("tags" => true, "user" => true));
-			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
-		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+			$media = $IC->sliceMedia($item); ?>
+		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>

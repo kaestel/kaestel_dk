@@ -10,7 +10,7 @@ $username = stringOr(getPost("username"));
 	<?= $model->formStart("?login=true", array("class" => "labelstyle:inject")) ?>
 
 <?	if(message()->hasMessages(array("type" => "error"))): ?>
-		<p class="error">
+		<p class="errormessages">
 <?		$messages = message()->getMessages(array("type" => "error"));
 		message()->resetMessages();
 		foreach($messages as $message): ?>

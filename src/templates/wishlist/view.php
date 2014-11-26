@@ -5,7 +5,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$wishlist = $IC->getCompleteItem(array("sindex" => $action[1]));
+$wishlist = $IC->getItem(array("sindex" => $action[1], "extend" => true));
 
 if($wishlist && $wishlist["tags"]):
 
@@ -13,7 +13,7 @@ if($wishlist && $wishlist["tags"]):
 	foreach($wishlist["tags"] as $tag) {
 		array_push($tags, $tag["context"].":".$tag["value"]);
 	}
-	$items = $IC->getItems(array("status" => 1, "itemtype" => "wish", "tags" => implode($tags, ";"), "order" => "wish.name"));
+	$items = $IC->getItems(array("status" => 1, "itemtype" => "wish", "tags" => implode($tags, ";"), "order" => "wish.name", "extend" => true));
 
 endif;
 
@@ -23,8 +23,7 @@ endif;
 
 <?	if($items): ?>
 	<ul class="items">
-<?		foreach($items as $item): 
-			$item = $IC->extendItem($item);
+<?		foreach($items as $item):
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 			<h3><?= $item["name"] ?></h3>

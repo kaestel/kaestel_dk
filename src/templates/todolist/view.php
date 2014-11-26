@@ -5,7 +5,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$todolist = $IC->getCompleteItem(array("sindex" => $action[1]));
+$todolist = $IC->getItem(array("sindex" => $action[1], "extend" => true));
 
 if($todolist && $todolist["tags"]):
 
@@ -13,7 +13,7 @@ if($todolist && $todolist["tags"]):
 	foreach($todolist["tags"] as $tag) {
 		array_push($tags, $tag["context"].":".$tag["value"]);
 	}
-	$items = $IC->getItems(array("status" => 1, "itemtype" => "todo", "tags" => implode($tags, ";"), "order" => "todo.deadline DESC, todo.priority DESC"));
+	$items = $IC->getItems(array("status" => 1, "itemtype" => "todo", "tags" => implode($tags, ";"), "order" => "todo.deadline DESC, todo.priority DESC", "extend" => true));
 
 endif;
 
@@ -23,8 +23,7 @@ endif;
 
 <?	if($items): ?>
 	<ul class="items todos">
-<?		foreach($items as $item): 
-			$item = $IC->extendItem($item); ?>
+<?		foreach($items as $item): ?>
 		<li class="item id:<?= $item["id"] ?>">
 			<h3><?= $item["name"] ?></h3>
 

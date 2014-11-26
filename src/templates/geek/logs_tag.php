@@ -10,15 +10,12 @@ $categories = $IC->getTags(array("context" => $itemtype));
 
 
 // get content pagination
-include_once("class/items/pagination.class.php");
-$PC = new Pagination();
-
 $limit = stringOr(getVar("limit"), 5);
 $sindex = isset($action[3]) ? $action[3] : false;
 $direction = isset($action[4]) ? $action[4] : false; 
 
-$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "order" => "published_at ASC");
-$pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
+$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "order" => "published_at ASC", "extend" => array("tags" => true, "user" => true));
+$pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
 ?>
 
@@ -28,10 +25,8 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <? if($pagination["range_items"]): ?>
 	<ul class="items postings i:articlelist">
 <?		foreach($pagination["range_items"] as $item):
-			$item = $IC->extendItem($item, array("tags" => true));
-			$hardlink = (isset($_SERVER["HTTPS"]) ? "https" : "http")."://".$_SERVER["SERVER_NAME"]."/geek/logs/tag/".$tag."/".$item["sindex"];
-			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
-		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/blog">
+			$media = $IC->sliceMedia($item); ?>
+		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
@@ -53,9 +48,9 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<dt class="published_at">Date published</dt>
 				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
 				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
+				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
 				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><a href="<?= $hardlink ?>" target="_blank"><?= $hardlink ?></a></dd>
+				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/logs/tag/".$tag."/".$item["sindex"] ?>" target="_blank"><?= $hardlink ?></a></dd>
 			</dl>
 
 			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
@@ -69,7 +64,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<dd class="longitude" itemprop="longitude"><?= round($item["longitude"], 5) ?>°</dd>
 			</dl>
 
-			<div class="description" itemprop="blogPost">
+			<div class="articlebody" itemprop="articleBody">
 				<?= $item["html"] ?>
 			</div>
 		</li>
@@ -91,7 +86,7 @@ $pagination = $PC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 <?	if($categories): ?>
 	<h2>Categories</h2>
 	<ul class="tags">
-<?		foreach($log_tags as $tag): ?>
+<?		foreach($categories as $tag): ?>
 		<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
 <?		endforeach; ?>
 	</ul>

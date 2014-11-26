@@ -140,7 +140,7 @@ class TypeLog extends Model {
 
 		if(count($action) == 2) {
 			$query = new Query();
-			$IC = new Item();
+			$IC = new Items();
 			$item_id = $action[1];
 
 			$query->checkDbExistance($this->db_mediae);

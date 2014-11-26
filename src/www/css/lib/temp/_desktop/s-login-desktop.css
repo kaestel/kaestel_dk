@@ -1,9 +1,0 @@
-#content .scene.login {}
-#content .scene.login .field input {width: 230px;}
-
-#content .scene.login .field.required .indicator {position: absolute; top: 4px; left: 300px; width: 25px; height: 25px; background: transparent url(/janitor/img/bg_icons.png) no-repeat 0 -292px;}
-#content .scene.login .field div.help {position: absolute; left: 315px; top: 6px; width: 300px;}
-
-#content .scene.login p.error {color: #A62300;}
-#content .scene.login p.forgot {margin-top: -13px;}
-	
