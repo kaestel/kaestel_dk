@@ -11,9 +11,9 @@ include_once("classes/system/upgrade.class.php");
 $upgrade = new Upgrade();
 
 
-// $upgrade->moveMediaeToItems("log");
-// $upgrade->moveMediaeToItems("wish");
-// $upgrade->moveMediaeToItems("post");
-// $upgrade->moveMediaeToItems("page");
+$upgrade->moveMediaeToItems("log");
+$upgrade->moveMediaeToItems("wish");
+$upgrade->moveMediaeToItems("post");
+$upgrade->moveMediaeToItems("page");
 
 ?>
