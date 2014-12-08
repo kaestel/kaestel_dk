@@ -14,7 +14,7 @@ $limit = stringOr(getVar("limit"), 5);
 $sindex = isset($action[3]) ? $action[3] : false;
 $direction = isset($action[4]) ? $action[4] : false; 
 
-$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "extend" => array("tags" => true, "user" => true));
+$pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "extend" => array("tags" => true, "user" => true, "mediae" => true));
 $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
 ?>
@@ -50,7 +50,7 @@ $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
 				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"]; ?>" target="_blank"><?= $hardlink ?></a></dd>
+				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"] ?>" target="_blank"><?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"] ?></a></dd>
 			</dl>
 
 			<div class="articlebody" itemprop="articleBody">
