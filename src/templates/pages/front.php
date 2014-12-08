@@ -5,9 +5,6 @@ global $action;
 $log_items = $IC->getItems(array("itemtype" => "log", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
 $post_items = $IC->getItems(array("itemtype" => "post", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
 
-$post_tags = $IC->getTags(array("context" => "post"));
-$log_tags = $IC->getTags(array("context" => "log"));
-
 ?>
 <div class="scene front i:front">
 	<h1>The plain geek</h1>
@@ -54,7 +51,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">
-				<p><?= $item["description"] ?></p>
+				<p><?= nl2br($item["description"]) ?></p>
 			</div>
 <?			endif; ?>
 
@@ -112,7 +109,7 @@ $log_tags = $IC->getTags(array("context" => "log"));
 
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">
-				<p><?= $item["description"] ?></p>
+				<p><?= nl2br($item["description"]) ?></p>
 			</div>
 <?			endif; ?>
 
