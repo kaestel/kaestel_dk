@@ -5,7 +5,7 @@ global $IC;
 global $model;
 global $itemtype;
 
-$wishlist = $IC->getItem(array("sindex" => $action[1], "extend" => true));
+$wishlist = $IC->getItem(array("sindex" => $action[1], "extend" => array("tags" => true)));
 
 if($wishlist && $wishlist["tags"]):
 
@@ -13,7 +13,7 @@ if($wishlist && $wishlist["tags"]):
 	foreach($wishlist["tags"] as $tag) {
 		array_push($tags, $tag["context"].":".$tag["value"]);
 	}
-	$items = $IC->getItems(array("status" => 1, "itemtype" => "wish", "tags" => implode($tags, ";"), "order" => "wish.name", "extend" => true));
+	$items = $IC->getItems(array("status" => 1, "itemtype" => "wish", "tags" => implode($tags, ";"), "order" => "wish.name", "extend" => array("mediae" => true)));
 
 endif;
 
@@ -22,7 +22,7 @@ endif;
 	<h1><?= $wishlist["name"] ?></h1>
 
 <?	if($items): ?>
-	<ul class="items">
+	<ul class="items wishes">
 <?		foreach($items as $item):
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
@@ -45,12 +45,12 @@ endif;
 
 			<ul class="actions <?= ($item["reserved"] == 1 ? "reserved" : "") ?>">
 				<li class="reserve">
-					<?= $model->formStart("/wishlist/reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
+					<?= $model->formStart("reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
 						<?= $model->submit("Available", array("class" => "primary")) ?>
 					<?= $model->formEnd() ?>
 				</li>
 				<li class="unreserve">
-					<?= $model->formStart("/wishlist/unreserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
+					<?= $model->formStart("unreserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
 						<?= $model->submit("Reserved", array("class" => "secondary")) ?>
 					<?= $model->formEnd() ?>
 				</li>

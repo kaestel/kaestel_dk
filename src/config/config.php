@@ -5,7 +5,7 @@
 * @package Config
 */
 header("Content-type: text/html; charset=UTF-8");
-error_reporting(E_STRICT);
+error_reporting(E_ALL);
 
 /**
 * Required site information

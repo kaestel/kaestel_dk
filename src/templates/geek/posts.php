@@ -69,7 +69,7 @@ $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 				<?= $item["html"] ?>
 			</div>
 
-<?			if(count($item["mediae"])):
+<?			if($item["mediae"]):
 				foreach($item["mediae"] as $media): ?>
 			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 <? 				endforeach;

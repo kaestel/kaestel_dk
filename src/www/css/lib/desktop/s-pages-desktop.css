@@ -12,9 +12,11 @@
 
 
 /* WISHLIST */
-#content .scene.wishlist {}
+#content .scene.wishlist ul.items.wishlists {padding-left: 50px; padding-right: 50px;}
+
 
 /* WISH */
+#content .scene.wishes ul.items.wishes {padding-left: 50px; padding-right: 50px;}
 #content .scene.wishes ul.items > li .image,
 #content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
 #content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 0px; cursor: default;}
