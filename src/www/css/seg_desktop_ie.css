@@ -472,7 +472,8 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 #content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
 #content .scene.front ul.tags {padding-bottom: 15px;}
-#content .scene.wishlist {}
+#content .scene.wishlist ul.items.wishlists {padding-left: 50px; padding-right: 50px;}
+#content .scene.wishes ul.items.wishes {padding-left: 50px; padding-right: 50px;}
 #content .scene.wishes ul.items > li .image,
 #content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
 #content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 0px; cursor: default;}
