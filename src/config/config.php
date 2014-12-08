@@ -28,13 +28,12 @@ define("DEFAULT_CURRENCY_ISO", "DKK");
 define("SITE_ITEMS", true);
 
 // Enable shop model
-define("SITE_SHOP", true);
+//define("SITE_SHOP", true);
 
 
 // Enable notifications (send collection email after N notifications)
 define("SITE_COLLECT_NOTIFICATIONS", 50);
 //define("SHOP_ORDER_NOTIFIES", "martin@think.dk");
-define("SHOP_ORDER_NOTIFIES", "martin@think.dk");
 
-//define("SITE_INSTALL", true);
+define("SITE_INSTALL", true);
 ?>
