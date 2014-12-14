@@ -35,5 +35,5 @@ define("SITE_ITEMS", true);
 define("SITE_COLLECT_NOTIFICATIONS", 50);
 //define("SHOP_ORDER_NOTIFIES", "martin@think.dk");
 
-//define("SITE_INSTALL", true);
+define("SITE_INSTALL", true);
 ?>
