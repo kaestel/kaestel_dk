@@ -3885,7 +3885,7 @@ Util.Objects["article"] = new function() {
 						html += 'var map, marker;';
 						html += 'var initialize = function() {';
 						html += '	window._map_loaded = true;';
-						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12, scrollwheel: false, draggable: false}};';
+						html += '	var mapOptions = {center: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'),zoom: 12, scrollwheel: false, draggable: false};';
 						html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
 						html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+this.geo_latitude+', '+this.geo_longitude+'), draggable:true});';
 						html += '	marker.setMap(map);';
