@@ -4012,13 +4012,15 @@ Util.Form = u.f = new function() {
 		u.f.positionHint(this.field);
 	}
 	this._focus = function(event) {
-		this.field.focused = true;
-		this.focused = true;
+		u.bug("this._focus:" + u.nodeId(this) + ", " + typeof(this.focused) +","+ typeof(this.field._input.focused))
+		this.field.is_focused = true;
+		this.is_focused = true;
 		u.ac(this.field, "focus");
 		u.ac(this, "focus");
 		u.as(this.field, "zIndex", this.form._focus_z_index);
 		u.f.positionHint(this.field);
 		if(typeof(this.focused) == "function") {
+			u.bug("should call back")
 			this.focused();
 		}
 		else if(this.field._input && typeof(this.field._input.focused) == "function") {
@@ -4029,8 +4031,8 @@ Util.Form = u.f = new function() {
 		}
 	}
 	this._blur = function(event) {
-		this.field.focused = false;
-		this.focused = false;
+		this.field.is_focused = false;
+		this.is_focused = false;
 		u.rc(this.field, "focus");
 		u.rc(this, "focus");
 		u.as(this.field, "zIndex", this.field._base_z_index);
@@ -4146,7 +4148,7 @@ Util.Form = u.f = new function() {
 		u.e.addEvent(action, "blur", this._button_blur);
 	}
 	this.updateDefaultState = function(iN) {
-		if(iN.focused || iN.val() !== "") {
+		if(iN.is_focused || iN.val() !== "") {
 			u.rc(iN, "default");
 			if(iN.val() === "") {
 				iN.val("");
@@ -4826,7 +4828,7 @@ Util.Form = u.f = new function() {
 			return tag;
 		}
 		field._focused_content = function(event) {
-			this.field.focused = true;
+			this.field.is_focused = true;
 			u.ac(this.tag, "focus");
 			u.ac(this.field, "focus");
 			u.as(this.field, "zIndex", this.field._input.form._focus_z_index);
@@ -4841,7 +4843,7 @@ Util.Form = u.f = new function() {
 			}
 		}
 		field._blurred_content = function() {
-			this.field.focused = false;
+			this.field.is_focused = false;
 			u.rc(this.tag, "focus");
 			u.rc(this.field, "focus");
 			u.as(this.field, "zIndex", this.field._base_z_index);
@@ -5865,6 +5867,363 @@ u.e.removeWindowEndEvent = function(node, id) {
 }
 
 
+/*u-dom.js*/
+Util.querySelector = u.qs = function(query, scope) {
+	scope = scope ? scope : document;
+	return scope.querySelector(query);
+}
+Util.querySelectorAll = u.qsa = function(query, scope) {
+	scope = scope ? scope : document;
+	return scope.querySelectorAll(query);
+}
+Util.getElement = u.ge = function(identifier, scope) {
+	var node, i, regexp;
+	if(document.getElementById(identifier)) {
+		return document.getElementById(identifier);
+	}
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			return node;
+		}
+	}
+	return scope.getElementsByTagName(identifier).length ? scope.getElementsByTagName(identifier)[0] : false;
+}
+Util.getElements = u.ges = function(identifier, scope) {
+	var node, i, regexp;
+	var nodes = new Array();
+	scope = scope ? scope : document;
+	regexp = new RegExp("(^|\\s)" + identifier + "(\\s|$|\:)");
+	for(i = 0; node = scope.getElementsByTagName("*")[i]; i++) {
+		if(regexp.test(node.className)) {
+			nodes.push(node);
+		}
+	}
+	return nodes.length ? nodes : scope.getElementsByTagName(identifier);
+}
+Util.parentNode = u.pn = function(node, node_type) {
+	if(node_type) {
+		if(node.parentNode) {
+			var parent = node.parentNode;
+		}
+		while(parent.nodeName.toLowerCase() != node_type.toLowerCase()) {
+			if(parent.parentNode) {
+				parent = parent.parentNode;
+			}
+			else {
+				return false;
+			}
+		}
+		return parent;
+	}
+	else {
+		return node.parentNode;
+	}
+}
+Util.previousSibling = u.ps = function(node, exclude) {
+	node = node.previousSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || exclude && (u.hc(node, exclude) || node.nodeName.toLowerCase().match(exclude)))) {
+		node = node.previousSibling;
+	}
+	return node;
+}
+Util.nextSibling = u.ns = function(node, exclude) {
+	node = node.nextSibling;
+	while(node && (node.nodeType == 3 || node.nodeType == 8 || exclude && (u.hc(node, exclude) || node.nodeName.toLowerCase().match(exclude)))) {
+		node = node.nextSibling;
+	}
+	return node;
+}
+Util.childNodes = u.cn = function(node, exclude) {
+	var i, child;
+	var children = new Array();
+	for(i = 0; child = node.childNodes[i]; i++) {
+		if(child && child.nodeType != 3 && child.nodeType != 8 && (!exclude || (!u.hc(child, exclude) && !child.nodeName.toLowerCase().match(exclude) ))) {
+			children.push(child);
+		}
+	}
+	return children;
+}
+Util.appendElement = u.ae = function(parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = parent.appendChild(node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.ae, called from: "+arguments.callee.caller.name);
+		u.bug("node:" + u.nodeId(parent, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.insertElement = u.ie = function(parent, node_type, attributes) {
+	try {
+		var node = (typeof(node_type) == "object") ? node_type : document.createElement(node_type);
+		node = parent.insertBefore(node, parent.firstChild);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				if(attribute == "html") {
+					node.innerHTML = attributes[attribute];
+				}
+				else {
+					node.setAttribute(attribute, attributes[attribute]);
+				}
+			}
+		}
+		return node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.ie, called from: "+arguments.callee.caller);
+		u.bug("node:" + u.nodeId(parent, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.wrapElement = u.we = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = node.parentNode.insertBefore(document.createElement(node_type), node);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		wrapper_node.appendChild(node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.we, called from: "+arguments.callee.caller);
+		u.bug("node:" + u.nodeId(node, 1));
+		u.xInObject(attributes);
+	}
+	return false;
+}
+Util.wrapContent = u.wc = function(node, node_type, attributes) {
+	try {
+		var wrapper_node = document.createElement(node_type);
+		if(attributes) {
+			var attribute;
+			for(attribute in attributes) {
+				wrapper_node.setAttribute(attribute, attributes[attribute]);
+			}
+		}	
+		while(node.childNodes.length) {
+			wrapper_node.appendChild(node.childNodes[0]);
+		}
+		node.appendChild(wrapper_node);
+		return wrapper_node;
+	}
+	catch(exception) {
+		u.exception("u.wc", arguments.callee.caller, exception, {"node":node, "node_type":node_type, "attributes":attributes})
+	}
+	return false;
+}
+Util.textContent = u.text = function(node) {
+	return node.textContent;
+}
+Util.clickableElement = u.ce = function(node, _options) {
+	u.bug("ce")
+	node._use_link = "a";
+	node._click_type = "manual";
+	if(typeof(_options) == "object") {
+		var _argument;
+		for(_argument in _options) {
+			switch(_argument) {
+				case "use"			: node._use_link		= _options[_argument]; break;
+				case "type"			: node._click_type		= _options[_argument]; break;
+			}
+		}
+	}
+	var a = (node.nodeName.toLowerCase() == "a" ? node : u.qs(node._use_link, node));
+	if(a) {
+		u.ac(node, "link");
+		if(a.getAttribute("href") !== null) {
+			node.url = a.href;
+			a.removeAttribute("href");
+		}
+	}
+	else {
+		u.ac(node, "clickable");
+	}
+	if(typeof(u.e.click) == "function") {
+		u.e.click(node);
+		if(node._click_type == "link") {
+			node.clicked = function(event) {
+				if(event && (event.metaKey || event.ctrlKey)) {
+					window.open(this.url);
+				}
+				else {
+					if(typeof(page.navigate) == "function") {
+						page.navigate(this.url);
+					}
+					else {
+						location.href = this.url;
+					}
+				}
+			}
+		}
+	}
+	return node;
+}
+Util.classVar = u.cv = function(node, var_name) {
+	try {
+		var regexp = new RegExp(var_name + ":[?=\\w/\\#~:.,?+=?&%@!\\-]*");
+		if(node.className.match(regexp)) {
+			return node.className.match(regexp)[0].replace(var_name + ":", "");
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.cv, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.setClass = u.sc = function(node, classname) {
+	try {
+		var old_class = node.className;
+		node.className = classname;
+		node.offsetTop;
+		return old_class;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.setClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.hasClass = u.hc = function(node, classname) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)(" + classname + ")(\\s|$)");
+			if(regexp.test(node.className)) {
+				return true;
+			}
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.hasClass("+u.nodeId(node)+", "+classname+"), called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.addClass = u.ac = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$)");
+			if(!regexp.test(node.className)) {
+				node.className += node.className ? " " + classname : classname;
+				dom_update === false ? false : node.offsetTop;
+			}
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.addClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.removeClass = u.rc = function(node, classname, dom_update) {
+	try {
+		if(classname) {
+			var regexp = new RegExp("(\\b)" + classname + "(\\s|$)", "g");
+			node.className = node.className.replace(regexp, " ").trim().replace(/[\s]{2}/g, " ");
+			dom_update === false ? false : node.offsetTop;
+			return node.className;
+		}
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.removeClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.toggleClass = u.tc = function(node, classname, _classname, dom_update) {
+	try {
+		var regexp = new RegExp("(^|\\s)" + classname + "(\\s|$|\:)");
+		if(regexp.test(node.className)) {
+			u.rc(node, classname, false);
+			if(_classname) {
+				u.ac(node, _classname, false);
+			}
+		}
+		else {
+			u.ac(node, classname, false);
+			if(_classname) {
+				u.rc(node, _classname, false);
+			}
+		}
+		dom_update === false ? false : node.offsetTop;
+		return node.className;
+	}
+	catch(exception) {
+		u.bug("Exception ("+exception+") in u.toggleClass, called from: "+arguments.callee.caller);
+	}
+	return false;
+}
+Util.applyStyle = u.as = function(node, property, value, dom_update) {
+	node.style[property] = value;
+	dom_update === false ? false : node.offsetTop;
+}
+Util.applyStyles = u.ass = function(node, styles, dom_update) {
+	if(styles) {
+		var style;
+		for(style in styles) {
+			node.style[style] = styles[style];
+		}
+	}
+	dom_update === false ? false : node.offsetTop;
+}
+Util.getComputedStyle = u.gcs = function(node, property) {
+	node.offsetHeight;
+	if(document.defaultView && document.defaultView.getComputedStyle) {
+		return document.defaultView.getComputedStyle(node, null).getPropertyValue(property);
+	}
+	return false;
+}
+Util.hasFixedParent = u.hfp = function(node) {
+	while(node.nodeName.toLowerCase() != "body") {
+		if(u.gcs(node.parentNode, "position").match("fixed")) {
+			return true;
+		}
+		node = node.parentNode;
+	}
+	return false;
+}
+Util.inNodeList = function(node, list) {
+	var i, list_node;
+	for(i = 0; list_node = list[i]; i++) {
+		if(list_node = node) {
+			return true;
+		}
+	}
+	return false;
+}
+Util.nodeWithin = u.nw = function(node, scope) {
+	var node_key = u.randomString(8);
+	var scope_key = u.randomString(8);
+	u.ac(node, node_key);
+	u.ac(scope, scope_key);
+	if(u.qs("."+scope_key+" ."+node_key)) {
+		u.rc(node, node_key);
+		u.rc(scope, scope_key);
+		return true;
+	}
+	u.rc(node, node_key);
+	u.rc(scope, scope_key);
+	return false;
+}
+
+
 /*i-page-desktop.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
@@ -5966,43 +6325,43 @@ Util.Objects["page"] = new function() {
 					page.nN.css_rule = page.style_tag.sheet.cssRules[0];
 					page.style_tag.sheet.insertRule("#navigation ul li {}", 0);
 					page.nN.list.css_rule = page.style_tag.sheet.cssRules[0];
-					this.hN.nodes = u.qsa("#navigation li,.servicenavigation li,a.logo", page.hN);
-					for(i = 0; node = this.hN.nodes[i]; i++) {
-						u.ce(node, {"type":"link"});
-						node._mousedover = function() {
-							this.transitioned = function() {
-								this.transitioned = function() {
-									this.transitioned = function() {
-										u.a.transition(this, "none");
-									}
-									u.a.transition(this, "all 0.1s ease-in-out");
-									u.a.scale(this, 1.2);
-								}
-								u.a.transition(this, "all 0.1s ease-in-out");
-								u.a.scale(this, 1.15);
-							}
-							u.a.transition(this, "all 0.1s ease-in-out");
-							u.a.scale(this, 1.22);
-						}
-						node._mousedout = function() {
+				}
+				this.hN.nodes = u.qsa("#navigation li,.servicenavigation li,a.logo", page.hN);
+				for(i = 0; node = this.hN.nodes[i]; i++) {
+				u.ce(node, {"type":"link"});
+					node._mousedover = function() {
+						this.transitioned = function() {
 							this.transitioned = function() {
 								this.transitioned = function() {
 									u.a.transition(this, "none");
 								}
-								u.a.transition(this, "all 0.1s ease-in");
-								u.a.scale(this, 1);
+								u.a.transition(this, "all 0.1s ease-in-out");
+								u.a.scale(this, 1.2);
+							}
+							u.a.transition(this, "all 0.1s ease-in-out");
+							u.a.scale(this, 1.15);
+						}
+						u.a.transition(this, "all 0.1s ease-in-out");
+						u.a.scale(this, 1.22);
+					}
+					node._mousedout = function() {
+						this.transitioned = function() {
+							this.transitioned = function() {
+								u.a.transition(this, "none");
 							}
 							u.a.transition(this, "all 0.1s ease-in");
-							u.a.scale(this, 0.8);
+							u.a.scale(this, 1);
 						}
-						if(u.e.event_pref == "mouse") {
-							u.e.addEvent(node, "mouseover", node._mousedover);
-							u.e.addEvent(node, "mouseout", node._mousedout);
-						}
-						else {
-							u.e.addStartEvent(node, node._mousedover);
-							u.e.addEndEvent(node, node._mousedout);
-						}
+						u.a.transition(this, "all 0.1s ease-in");
+						u.a.scale(this, 0.8);
+					}
+					if(u.e.event_pref == "mouse") {
+						u.e.addEvent(node, "mouseover", node._mousedover);
+						u.e.addEvent(node, "mouseout", node._mousedout);
+					}
+					else {
+						u.e.addStartEvent(node, node._mousedover);
+						u.e.addEndEvent(node, node._mousedout);
 					}
 				}
 			}
@@ -6219,11 +6578,11 @@ Util.Objects["article"] = new function() {
 /*i-front-desktop.js*/
 Util.Objects["front"] = new function() {
 	this.init = function(scene) {
-		var nodes = u.qsa("li.item h3", scene);
+		var nodes = u.qsa("li.item", scene);
 		var i, node
 		if(nodes) {
 			for(i = 0; node = nodes[i]; i++) {
-				u.ce(node, {"type":"link"});
+				u.ce(node, {"type":"link", "use":"h3 a"});
 			}
 		}
 	}

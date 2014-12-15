@@ -2,8 +2,8 @@
 global $IC;
 global $action;
 
-$log_items = $IC->getItems(array("itemtype" => "log", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
-$post_items = $IC->getItems(array("itemtype" => "post", "tags" => "on:frontpage", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true)));
+$log_items = $IC->getItems(array("itemtype" => "log", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true, "mediae" => true)));
+$post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" => 1, "extend" => array("tags" => true, "user" => true, "mediae" => true)));
 
 ?>
 <div class="scene front i:front">
