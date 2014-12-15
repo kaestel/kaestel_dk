@@ -4027,13 +4027,15 @@ Util.Form = u.f = new function() {
 				var lon = this.lon_input.val() !== "" ? this.lon_input.val() : 0;
 				var maps_url = "https://maps.googleapis.com/maps/api/js" + (u.gapi_key ? "?key="+u.gapi_key : "");
 				var html = '<html><head>';
-				html += '<style type="text/css">body {margin: 0;}#map {width: 300px; height: 300px;}} </style>';
+				html += '<style type="text/css">body {margin: 0;} #map {width: 300px; height: 300px;} #close {width: 25px; height: 25px; position: absolute; top: 0; left: 0; background: #ffffff; z-index: 10; border-bottom-right-radius: 10px; cursor: pointer;}</style>';
 				html += '<script type="text/javascript" src="'+maps_url+'"></script>';
 				html += '<script type="text/javascript">';
 				html += 'var map, marker;';
 				html += 'var initialize = function() {';
 				html += '	window._map_loaded = true;';
-				html += '	var mapOptions = {center: new google.maps.LatLng('+lat+', '+lon+'),zoom: 15};';
+				html += '	var close = document.getElementById("close");';
+				html += '	close.onclick = function() {field.hideMap();};';
+				html += '	var mapOptions = {center: new google.maps.LatLng('+lat+', '+lon+'),zoom: 15, streetViewControl: false, zoomControlOptions: {position: google.maps.ControlPosition.LEFT_CENTER}};';
 				html += '	map = new google.maps.Map(document.getElementById("map"),mapOptions);';
 				html += '	marker = new google.maps.Marker({position: new google.maps.LatLng('+lat+', '+lon+'), draggable:true});';
 				html += '	marker.setMap(map);';
@@ -4052,26 +4054,27 @@ Util.Form = u.f = new function() {
 				html += '};';
 				html += 'google.maps.event.addDomListener(window, "load", initialize);';
 				html += '</script>';
-				html += '</head><body><div id="map"></div></body></html>';
+				html += '</head><body><div id="map"></div><div id="close"></div></body></html>';
 				window._mapsiframe = u.ae(document.body, "iframe", {"id":"geolocationmap"});
+				window._mapsiframe.field = this;
 				window._mapsiframe.doc = window._mapsiframe.contentDocument? window._mapsiframe.contentDocument: window._mapsiframe.contentWindow.document;
 				window._mapsiframe.doc.open();
 				window._mapsiframe.doc.write(html);
 				window._mapsiframe.doc.close();
 			}
 			else {
-				this.updateMap();
 			}
 			window._mapsiframe.contentWindow.field = this;
 			u.as(window._mapsiframe, "left", (u.absX(this.bn_geolocation)+this.bn_geolocation.offsetWidth+10)+"px");
 			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
 		}
 		field.updateMap = function() {
+			u.bug("update map")
 			if(window._mapsiframe && window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
 				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
 			}
 		}
-		field.move_map = function(event) {
+		field.moveMap = function(event) {
 			var factor;
 			if(this._move_direction) {
 				if(event && event.shiftKey) {
@@ -4108,7 +4111,7 @@ Util.Form = u.f = new function() {
 		field._start_move_map = function(event) {
 			if(event.keyCode.toString().match(/37|38|39|40/)) {
 				this.field._move_direction = event.keyCode;
-				this.field.move_map(event);
+				this.field.moveMap(event);
 			}
 		}
 		u.e.addEvent(field.lat_input, "keydown", field._start_move_map);
@@ -4123,7 +4126,13 @@ Util.Form = u.f = new function() {
 			this.field.showMap();
 		}
 		field.lat_input.blurred = field.lon_input.blurred = function() {
-			this.field.t_hide_map = u.t.setTimer(this.field, this.field.hideMap, 800);
+		}
+		field._map_focused = function() {
+			u.bug("map focused")
+			u.t.resetTimer(this.field.t_hide_map);
+		}
+		field._map_blurred = function() {
+			u.bug("map blurred")
 		}
 		field.bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
 		field.bn_geolocation.field = field;
@@ -5773,7 +5782,6 @@ Util.textContent = u.text = function(node) {
 	return node.textContent;
 }
 Util.clickableElement = u.ce = function(node, _options) {
-	u.bug("ce")
 	node._use_link = "a";
 	node._click_type = "manual";
 	if(typeof(_options) == "object") {
