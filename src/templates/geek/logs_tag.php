@@ -29,7 +29,9 @@ $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
+				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
+			</div>
 <?			endif; ?>
 
 			<ul class="tags">
@@ -67,6 +69,15 @@ $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 			<div class="articlebody" itemprop="articleBody">
 				<?= $item["html"] ?>
 			</div>
+
+<?			if($item["mediae"]):
+				foreach($item["mediae"] as $media): ?>
+			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
+				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
+			</div>
+<? 				endforeach;
+			endif; ?>
+
 		</li>
 <?		endforeach; ?>
 	</ul>

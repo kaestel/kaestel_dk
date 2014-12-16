@@ -144,7 +144,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene div.image p {margin-top: -20px; padding: 0 50px 30px; font-size: 0;}
 #content .scene div.image p a {font-style: italic; font-size: 13px; display: block; color: #cccccc;}
 #content .scene div.image.fullsize {cursor: zoom-out;}
-#content .scene div.image.fullsize img {width: 100%; margin: 0; border-radius: 0;}
+#content .scene div.image.fullsize img {width: 100%; margin: 0 0 30px; border-radius: 0;}
 #content .scene .pagination {display: none;}
 #content .scene div.categories {padding-bottom: 20px; display: inline-block; vertical-align: top; width: 250px;}
 #content .scene div.categories ul {padding-right: 0;}

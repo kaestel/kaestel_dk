@@ -3990,11 +3990,14 @@ Util.Form = u.f = new function() {
 				window._geoLocationField.lon_input.val(u.round(lon, 6));
 				window._geoLocationField.lat_input.focus();
 				window._geoLocationField.lon_input.focus();
-				window._geoLocationField.showMap();
 				u.a.transition(window._geoLocationField.bn_geolocation, "none");
 				u.a.scale(window._geoLocationField.bn_geolocation, 1);
+				window._geoLocationField.showMap();
+				window._geoLocationField.updateMap();
 			}
 			window._noLocation = function() {
+				u.a.transition(window._geoLocationField.bn_geolocation, "none");
+				u.a.scale(window._geoLocationField.bn_geolocation, 1);
 				alert('Could not find location');
 			}
 			navigator.geolocation.getCurrentPosition(window._foundLocation, window._noLocation);
