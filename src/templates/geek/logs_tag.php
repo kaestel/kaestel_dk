@@ -93,18 +93,18 @@ $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "l
 	</div>
 <? endif; ?>
 
+	<div class="categories">
+<?		if($categories): ?>
+		<h2>Categories</h2>
+		<ul class="tags">
+<?			foreach($categories as $tag): ?>
+			<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
+<?			endforeach; ?>
+		</ul>
+<?		endif; ?>
 
-<?	if($categories): ?>
-	<h2>Categories</h2>
-	<ul class="tags">
-<?		foreach($categories as $tag): ?>
-		<li><a href="/geek/logs/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
-<?		endforeach; ?>
-	</ul>
-<?	endif; ?>
-
-	<ul class="actions">
-		<li class="more"><a href="/geek/logs">All log entries</a></li>
-	</ul>
-
+		<ul class="actions">
+			<li class="more"><a href="/geek/logs">All log entries</a></li>
+		</ul>
+	</div>
 </div>
