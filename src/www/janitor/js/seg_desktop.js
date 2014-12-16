@@ -4069,7 +4069,6 @@ Util.Form = u.f = new function() {
 			u.as(window._mapsiframe, "top", (u.absY(this.bn_geolocation) + (this.bn_geolocation.offsetHeight/2) -(window._mapsiframe.offsetHeight/2))+"px");
 		}
 		field.updateMap = function() {
-			u.bug("update map")
 			if(window._mapsiframe && window._mapsiframe.contentWindow && window._mapsiframe.contentWindow._map_loaded) {
 				window._mapsiframe.contentWindow.centerMap(this.lat_input.val(), this.lon_input.val());
 			}
@@ -4126,13 +4125,6 @@ Util.Form = u.f = new function() {
 			this.field.showMap();
 		}
 		field.lat_input.blurred = field.lon_input.blurred = function() {
-		}
-		field._map_focused = function() {
-			u.bug("map focused")
-			u.t.resetTimer(this.field.t_hide_map);
-		}
-		field._map_blurred = function() {
-			u.bug("map blurred")
 		}
 		field.bn_geolocation = u.ae(field, "div", {"class":"geolocation"});
 		field.bn_geolocation.field = field;
