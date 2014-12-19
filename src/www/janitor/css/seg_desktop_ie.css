@@ -5,7 +5,7 @@
 
 /*s-fonts.css*/
 @font-face {
-	font-family: 'OpenSansRegular';
+	font-family: 'OpenSans';
 	src: url('/janitor/admin/fonts/opensans-regular-webfont.woff') format('woff'),
 		 url('/janitor/admin/fonts/opensans-regular-webfont.ttf') format('truetype'),
 		 url('/janitor/admin/fonts/opensans-regular-webfont.svg#OpenSansRegular') format('svg');
@@ -15,7 +15,7 @@
 
 
 /*s-page.css*/
-* {font-family: "OpenSansRegular", Arial, Verdana, sans-serif; font-size: 13px;
+* {font-family: "OpenSans", Arial, Verdana, sans-serif; font-size: 13px;
 	-webkit-text-size-adjust: none;
 }
 html {height: 100%;}
@@ -61,6 +61,22 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 0.923
 #header .servicenavigation li.help {display: none;}
 #header .servicenavigation li.user {display: block; color: #8C9399; border-top: 1px solid #404A56; position: absolute; bottom: 0; left: 0; width: 230px;}
 #header .servicenavigation li.user a {padding: 14px 20px 15px; display: block;}
+#navigation {}
+#navigation ul {}
+#navigation ul li {border-bottom: 1px solid #404a56; color: #8c9399; display: block; text-transform: uppercase; font-size: 1rem;}
+#navigation ul li:hover {color: #ffffff;}
+#navigation ul li a {display: block;  padding: 14px 20px 15px;}
+#navigation ul li.selected {}
+body.page #navigation .page a,
+body.post #navigation .post a,
+body.photocollection #navigation .photocollection a,
+body.todo #navigation .todo a,
+body.todolist #navigation .todolist a,
+body.navigation #navigation .navigation a,
+body.shop #navigation .shop a,
+body.tags #navigation .tags a,
+body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
+
 
 /*s-content.css*/
 #content {margin-bottom: 50px;}
@@ -88,24 +104,6 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 0.923
 #content .system_error, #content .system_error * {color: red !important;}
 #content .scene.login h1 {padding-bottom: 74px; border-bottom: 1px solid #bbbbbb;}
 #content .scene.login form {padding-top: 30px;}
-
-/*s-navigation.css*/
-#navigation {}
-#navigation ul {}
-#navigation ul li {border-bottom: 1px solid #404a56; color: #8c9399; display: block; text-transform: uppercase; font-size: 1rem;}
-#navigation ul li:hover {color: #ffffff;}
-#navigation ul li a {display: block;  padding: 14px 20px 15px;}
-#navigation ul li.selected {}
-body.page #navigation .page a,
-body.post #navigation .post a,
-body.photocollection #navigation .photocollection a,
-body.todo #navigation .todo a,
-body.todolist #navigation .todolist a,
-body.navigation #navigation .navigation a,
-body.shop #navigation .shop a,
-body.tags #navigation .tags a,
-body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
-
 
 /*s-footer.css*/
 #footer {text-align: right; font-size: 0; padding: 10px 20px; position: fixed; z-index: 100; bottom: 0; right: 0; background-color: rgba(255,255,255,0.5);}

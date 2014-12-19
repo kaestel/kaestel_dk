@@ -5702,6 +5702,9 @@ u.f.recurseName = function(object, indexes, value) {
 	}
 	return object;
 }
+
+
+/*u-form-builder.js*/
 u.f.addForm = function(node, settings) {
 u.bug("addform")
 	var form_name = "js_form";
@@ -6260,9 +6263,9 @@ Util.Objects["page"] = new function() {
 				this.calc_height = u.browserH();
 				this.calc_width = u.browserW();
 				this.available_height = this.calc_height - page.hN.offsetHeight - page.fN.offsetHeight;
-				u.as(page.cN, "height", "auto", false);
+				u.as(page.cN, "min-height", "auto", false);
 				if(this.available_height >= page.cN.offsetHeight) {
-					u.as(page.cN, "height", this.available_height+"px", false);
+					u.as(page.cN, "minHeight", this.available_height+"px", false);
 				}
 				if(this.calc_width > 1300) {
 					u.ac(page, "fixed");

@@ -26,6 +26,7 @@
 <div id="page" class="i:page">
 	<div id="header">
 		<ul class="servicenavigation">
+			<li class="keynav navigation nofollow"><a href="#navigation">To navigation</a></li>
 			<li class="keynav front"><a href="/janitor"><?= SITE_NAME ?></a></li>
 <?			if(session()->value("user_id") && session()->value("user_group_id") > 1): ?>
 			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>

@@ -5838,6 +5838,9 @@ u.f.recurseName = function(object, indexes, value) {
 	}
 	return object;
 }
+
+
+/*u-form-builder.js*/
 u.f.addForm = function(node, settings) {
 u.bug("addform")
 	var form_name = "js_form";
