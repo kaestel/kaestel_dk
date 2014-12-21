@@ -12,7 +12,7 @@ $IC = new Items();
 
 
 $page->bodyClass("front");
-$page->pageTitle("Getting lost without loosing my way");
+$page->pageTitle("Getting lost without losing my way");
 
 
 $page->page(array(
