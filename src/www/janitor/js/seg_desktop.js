@@ -5411,7 +5411,7 @@ u.f.textEditor = function(field) {
 		if(u.hc(tag, this.text_allowed.join("|"))) {
 			tag._input.focus();
 		}
-		else if(u.hc(tag, this.code_allowed.join("|"))) {
+		else if(u.hc(tag, "code")) {
 			tag._input.focus();
 		}
 		else if(u.hc(tag, this.list_allowed.join("|"))) {
@@ -5607,7 +5607,7 @@ u.f.textEditor = function(field) {
 				tag = field.addTextTag(node.nodeName.toLowerCase(), value);
 				field.activateInlineFormatting(tag._input);
 			}
-			else if(node.nodeName.toLowerCase().match(field.code_allowed.join("|"))) {
+			else if(node.nodeName.toLowerCase() == "code") {
 				// 
 				tag = field.addCodeTag(node.nodeName.toLowerCase(), node.innerHTML);
 				field.activateInlineFormatting(tag._input);
@@ -6150,7 +6150,12 @@ Util.wrapContent = u.wc = function(node, node_type, attributes) {
 	return false;
 }
 Util.textContent = u.text = function(node) {
-	return node.textContent;
+	try {
+		return node.textContent;
+	}
+	catch(exception) {
+		u.exception("u.text", arguments, exception);
+	}
 }
 Util.clickableElement = u.ce = function(node, _options) {
 	node._use_link = "a";
@@ -8490,7 +8495,6 @@ Util.Objects["defaultTags"] = new function() {
 /*i-defaultmedia.js*/
 Util.Objects["addMedia"] = new function() {
 	this.init = function(div) {
-		u.bug("addMedia init:" + u.nodeId(div))
 		div.form = u.qs("form.upload", div);
 		div.form.div = div;
 		div.media_list = u.qs("ul.mediae", div);
@@ -8663,7 +8667,6 @@ Util.Objects["addMedia"] = new function() {
 			}
 		}
 		div.adjustMediaName = function(node) {
-			u.bug("adjust media name:" + u.nodeId(node) + ", " + node.media_name)
 			if(node.media_name) {
 				var n_w = node.offsetWidth;
 				var p_p_l = parseInt(u.gcs(node.media_name, "padding-left"));

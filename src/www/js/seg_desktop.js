@@ -4605,7 +4605,12 @@ Util.wrapContent = u.wc = function(node, node_type, attributes) {
 	return false;
 }
 Util.textContent = u.text = function(node) {
-	return node.textContent;
+	try {
+		return node.textContent;
+	}
+	catch(exception) {
+		u.exception("u.text", arguments, exception);
+	}
 }
 Util.clickableElement = u.ce = function(node, _options) {
 	node._use_link = "a";
