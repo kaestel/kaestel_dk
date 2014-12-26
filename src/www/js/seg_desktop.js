@@ -4884,7 +4884,6 @@ Util.Animation = u.a = new function() {
 		}
 	}
 	this._transitioned = function(event) {
-		u.bug("_transitioned")
 		if(event.target == this && typeof(this.transitioned) == "function") {
 			this.transitioned(event);
 		}
