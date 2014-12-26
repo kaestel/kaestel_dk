@@ -4825,7 +4825,7 @@ Util.Animation = u.a = new function() {
 		return this._support3d;
 	}
 	this._vendor_exceptions = {
-		"mozTransform":"MozTransform","mozTransitionEnd":"transitionend"
+		"mozTransform":"MozTransform","mozTransition":"MozTransition","mozTransitionEnd":"transitionend"
 	};
 	this._vendor_methods = {};
  	this.vendorMethod = function(method) {
@@ -4877,13 +4877,14 @@ Util.Animation = u.a = new function() {
 				}
 			}
 			node.style[this.vendor("Transition")] = transition;
-			u.e.addEvent(node, this.vendor("TransitionEnd"), this._transitioned);
+			u.e.addEvent(node, this.vendor("transitionEnd"), this._transitioned);
 		}
 		catch(exception) {
 			u.exception("u.a.transition", arguments, exception);
 		}
 	}
 	this._transitioned = function(event) {
+		u.bug("_transitioned")
 		if(event.target == this && typeof(this.transitioned) == "function") {
 			this.transitioned(event);
 		}
