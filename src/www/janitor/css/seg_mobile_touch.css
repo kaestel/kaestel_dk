@@ -15,7 +15,7 @@
 
 
 /*s-page-mobile_touch.css*/
-* {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #cccccc;
+* {font-family: "OpenSans", Verdana, Arial, sans-serif; font-size: 13px;
 	-webkit-text-size-adjust: none;
 	-webkit-font-smoothing: antialiased;
 }
@@ -74,10 +74,19 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 0.923
 #header .servicenavigation li.front,
 #header .servicenavigation li.user,
 #header .servicenavigation li.admin {display: none;}
-#navigation {position: absolute; width: 100%; top: 0px; margin-right: -1px; display: none; border-right: 1px solid #dedede;}
+#navigation {position: absolute; width: 100%; min-height: 100%; background: #313942; top: 0px; margin-right: -1px; display: none; border-right: 1px solid #dedede;}
 #navigation ul {padding: 20px 0;}
-#navigation ul li {padding: 10px 20px; font-size: 20px; color: #888888; display: block;}
-#navigation ul li:active {text-decoration: none;}
+#navigation ul li {padding: 10px 20px; font-size: 20px; color: #8c9399; display: block;}
+#navigation ul li:active {text-decoration: none; color: #ffffff;}
+body.page #navigation .page a,
+body.post #navigation .post a,
+body.photocollection #navigation .photocollection a,
+body.todo #navigation .todo a,
+body.todolist #navigation .todolist a,
+body.navigation #navigation .navigation a,
+body.shop #navigation .shop a,
+body.tags #navigation .tags a,
+body.user #navigation .user a {padding-left: 35px; color: #ffffff;}
 
 
 /*s-content-mobile_touch.css*/
@@ -95,7 +104,7 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 0.923
 #content .scene p {}
 #content .scene hr {border: none; border-top: 1px solid #888888; margin: 15px 0 30px; padding: 0;}
 #content .scene p.note {font-style: italic;}
-#content .scene h1 + ul.actions {border-bottom: 1px solid #bbbbbb; padding: 15px 15px 0; height: 39px;}
+#content .scene h1 + ul.actions {border-bottom: 1px solid #bbbbbb; padding: 15px 15px 0; height: 40px; margin: 0;}
 #content .scene h1 + ul.actions li {padding-bottom: 0;}
 #content .scene h2 {padding: 10px 15px 11px;}
 #content ul.list {padding: 21px 20px;}
@@ -234,7 +243,7 @@ dt {color: #7d848c; display: inline-block; vertical-align: top; font-size: 0.923
 #login_overlay p {display: none;}
 
 
-/*s-form.css*/
+/*s-form-mobile_touch.css*/
 #content form {}
 #content fieldset {border: none; display: block;}
 #content .field {padding: 0 28px 10px; position: relative; font-size: 0; z-index: 1;}
