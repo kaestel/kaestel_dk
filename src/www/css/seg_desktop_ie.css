@@ -103,7 +103,7 @@ dd {display: inline-block; vertical-align: top; font-size: 13px; line-height: 1.
 #content .scene dl.info+dl.geo {padding-left: 0;}
 #content .scene ul,
 #content .scene ol {padding: 0 50px 15px;}
-#content .scene ul.items {padding: 0}
+#content .scene ul.items {padding: 0;}
 #content .scene ul.items li.item {display: block; padding-top: 20px; padding-bottom: 30px; border-top: 1px solid #dedede;}
 #content .scene ul.items li.item h2 {position: relative; z-index: 1;}
 #content .scene dl {padding: 0 50px 15px; width: 500px;}
@@ -473,7 +473,6 @@ body #selection_options ul.actions a.button:hover {background-color: #313942;}
 /*s-pages-desktop.css*/
 #header .logo {font-size: 20px; text-transform: uppercase;}
 #content .scene.front > h2 {padding-bottom: 20px;}
-#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
 #content .scene.front ul.tags {padding-bottom: 15px;}
 #content .scene.wishlist ul.items.wishlists {padding-left: 50px; padding-right: 50px;}
