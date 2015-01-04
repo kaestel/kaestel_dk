@@ -17,6 +17,9 @@ $direction = isset($action[4]) ? $action[4] : false;
 $pattern = array("itemtype" => $itemtype, "status" => 1, "tags" => $itemtype.":".addslashes($tag), "extend" => array("tags" => true, "user" => true, "mediae" => true));
 $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
+if($pagination["range_items"]) {
+	$this->OG_metaData($pagination["range_items"][0]);
+}
 ?>
 
 <div class="scene geek posts tag i:generic">
