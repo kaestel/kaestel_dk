@@ -11,7 +11,7 @@
 	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-	<?= $this->OG_metaData() ?>
+	<?= $this->sharingMetaData() ?>
 	<link rel="apple-touch-icon" href="touchicon.png">
 	<link rel="icon" href="favicon.png">
 

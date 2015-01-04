@@ -18,7 +18,7 @@ $pattern = array("itemtype" => $itemtype, "status" => 1, "extend" => array("tags
 $pagination = $IC->paginate(array("pattern" => $pattern, "sindex" => $sindex, "limit" => $limit, "direction" => $direction));
 
 if($pagination["range_items"]) {
-	$this->OG_metaData($pagination["range_items"][0]);
+	$this->sharingMetaData($pagination["range_items"][0]);
 }
 ?>
 
