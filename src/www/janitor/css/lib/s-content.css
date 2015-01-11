@@ -14,6 +14,6 @@
 
 /* NAVIGATION */
 body.wish #navigation .wish a,
-body.wishlist #navigation .wishlist a,
+body.wishlist #navigation .wish a,
 body.log #navigation .log a {padding-left: 35px; color: #ffffff;}
 

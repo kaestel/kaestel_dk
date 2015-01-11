@@ -5,10 +5,7 @@
 			<?= $HTML->link("Logs", "/janitor/log/list", array("wrapper" => "li.log")) ?>
 
 			<?= $HTML->link("Wishes", "/janitor/wish/list", array("wrapper" => "li.wish")) ?>
-			<?= $HTML->link("Wishlists", "/janitor/wishlist/list", array("wrapper" => "li.wishlist")) ?>
-
-			<?= $HTML->link("Todo", "/janitor/admin/todo/list", array("wrapper" => "li.todo")) ?>
-			<?= $HTML->link("Todolist", "/janitor/admin/todolist/list", array("wrapper" => "li.todolist")) ?>
+			<?= $HTML->link("Todos", "/janitor/admin/todo/list", array("wrapper" => "li.todo")) ?>
 
 			<?= $HTML->link("Posts", "/janitor/admin/post/list", array("wrapper" => "li.post")) ?>
 			<?= $HTML->link("Pages", "/janitor/admin/page/list", array("wrapper" => "li.page")) ?>
@@ -16,12 +13,14 @@
 
 			<?= $HTML->link("Tags", "/janitor/admin/tag/list", array("wrapper" => "li.tags")) ?>
 			<?= $HTML->link("Users", "/janitor/admin/user/list", array("wrapper" => "li.user")) ?>
+
+			<?= $HTML->link("Profile", "/janitor/admin/profile", array("wrapper" => "li.profile")) ?>
 		</ul>
 	</div>
 
 	<div id="footer">
 		<ul class="servicenavigation">
-			<li class="copyright">Janitor, Manipulator, Modulator - parentNode - Copyright 2014</li>
+			<li class="copyright">Janitor, Manipulator, Modulator - parentNode - Copyright 2015</li>
 		</ul>
 	</div>
 </div>

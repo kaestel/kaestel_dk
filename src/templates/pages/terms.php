@@ -64,6 +64,9 @@
 				its origin or provide a link to this website in direct conjonction with the reproduced text.
 			</p>
 			<p>
+				By contributing to this website, you accept the rules of copyright.
+			</p>
+			<p>
 				I maintain the right to update or change these terms as needed.
 			</p>
 		</div>

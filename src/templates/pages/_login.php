@@ -30,5 +30,5 @@ $username = stringOr(getPost("username"));
 		</ul>
 	<?= $model->formEnd() ?>
 	
-	<!--p>Not registered yet? <a href="/login/signup">Sign up now</a>.</p-->
+	<p>Not registered yet? <a href="/login/signup">Sign up now</a>.</p>
 </div>

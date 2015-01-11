@@ -11,6 +11,7 @@ $items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position ASC",
 
 	<ul class="actions">
 		<?= $JML->listNew(array("label" => "New wishlist")) ?>
+		<?= $HTML->link("Wishes", "/janitor/wish/list", array("class" => "button", "wrapper" => "li.wish")) ?>
 	</ul>
 
 	<div class="all_items i:defaultList taggable filters sortable"<?= $JML->jsData() ?>>
