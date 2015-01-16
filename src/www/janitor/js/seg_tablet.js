@@ -7938,7 +7938,7 @@ Util.Objects["defaultNew"] = new function() {
 				if(response.cms_status == "success" && response.cms_object) {
 					location.href = this.actions["cancel"].url.replace("\/list", "/edit/"+response.cms_object.item_id);
 				}
-				else if(response.cms_message) {
+				else {
 					page.notify(response);
 				}
 			}
