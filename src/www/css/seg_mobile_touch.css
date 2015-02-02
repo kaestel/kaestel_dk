@@ -382,8 +382,9 @@ body {background: #ffffff;}
 #header .logo {text-transform: uppercase;}
 #content .scene.front > ul.actions {padding: 15px 20px; margin: 20px 0; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
-#content .scene.geek.lists div.logbooks,
-#content .scene.geek.lists div.posts {padding-top: 20px;}
+#content .scene.front > ul.items li.item h3 {font-size: 24px; padding-top: 5px; padding-bottom: 20px;
+	font-family: "PT Serif", Times, serif;
+}
 #content .scene.wishlist {}
 #content .scene.wishes ul.items > li .image,
 #content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}

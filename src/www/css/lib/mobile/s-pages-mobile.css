@@ -1,11 +1,10 @@
 /* FRONT */
-#content .scene.front > ul.actions {padding: 15px 0; margin: 0 10px 20px;}
-#content .scene.front > ul.actions li {padding-bottom: 0;}
+#content .scene.front ul.actions {padding: 15px 0; margin: 0 10px 20px;}
+#content .scene.front ul.actions li {padding-bottom: 0;}
 
-
-/* GEEK FRONT */
-#content .scene.geek.lists div.logbooks,
-#content .scene.geek.lists div.posts {padding-top: 20px;}
+#content .scene.front ul.items li.item h3 {font-size: 18px; padding-top: 5px; padding-bottom: 20px;
+	font-family: Times,serif;
+}
 
 
 /* GEEK */
