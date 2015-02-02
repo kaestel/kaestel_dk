@@ -25,7 +25,8 @@ global $model;
 				one day this will lead to a breakdown. I wonder who will win.
 			</p>
 			<p>
-				I am a ideologist.
+				I am a ideologist. I think someone has to be in order to save ourselves from reaching the end of our 
+				current path. It is closing in fast, but I have some ideas.
 			</p>
 			<p>
 				I am a coder. I am an expert within 
@@ -33,7 +34,8 @@ global $model;
 				things, but not this. 
 			</p>
 			<p>
-				I am a writer.
+				I am a writer. I love the process of writing, the in depth reflection as well as the surprising result
+				of letting the words flow.
 			</p>
 
 			<p>
@@ -69,7 +71,6 @@ global $model;
 				I feel an urge to make this world a better place.<br />
 				I contain solutions I cannot yet imagine.<br />
 				I believe everything and everyone is connected.<br />
-				I think we are all responsible.<br />
 				I fear the ignorance that threatens to end everything.
 			</p>
 			<p>
