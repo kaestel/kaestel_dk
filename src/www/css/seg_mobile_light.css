@@ -107,6 +107,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene dl h5,
 #content .scene dl h6 {padding-left: 0; padding-right: 0; padding-top: 10px;}
 #content .scene ul.tags li {font-size: 12px;}
+#content .scene ul.tags li.editing {background: #666666; border-radius: 5px; color: #ffffff; margin: -2px 10px 5px -4px; padding: 2px 10px 3px; display: inline-block; vertical-align: top;}
 #content .scene dl.info dd {padding-left: 0; padding-right: 0; padding-bottom: 3px; font-size: 12px; color: #999999;}
 #content .scene dl.info dt {display: none;}
 #content .scene dl.info dd.hardlink {display: none;}
@@ -115,7 +116,8 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene dl.geo dt {display: none;}
 #content .scene dl.geo .latitude,
 #content .scene dl.geo .longitude {display: none;}
-#content .scene div.image {display: none;}
+#content .scene div.image,
+#content .scene div.media {display: none;}
 #content .scene .pagination {}
 #content .scene div.categories {padding-bottom: 10px;}
 #content .scene code {padding: 10px 10px; margin: 0 10px 15px; background-color: #ededed; font-size: 11px; display: block; overflow: hidden; white-space: pre-wrap;

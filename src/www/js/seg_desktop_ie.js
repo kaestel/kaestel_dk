@@ -3603,6 +3603,80 @@ if(u.ga_account) {
 }
 
 
+/*u-events-browser.js*/
+u.e.addDOMReadyEvent = function(action) {
+	if(document.readyState && document.addEventListener) {
+		if((document.readyState == "interactive" && !u.browser("ie")) || document.readyState == "complete" || document.readyState == "loaded") {
+			action();
+		}
+		else {
+			var id = u.randomString();
+			window["DOMReady_" + id] = action;
+			eval('window["_DOMReady_' + id + '"] = function() {window["DOMReady_'+id+'"](); u.e.removeEvent(document, "DOMContentLoaded", window["_DOMReady_' + id + '"])}');
+			u.e.addEvent(document, "DOMContentLoaded", window["_DOMReady_" + id]);
+		}
+	}
+	else {
+		u.e.addOnloadEvent(action);
+	}
+}
+u.e.addOnloadEvent = function(action) {
+	if(document.readyState && (document.readyState == "complete" || document.readyState == "loaded")) {
+		action();
+	}
+	else {
+		var id = u.randomString();
+		window["Onload_" + id] = action;
+		eval('window["_Onload_' + id + '"] = function() {window["Onload_'+id+'"](); u.e.removeEvent(window, "load", window["_Onload_' + id + '"])}');
+		u.e.addEvent(window, "load", window["_Onload_" + id]);
+	}
+}
+u.e.addWindowResizeEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onresize_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onresize_'+id+' = '+action+'; node._Onresize_'+id+'();}');
+	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
+	return id;
+}
+u.e.removeWindowResizeEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeEvent(window, "resize", window["_Onresize_" + id]);
+}
+u.e.addWindowScrollEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onscroll_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onscroll_'+id+' = '+action+'; node._Onscroll_'+id+'();}');
+	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
+	return id;
+}
+u.e.removeWindowScrollEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeEvent(window, "scroll", window["_Onscroll_" + id]);
+}
+u.e.addWindowMoveEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onmove_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onmove_'+id+' = '+action+'; node._Onmove_'+id+'(event);}');
+	u.e.addMoveEvent(window, window["_Onmove_" + id]);
+	return id;
+}
+u.e.removeWindowMoveEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeMoveEvent(window, window["_Onmove_" + id]);
+}
+u.e.addWindowEndEvent = function(node, action) {
+	var id = u.randomString();
+	u.ac(node, id);
+	eval('window["_Onend_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onend_'+id+' = '+action+'; node._Onend_'+id+'(event);}');
+	u.e.addEndEvent(window, window["_Onend_" + id]);
+	return id;
+}
+u.e.removeWindowEndEvent = function(node, id) {
+	u.rc(node, id);
+	u.e.removeEndEvent(window, window["_Onend_" + id]);
+}
+
+
 /*u-form.js*/
 Util.Form = u.f = new function() {
 	this.customInit = {};
@@ -4707,121 +4781,6 @@ u.f.addAction = function(node, _options) {
 }
 
 
-/*beta-u-animation-to.js*/
-	u.a.getInitialValue = function(node, attribute) {
-		var value = (node.getAttribute(attribute) ? node.getAttribute(attribute) : u.gcs(node, attribute)).replace(node._unit[attribute], "")
-		return Number(value.replace(/auto/, 0));
-	}
-	u.a.to = function(node, transition, attributes) {
-		var duration = transition.match(/[0-9.]+[ms]+/g);
-		if(duration) {
-			node.duration = duration[0].match("ms") ? parseFloat(duration[0]) : (parseFloat(duration[0]) * 1000);
-		}
-		node._start = {};
-		node._end = {};
-		node._unit = {};
-		for(attribute in attributes) {
-			node._unit[attribute] = attributes[attribute].toString().match(/\%|px/);
-			node._start[attribute] = Number(this.getInitialValue(node, attribute));
-			node._end[attribute] = attributes[attribute].toString().replace(node._unit[attribute], "");
-		}
-		node.transitionTo = function(progress) {
-			for(attribute in attributes) {
-				if(attribute.match(/translate|rotate|scale/)) {
-					if(attribute == "translate") {
-						u.a.translate(this, Math.round((this._end_x - this._start_x) * progress), Math.round((this._end_y - this._start_y) * progress))
-					}
-					else if(attribute == "rotate") {
-					}
-				}
-				else if(attribute.match(/x1|y1|x2|y2|r|cx|cy/)) {
-					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
-					this.setAttribute(attribute, new_value);
-				}
-				else {
-					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
-					u.as(node, attribute, new_value, false);
-				}
-			}
-		}
-		u.a.requestAnimationFrame(node, "transitionTo", node.duration);
-	}
-
-
-/*u-events-browser.js*/
-u.e.addDOMReadyEvent = function(action) {
-	if(document.readyState && document.addEventListener) {
-		if((document.readyState == "interactive" && !u.browser("ie")) || document.readyState == "complete" || document.readyState == "loaded") {
-			action();
-		}
-		else {
-			var id = u.randomString();
-			window["DOMReady_" + id] = action;
-			eval('window["_DOMReady_' + id + '"] = function() {window["DOMReady_'+id+'"](); u.e.removeEvent(document, "DOMContentLoaded", window["_DOMReady_' + id + '"])}');
-			u.e.addEvent(document, "DOMContentLoaded", window["_DOMReady_" + id]);
-		}
-	}
-	else {
-		u.e.addOnloadEvent(action);
-	}
-}
-u.e.addOnloadEvent = function(action) {
-	if(document.readyState && (document.readyState == "complete" || document.readyState == "loaded")) {
-		action();
-	}
-	else {
-		var id = u.randomString();
-		window["Onload_" + id] = action;
-		eval('window["_Onload_' + id + '"] = function() {window["Onload_'+id+'"](); u.e.removeEvent(window, "load", window["_Onload_' + id + '"])}');
-		u.e.addEvent(window, "load", window["_Onload_" + id]);
-	}
-}
-u.e.addWindowResizeEvent = function(node, action) {
-	var id = u.randomString();
-	u.ac(node, id);
-	eval('window["_Onresize_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onresize_'+id+' = '+action+'; node._Onresize_'+id+'();}');
-	u.e.addEvent(window, "resize", window["_Onresize_" + id]);
-	return id;
-}
-u.e.removeWindowResizeEvent = function(node, id) {
-	u.rc(node, id);
-	u.e.removeEvent(window, "resize", window["_Onresize_" + id]);
-}
-u.e.addWindowScrollEvent = function(node, action) {
-	var id = u.randomString();
-	u.ac(node, id);
-	eval('window["_Onscroll_' + id + '"] = function() {var node = u.qs(".'+id+'"); node._Onscroll_'+id+' = '+action+'; node._Onscroll_'+id+'();}');
-	u.e.addEvent(window, "scroll", window["_Onscroll_" + id]);
-	return id;
-}
-u.e.removeWindowScrollEvent = function(node, id) {
-	u.rc(node, id);
-	u.e.removeEvent(window, "scroll", window["_Onscroll_" + id]);
-}
-u.e.addWindowMoveEvent = function(node, action) {
-	var id = u.randomString();
-	u.ac(node, id);
-	eval('window["_Onmove_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onmove_'+id+' = '+action+'; node._Onmove_'+id+'(event);}');
-	u.e.addMoveEvent(window, window["_Onmove_" + id]);
-	return id;
-}
-u.e.removeWindowMoveEvent = function(node, id) {
-	u.rc(node, id);
-	u.e.removeMoveEvent(window, window["_Onmove_" + id]);
-}
-u.e.addWindowEndEvent = function(node, action) {
-	var id = u.randomString();
-	u.ac(node, id);
-	eval('window["_Onend_' + id + '"] = function(event) {var node = u.qs(".'+id+'"); node._Onend_'+id+' = '+action+'; node._Onend_'+id+'(event);}');
-	u.e.addEndEvent(window, window["_Onend_" + id]);
-	return id;
-}
-u.e.removeWindowEndEvent = function(node, id) {
-	u.rc(node, id);
-	u.e.removeEndEvent(window, window["_Onend_" + id]);
-}
-
-
 /*u-dom.js*/
 Util.querySelector = u.qs = function(query, scope) {
 	scope = scope ? scope : document;
@@ -5231,6 +5190,309 @@ Util.nodeWithin = u.nw = function(node, scope) {
 }
 
 
+/*u-animation.js*/
+Util.Animation = u.a = new function() {
+	this.support3d = function() {
+		if(this._support3d === undefined) {
+			var node = document.createElement("div");
+			try {
+				var test = "translate3d(10px, 10px, 10px)";
+				node.style[this.vendor("Transform")] = test;
+				if(node.style[this.vendor("Transform")] == test) {
+					this._support3d = true;
+				}
+				else {
+					this._support3d = false;
+				}
+			}
+			catch(exception) {
+				this._support3d = false;
+			}
+		}
+		return this._support3d;
+	}
+	this._vendor_exceptions = {
+		"mozTransform":"MozTransform","mozTransition":"MozTransition","mozTransitionEnd":"transitionend","mozTransformOrigin":"MozTransformOrigin"
+	};
+	this._vendor_methods = {};
+ 	this.vendorMethod = function(method) {
+		var vender_method = this._vendor+method;
+		method = this._vendor ? method.replace(/^([a-z]{1})/, function(word){return word.toUpperCase()}) : method;
+		if(this._vendor_exceptions[this._vendor+method]) {
+			this._vendor_methods[vender_method] = this._vendor_exceptions[this._vendor+method];
+			return;
+		}
+ 		this._vendor_methods[vender_method] = this._vendor+method;
+ 		return;
+	}
+	this.vendor = function(method) {
+		if(this._vendor === undefined) {
+			if(document.documentElement.style.webkitTransform != undefined) {
+				this._vendor = "webkit";
+			}
+			else if(document.documentElement.style.MozTransform != undefined) {
+				this._vendor = "moz";
+			}
+			else if(document.documentElement.style.oTransform != undefined) {
+				this._vendor = "o";
+			}
+			else if(document.documentElement.style.msTransform != undefined) {
+				this._vendor = "ms";
+			}
+			else {
+				this._vendor = "";
+			}
+		}
+		if(!method) {
+			return this._vendor;
+		}
+		if(this._vendor_methods[this._vendor+method] === undefined) {
+			this.vendorMethod(method);
+		}
+		return this._vendor_methods[this._vendor+method];
+	}
+	this.transition = function(node, transition) {
+		try {
+			var duration = transition.match(/[0-9.]+[ms]+/g);
+			if(duration) {
+				node.duration = duration[0].match("ms") ? parseFloat(duration[0]) : (parseFloat(duration[0]) * 1000);
+			}
+			else {
+				node.duration = false;
+				if(transition.match(/none/i)) {
+					node.transitioned = null;
+				}
+			}
+			node.style[this.vendor("Transition")] = transition;
+			u.e.addEvent(node, this.vendor("transitionEnd"), this._transitioned);
+		}
+		catch(exception) {
+			u.exception("u.a.transition", arguments, exception);
+		}
+	}
+	this._transitioned = function(event) {
+		if(event.target == this && typeof(this.transitioned) == "function") {
+			this.transitioned(event);
+		}
+		u.a.transition(this, "none");
+	}
+	this.removeTransform = function(node) {
+		node.style[this.vendor("Transform")] = "none";
+	}
+	this.origin = function(node, x, y) {
+		node.style[this.vendor("TransformOrigin")] = x +"px "+ y +"px";
+		node._origin_x = x;
+		node._origin_y = y;
+		node.offsetHeight;
+	}
+	this.translate = function(node, x, y) {
+		if(this.support3d()) {
+			node.style[this.vendor("Transform")] = "translate3d("+x+"px, "+y+"px, 0)";
+		}
+		else {
+			node.style[this.vendor("Transform")] = "translate("+x+"px, "+y+"px)";
+		}
+		node._x = x;
+		node._y = y;
+		node.offsetHeight;
+	}
+	this.rotate = function(node, deg) {
+		node.style[this.vendor("Transform")] = "rotate("+deg+"deg)";
+		node._rotation = deg;
+		node.offsetHeight;
+	}
+	this.scale = function(node, scale) {
+		node.style[this.vendor("Transform")] = "scale("+scale+")";
+		node._scale = scale;
+		node.offsetHeight;
+	}
+	this.setOpacity = function(node, opacity) {
+		node.style.opacity = opacity;
+		node._opacity = opacity;
+		node.offsetHeight;
+	}
+	this.setWidth = function(node, width) {
+		width = width.toString().match(/\%|auto|px/) ? width : (width + "px");
+		node.style.width = width;
+		node._width = width;
+		node.offsetHeight;
+	}
+	this.setHeight = function(node, height) {
+		height = height.toString().match(/\%|auto|px/) ? height : (height + "px");
+		node.style.height = height;
+		node._height = height;
+		node.offsetHeight;
+	}
+	this.setBgPos = function(node, x, y) {
+		x = x.toString().match(/\%|auto|px|center|top|left|bottom|right/) ? x : (x + "px");
+		y = y.toString().match(/\%|auto|px|center|top|left|bottom|right/) ? y : (y + "px");
+		node.style.backgroundPosition = x + " " + y;
+		node._bg_x = x;
+		node._bg_y = y;
+		node.offsetHeight;
+	}
+	this.setBgColor = function(node, color) {
+		node.style.backgroundColor = color;
+		node._bg_color = color;
+		node.offsetHeight;
+	}
+	this.rotateScale = function(node, deg, scale) {
+		node.style[this.vendor("Transform")] = "rotate("+deg+"deg) scale("+scale+")";
+		node._rotation = deg;
+		node._scale = scale;
+		node.offsetHeight;
+	}
+	this.scaleRotateTranslate = function(node, scale, deg, x, y) {
+		if(this.support3d()) {
+			node.style[this.vendor("Transform")] = "scale("+scale+") rotate("+deg+"deg) translate3d("+x+"px, "+y+"px, 0)";
+		}
+		else {
+			node.style[this.vendor("Transform")] = "scale("+scale+") rotate("+deg+"deg) translate("+x+"px, "+y+"px)";
+		}
+		node._rotation = deg;
+		node._scale = scale;
+		node._x = x;
+		node._y = y;
+		node.offsetHeight;
+	}
+	this._animationqueue = {};
+	this.requestAnimationFrame = function(node, callback, duration) {
+		var start = new Date().getTime();
+		var id = u.randomString();
+		u.a._animationqueue[id] = {};
+		u.a._animationqueue[id].id = id;
+		u.a._animationqueue[id].node = node;
+		u.a._animationqueue[id].callback = callback;
+		u.a._animationqueue[id].start = start;
+		u.a._animationqueue[id].duration = duration;
+		u.t.setTimer(u.a, function() {u.a.finalAnimationFrame(id)}, duration);
+		if(!u.a._animationframe) {
+			window._requestAnimationFrame = eval(this.vendor("requestAnimationFrame"));
+			window._cancelAnimationFrame = eval(this.vendor("cancelAnimationFrame"));
+			u.a._animationframe = function(timestamp) {
+				var id, animation;
+				for(id in u.a._animationqueue) {
+					animation = u.a._animationqueue[id];
+					animation.node[animation.callback]((timestamp-animation.start) / animation.duration);
+				}
+				if(Object.keys(u.a._animationqueue).length) {
+					u.a._requestAnimationId = window._requestAnimationFrame(u.a._animationframe);
+				}
+			}
+		}
+		if(!u.a._requestAnimationId) {
+			u.a._requestAnimationId = window._requestAnimationFrame(u.a._animationframe);
+		}
+		return id;
+	}
+	this.finalAnimationFrame = function(id) {
+		var animation = u.a._animationqueue[id];
+		animation.node[animation.callback](1);
+		if(typeof(animation.node.transitioned) == "function") {
+			animation.node.transitioned({});
+		}
+		delete animation;
+		delete u.a._animationqueue[id];
+		if(!Object.keys(u.a._animationqueue).length) {
+			this.cancelAnimationFrame(id);
+		}
+	}
+	this.cancelAnimationFrame = function(id) {
+		if(id && u.a._animationqueue[id]) {
+			delete u.a._animationqueue[id];
+		}
+		if(u.a._requestAnimationId) {
+			window._cancelAnimationFrame(u.a._requestAnimationId);
+			u.a._requestAnimationId = false;
+		}
+	}
+}
+
+
+/*beta-u-animation-to.js*/
+	u.a.getInitialValue = function(node, attribute) {
+		var value = (node.getAttribute(attribute) ? node.getAttribute(attribute) : u.gcs(node, attribute)).replace(node._unit[attribute], "")
+		return Number(value.replace(/auto/, 0));
+	}
+	u.a.to = function(node, transition, attributes) {
+		var duration = transition.match(/[0-9.]+[ms]+/g);
+		if(duration) {
+			node.duration = duration[0].match("ms") ? parseFloat(duration[0]) : (parseFloat(duration[0]) * 1000);
+		}
+		node._start = {};
+		node._end = {};
+		node._unit = {};
+		for(attribute in attributes) {
+			node._unit[attribute] = attributes[attribute].toString().match(/\%|px/);
+			node._start[attribute] = Number(this.getInitialValue(node, attribute));
+			node._end[attribute] = attributes[attribute].toString().replace(node._unit[attribute], "");
+		}
+		node.transitionTo = function(progress) {
+			for(attribute in attributes) {
+				if(attribute.match(/translate|rotate|scale/)) {
+					if(attribute == "translate") {
+						u.a.translate(this, Math.round((this._end_x - this._start_x) * progress), Math.round((this._end_y - this._start_y) * progress))
+					}
+					else if(attribute == "rotate") {
+					}
+				}
+				else if(attribute.match(/x1|y1|x2|y2|r|cx|cy/)) {
+					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
+					this.setAttribute(attribute, new_value);
+				}
+				else {
+					var new_value = (this._start[attribute] + ((this._end[attribute] - this._start[attribute]) * progress)) +  this._unit[attribute]
+					u.as(node, attribute, new_value, false);
+				}
+			}
+		}
+		u.a.requestAnimationFrame(node, "transitionTo", node.duration);
+	}
+
+
+/*u-svg.js*/
+Util.svg = function(svg_object) {
+	var svg, shape, svg_shape;
+	if(svg_object.id && u._svg_cache[svg_object.id]) {
+		svg = u._svg_cache[svg_object.id].cloneNode(true);
+	}
+	if(!svg) {
+		svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+		if(svg_object.width) {
+			svg.setAttributeNS(null, "width", svg_object.width);
+		}
+		if(svg_object.height) {
+			svg.setAttributeNS(null, "height", svg_object.height);
+		}
+		if(svg_object.id) {
+			svg.setAttributeNS(null, "id", svg_object.id);
+		}
+		if(svg_object.node) {
+			svg.node = svg_object.node;
+		}
+		for(shape in svg_object.shapes) {
+			Util.svgShape(svg, svg_object.shapes[shape]);
+		}
+		if(svg_object.id) {
+			u._svg_cache[svg_object.id] = svg.cloneNode(true);
+		}
+	}
+	if(svg_object.node) {
+		svg_object.node.appendChild(svg);
+	}
+	return svg;
+}
+Util.svgShape = function(svg, svg_object) {
+	svg_shape = document.createElementNS("http://www.w3.org/2000/svg", svg_object["type"]);
+	svg_object["type"] = null;
+	delete svg_object["type"];
+	for(detail in svg_object) {
+		svg_shape.setAttributeNS(null, detail, svg_object[detail]);
+	}
+	return svg.appendChild(svg_shape);
+}
+
+
 /*i-page-desktop.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
@@ -5397,46 +5659,81 @@ Util.Objects["login"] = new function() {
 }
 
 
+/*i-signup-desktop.js*/
+Util.Objects["signup"] = new function() {
+	this.init = function(scene) {
+		u.bug("scene init:" + u.nodeId(scene))
+		scene.resized = function() {
+		}
+		scene.scrolled = function() {
+		}
+		scene.ready = function() {
+			this._form = u.qs("form", this);
+			u.f.init(this._form);
+			page.cN.scene = this;
+			page.resized();
+		}
+		scene.ready();
+	}
+}
+
+
 /*i-article-desktop.js*/
 Util.Objects["articlelist"] = new function() {
 	this.init = function(list) {
 		list.popstate = ("onpopstate" in window);
 		list.items = u.qsa(".item", list);
 		list.scrolled = function() {
-			var scroll_y = u.scrollY()
-			var browser_h = u.browserH();
-			var screen_middle = browser_h/2;
-			var i, node, node_y, list_y;
+			u.t.resetTimer(this.t_init);
+			this.scroll_y = page.scrolled_y;
+			this.browser_h = page.calc_height;
+			this.screen_middle = this.browser_h/2;
+			var i, node, list_y;
 			list_y = u.absY(this);
-			if(this._prev && list_y + browser_h > scroll_y) {
+			if(this._prev && list_y + this.browser_h > this.scroll_y) {
 				this.loadPrev();
 			}
-			else if(this._next && list_y + this.offsetHeight < scroll_y + (browser_h*2)) {
+			else if(this._next && list_y + this.offsetHeight < this.scroll_y + (this.browser_h*2)) {
 				this.loadNext();
 			}
+			for(i = 0; node = this.items[i]; i++) {
+				if(this.popstate && node._ready && node.hardlink) {
+					node_y = u.absY(node);
+					if(node_y <= this.scroll_y + this.screen_middle && node_y + node.offsetHeight > this.scroll_y + this.screen_middle) {
+						history.replaceState({}, node.hardlink, node.hardlink);
+					}
+					else if(node_y > this.scroll_y) {
+						break;
+					}
+				}
+			}
+			this.t_init = u.t.setTimer(this, this.initFocusedArticles, 250);
+		}
+		list.initFocusedArticles = function() {
+			var i, node,node_y;
 			for(i = 0; node = this.items[i]; i++) {
 				node_y = u.absY(node);
 				if(!node._ready && (
 					(
-						node_y + node.offsetHeight > scroll_y && 
-						node_y + node.offsetHeight < scroll_y+browser_h
+						node_y + node.offsetHeight > this.scroll_y && 
+						node_y + node.offsetHeight < this.scroll_y+this.browser_h
 					)
 					 || 
 					(
-						node_y > scroll_y &&
-						node_y < scroll_y+browser_h
+						node_y > this.scroll_y &&
+						node_y < this.scroll_y+this.browser_h
 					)
 					 ||
 					(
-						node_y < scroll_y &&
-						node_y + node.offsetHeight > scroll_y+browser_h
+						node_y < this.scroll_y &&
+						node_y + node.offsetHeight > this.scroll_y+this.browser_h
 					)
 				)) {
 					u.o.article.init(node);
 					node._ready = true;
 				}
 				if(this.popstate && node._ready && node.hardlink) {
-					if(node_y <= scroll_y + screen_middle && node_y + node.offsetHeight > scroll_y + screen_middle) {
+					if(node_y <= this.scroll_y + this.screen_middle && node_y + node.offsetHeight > this.scroll_y + this.screen_middle) {
 						history.replaceState({}, node.hardlink, node.hardlink);
 					}
 				}
@@ -5496,9 +5793,9 @@ Util.Objects["article"] = new function() {
 		var hardlink = u.qs("dd.hardlink a", article);
 		article.hardlink = hardlink ? hardlink.href : false;
 		var i, image;
-		article._images = u.qsa("div.image", article);
+		article._images = u.qsa("div.image,div.media", article);
 		for(i = 0; image = article._images[i]; i++) {
-			image._id = u.cv(image, "image_id");
+			image._id = u.cv(image, "item_id");
 			image._format = u.cv(image, "format");
 			image._variant = u.cv(image, "variant");
 			if(image._id && image._format) {
@@ -5509,7 +5806,7 @@ Util.Objects["article"] = new function() {
 					this._image = u.ie(this, "img");
 					this._image.src = queue[0].image.src;
 					if(u.absY(this) < u.scrollY() + (u.browserH()/2)) {
-						window.scrollTo(0, u.scrollY()+this.offsetHeight)
+						window.scrollTo(0, u.scrollY()+this.offsetHeight-10)
 					}
 					u.a.transition(this, "all 0.5s ease-in-out");
 					u.a.setOpacity(this, 1);
@@ -5589,7 +5886,7 @@ Util.Objects["article"] = new function() {
 		}
 		if(article.hardlink) {
 			article.sharing = u.ae(article, "div", {"class":"sharing"});
-			if(u.absY(article.sharing) < u.scrollY()) {
+			if(u.absY(article.sharing) < u.scrollY() + (u.browserH()/2)) {
 				window.scrollTo(0, u.scrollY()+article.sharing.offsetHeight)
 			}
 			article.h3_share = u.ae(article.sharing, "h3", {"html":"Share"})
@@ -5602,28 +5899,28 @@ Util.Objects["article"] = new function() {
 				"node":article.sharing,
 				"class":"sharing",
 				"width":500,
-				"height":200,
+				"height":300,
 				"shapes":[
 					{
 						"type": "line",
 						"class": "primary",
 						"x1": 6,
-						"y1": 100,
+						"y1": 150,
 						"x2": 22,
-						"y2": 100
+						"y2": 150
 					},
 					{
 						"type": "circle",
 						"class": "primary",
 						"cx": 6,
-						"cy": 100,
+						"cy": 150,
 						"r": 5
 					},
 					{
 						"type": "circle",
 						"class": "primary",
 						"cx": 22,
-						"cy": 100,
+						"cy": 150,
 						"r": 3
 					}
 				]
@@ -5643,16 +5940,16 @@ Util.Objects["article"] = new function() {
 				return circle;
 			}
 			article.sharing.drawLine = function(svg, x1, y1, x2, y2) {
-				x2 = x2 ? x2 : (x1 + u.random(40, 60));
+				x2 = x2 ? x2 : (x1 + u.random(30, 50));
 				if(!y2) {
-					if(y1 < 100) {
-						y2 = y1 + u.random(-60, 40);
+					if(y1 < 150) {
+						y2 = y1 + u.random(-50, 30);
 					}
 					else {
-						y2 = y1 + u.random(-40, 60);
+						y2 = y1 + u.random(-30, 50);
 					}
 				}
-				if(x2 < 490 && y2 > 10 && y2 < 190 && (x2 < 70 || x2 > 450 || (y2 < 80 && y1 < 80) || (y2 > 120 && y1 > 120))) {
+				if(x2 < 490 && y2 > 10 && y2 < 290 && (x2 < 70 || x2 > 450 || (y2 < 130 && y1 < 130) || (y2 > 170 && y1 > 170))) {
 					var line = u.svgShape(svg, {
 						"type": "line",
 						"x1": x1,
@@ -5707,15 +6004,16 @@ Util.Objects["article"] = new function() {
 				"type": "rect",
 				"class": "share",
 				"x": 0,
-				"y": 80,
+				"y": 130,
 				"width": 40,
 				"height": 40,
 				"fill": "transparent"
 			});
 			article.sharing.button._x1 = 22;
-			article.sharing.button._y1 = 100;
+			article.sharing.button._y1 = 150;
 			article.sharing.button.sharing = article.sharing;
 			article.sharing.button.over = function() {
+				u.t.resetTimer(this.t_hide);
 				u.ac(this.sharing, "hover");
 				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(this._x1, 70), this._y1 + u.random(-55, -40));
 				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(70, 120), this._y1 + u.random(-20, -15));

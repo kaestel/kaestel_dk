@@ -16,6 +16,9 @@ $log_tags = $IC->getTags(array("context" => "log"));
 	<p>
 		I live to learn, I learn to live. One experience at the time. <br />This is a selected part of my story.
 	</p>
+	<p class="note">
+		Everything is a process. This is my playground.
+	</p>
 
 <? 	if($post_items): ?>
 	<div class="categories">

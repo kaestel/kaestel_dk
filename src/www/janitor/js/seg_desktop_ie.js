@@ -3639,11 +3639,22 @@ Util.bug = function(message, corner, color) {
 		}
 	}
 }
-Util.xInObject = function(object, return_string) {
+Util.xInObject = function(object, _options) {
 	if(u.debugURL()) {
+		var return_string = false;
+		var explore_objects = false;
+		if(typeof(_options) == "object") {
+			var _argument;
+			for(_argument in _options) {
+				switch(_argument) {
+					case "return"     : return_string               = _options[_argument]; break;
+					case "objects"    : explore_objects             = _options[_argument]; break;
+				}
+			}
+		}
 		var x, s = "--- start object ---\n";
 		for(x in object) {
-			if(object[x] && typeof(object[x]) == "object" && typeof(object[x].nodeName) != "string") {
+			if(explore_objects && object[x] && typeof(object[x]) == "object" && typeof(object[x].nodeName) != "string") {
 				s += x + "=" + object[x]+" => \n";
 				s += u.xInObject(object[x], true);
 			}
@@ -6752,10 +6763,10 @@ Util.nodeWithin = u.nw = function(node, scope) {
 
 
 /*u-request.js*/
-Util.createRequestObject = u.createRequestObject = function() {
+Util.createRequestObject = function() {
 	return new XMLHttpRequest();
 }
-Util.request = u.request = function(node, url, _options) {
+Util.request = function(node, url, _options) {
 	var request_id = u.randomString(6);
 	node[request_id] = {};
 	node[request_id].request_url = url;
@@ -7327,7 +7338,7 @@ Util.History = u.h = new function() {
 		}
 		var urlChanged = function(event) {
 			var url = u.h.getCleanUrl(location.href);
-			if(event.state) {
+			if(event.state || (!event.state && event.path)) {
 				if(typeof(u.h.node[u.h.node.callback_urlchange]) == "function") {
 					u.h.node[u.h.node.callback_urlchange](url);
 				}

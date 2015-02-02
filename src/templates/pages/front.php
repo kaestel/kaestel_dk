@@ -20,7 +20,6 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 	</p>
 	<p>No <a href="/geek">geek</a> is <a href="/plain">plain</a>. Normal is weird. This is personal.</p>
 
-
 <? if($post_items): ?>
 
 	<h2>Recent postings</h2>
@@ -37,6 +36,7 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 
 <?			if($item["tags"]): ?>
 			<ul class="tags">
+				<li><a href="/geek/posts">Posts</a></li>
 <?				foreach($item["tags"] as $item_tag): ?>
 <?	 				if($item_tag["context"] == "post"): ?>
 				<li><a href="/geek/posts/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
@@ -64,9 +64,9 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?		endforeach; ?>
 	</ul>
 
-	<ul class="actions">
+	<!--ul class="actions">
 		<li class="more"><a href="/geek">More postings</a></li>
-	</ul>
+	</ul-->
 <? endif; ?>
 
 
@@ -86,6 +86,7 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 
 <?			if($item["tags"]): ?>
 			<ul class="tags">
+				<li><a href="/geek/logs">Logs</a></li>
 <?				foreach($item["tags"] as $item_tag): ?>
 <?	 				if($item_tag["context"] == "log"): ?>
 				<li><a href="/geek/logs/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
@@ -124,9 +125,9 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?		endforeach; ?>
 	</ul>
 
-	<ul class="actions">
+	<!--ul class="actions">
 		<li class="more"><a href="/geek">More log entries</a></li>
-	</ul>
+	</ul-->
 <?	endif; ?>
 
 </div>

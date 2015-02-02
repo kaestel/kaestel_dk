@@ -43,12 +43,17 @@ if($pagination["range_items"]) {
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
+			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
 			</div>
 <?			endif; ?>
 
 			<ul class="tags">
+<?			if($item["tags"]): ?>
+<?				if(arrayKeyValue($item["tags"], "context", "editing")): ?>
+					<li class="editing" title="This post is work in progress">Still editing</li>
+<?				endif; ?>
+<?			endif; ?>
 				<li><a href="/geek/logs">Logs</a></li>
 <?			if($item["tags"]): ?>
 <?				foreach($item["tags"] as $item_tag): ?>
@@ -87,7 +92,7 @@ if($pagination["range_items"]) {
 
 <?			if($item["mediae"]):
 				foreach($item["mediae"] as $media): ?>
-			<div class="image image_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
+			<div class="image _id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
 			</div>
 <? 				endforeach;

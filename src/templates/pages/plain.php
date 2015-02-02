@@ -25,10 +25,17 @@ global $model;
 				one day this will lead to a breakdown. I wonder who will win.
 			</p>
 			<p>
+				I am a ideologist.
+			</p>
+			<p>
 				I am a coder. I am an expert within 
 				logic, numbers and connecting the dots. It's not random, it just looks random. I may suck at many 
 				things, but not this. 
 			</p>
+			<p>
+				I am a writer.
+			</p>
+
 			<p>
 				I challenge conventions in search for better alternatives. Too many rules are blindly
 				accepted, even years after they have outlived themselves. I am uncompromisingly focused on 
@@ -46,11 +53,11 @@ global $model;
 				ignored too often. What the fuck is wrong with you people. I am fighting back.
 			</p>
 			<p>
-				I love the sun, it shines upon me.<br />
+				I love the sun, it warms me and lights my way.<br />
 				I love the sea, it never fails to embrace me.<br />
+				I love the sky, it never ends.<br />
 				I love the mountains, they lift me up.<br />
-				I love the sky, it has no end.<br />
-				I love the flowers, they bring me hope.<br />
+				I love the flowers, they renew my hope.<br />
 				I love the moon, she knows why.
 			</p>
 			<p>
@@ -62,8 +69,7 @@ global $model;
 				I feel an urge to make this world a better place.<br />
 				I contain solutions I cannot yet imagine.<br />
 				I believe everything and everyone is connected.<br />
-				I think we are all responsible though not all of us live up to our responsibility.<br />
-				I want to promote humanity.<br />
+				I think we are all responsible.<br />
 				I fear the ignorance that threatens to end everything.
 			</p>
 			<p>
@@ -85,7 +91,6 @@ global $model;
 			<h2>Side projects</h2>
 			<ul>
 				<li><a href="http://think.dk" target="_blank">think.dk</a></li>
-				<li><a href="http://e-types.com" target="_blank">e-Types</a></li>
 				<li><a href="http://parentnode.dk" target="_blank">parentNode</a></li>
 				<li><a href="http://detector.parentnode.dk" target="_blank">Detector</a></li>
 				<li><a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>

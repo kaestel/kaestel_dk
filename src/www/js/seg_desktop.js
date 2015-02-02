@@ -4845,16 +4845,16 @@ Util.Animation = u.a = new function() {
 	}
 	this.vendor = function(method) {
 		if(this._vendor === undefined) {
-			if(document.body.style.webkitTransform != undefined) {
+			if(document.documentElement.style.webkitTransform != undefined) {
 				this._vendor = "webkit";
 			}
-			else if(document.body.style.MozTransform != undefined) {
+			else if(document.documentElement.style.MozTransform != undefined) {
 				this._vendor = "moz";
 			}
-			else if(document.body.style.oTransform != undefined) {
+			else if(document.documentElement.style.oTransform != undefined) {
 				this._vendor = "o";
 			}
-			else if(document.body.style.msTransform != undefined) {
+			else if(document.documentElement.style.msTransform != undefined) {
 				this._vendor = "ms";
 			}
 			else {
@@ -5302,40 +5302,56 @@ Util.Objects["articlelist"] = new function() {
 		list.popstate = ("onpopstate" in window);
 		list.items = u.qsa(".item", list);
 		list.scrolled = function() {
-			var scroll_y = u.scrollY()
-			var browser_h = u.browserH();
-			var screen_middle = browser_h/2;
-			var i, node, node_y, list_y;
+			u.t.resetTimer(this.t_init);
+			this.scroll_y = page.scrolled_y;
+			this.browser_h = page.calc_height;
+			this.screen_middle = this.browser_h/2;
+			var i, node, list_y;
 			list_y = u.absY(this);
-			if(this._prev && list_y + browser_h > scroll_y) {
+			if(this._prev && list_y + this.browser_h > this.scroll_y) {
 				this.loadPrev();
 			}
-			else if(this._next && list_y + this.offsetHeight < scroll_y + (browser_h*2)) {
+			else if(this._next && list_y + this.offsetHeight < this.scroll_y + (this.browser_h*2)) {
 				this.loadNext();
 			}
+			for(i = 0; node = this.items[i]; i++) {
+				if(this.popstate && node._ready && node.hardlink) {
+					node_y = u.absY(node);
+					if(node_y <= this.scroll_y + this.screen_middle && node_y + node.offsetHeight > this.scroll_y + this.screen_middle) {
+						history.replaceState({}, node.hardlink, node.hardlink);
+					}
+					else if(node_y > this.scroll_y) {
+						break;
+					}
+				}
+			}
+			this.t_init = u.t.setTimer(this, this.initFocusedArticles, 250);
+		}
+		list.initFocusedArticles = function() {
+			var i, node,node_y;
 			for(i = 0; node = this.items[i]; i++) {
 				node_y = u.absY(node);
 				if(!node._ready && (
 					(
-						node_y + node.offsetHeight > scroll_y && 
-						node_y + node.offsetHeight < scroll_y+browser_h
+						node_y + node.offsetHeight > this.scroll_y && 
+						node_y + node.offsetHeight < this.scroll_y+this.browser_h
 					)
 					 || 
 					(
-						node_y > scroll_y &&
-						node_y < scroll_y+browser_h
+						node_y > this.scroll_y &&
+						node_y < this.scroll_y+this.browser_h
 					)
 					 ||
 					(
-						node_y < scroll_y &&
-						node_y + node.offsetHeight > scroll_y+browser_h
+						node_y < this.scroll_y &&
+						node_y + node.offsetHeight > this.scroll_y+this.browser_h
 					)
 				)) {
 					u.o.article.init(node);
 					node._ready = true;
 				}
 				if(this.popstate && node._ready && node.hardlink) {
-					if(node_y <= scroll_y + screen_middle && node_y + node.offsetHeight > scroll_y + screen_middle) {
+					if(node_y <= this.scroll_y + this.screen_middle && node_y + node.offsetHeight > this.scroll_y + this.screen_middle) {
 						history.replaceState({}, node.hardlink, node.hardlink);
 					}
 				}
@@ -5395,9 +5411,9 @@ Util.Objects["article"] = new function() {
 		var hardlink = u.qs("dd.hardlink a", article);
 		article.hardlink = hardlink ? hardlink.href : false;
 		var i, image;
-		article._images = u.qsa("div.image", article);
+		article._images = u.qsa("div.image,div.media", article);
 		for(i = 0; image = article._images[i]; i++) {
-			image._id = u.cv(image, "image_id");
+			image._id = u.cv(image, "item_id");
 			image._format = u.cv(image, "format");
 			image._variant = u.cv(image, "variant");
 			if(image._id && image._format) {
@@ -5408,7 +5424,7 @@ Util.Objects["article"] = new function() {
 					this._image = u.ie(this, "img");
 					this._image.src = queue[0].image.src;
 					if(u.absY(this) < u.scrollY() + (u.browserH()/2)) {
-						window.scrollTo(0, u.scrollY()+this.offsetHeight)
+						window.scrollTo(0, u.scrollY()+this.offsetHeight-10)
 					}
 					u.a.transition(this, "all 0.5s ease-in-out");
 					u.a.setOpacity(this, 1);
@@ -5488,7 +5504,7 @@ Util.Objects["article"] = new function() {
 		}
 		if(article.hardlink) {
 			article.sharing = u.ae(article, "div", {"class":"sharing"});
-			if(u.absY(article.sharing) < u.scrollY()) {
+			if(u.absY(article.sharing) < u.scrollY() + (u.browserH()/2)) {
 				window.scrollTo(0, u.scrollY()+article.sharing.offsetHeight)
 			}
 			article.h3_share = u.ae(article.sharing, "h3", {"html":"Share"})
@@ -5501,28 +5517,28 @@ Util.Objects["article"] = new function() {
 				"node":article.sharing,
 				"class":"sharing",
 				"width":500,
-				"height":200,
+				"height":300,
 				"shapes":[
 					{
 						"type": "line",
 						"class": "primary",
 						"x1": 6,
-						"y1": 100,
+						"y1": 150,
 						"x2": 22,
-						"y2": 100
+						"y2": 150
 					},
 					{
 						"type": "circle",
 						"class": "primary",
 						"cx": 6,
-						"cy": 100,
+						"cy": 150,
 						"r": 5
 					},
 					{
 						"type": "circle",
 						"class": "primary",
 						"cx": 22,
-						"cy": 100,
+						"cy": 150,
 						"r": 3
 					}
 				]
@@ -5542,16 +5558,16 @@ Util.Objects["article"] = new function() {
 				return circle;
 			}
 			article.sharing.drawLine = function(svg, x1, y1, x2, y2) {
-				x2 = x2 ? x2 : (x1 + u.random(40, 60));
+				x2 = x2 ? x2 : (x1 + u.random(30, 50));
 				if(!y2) {
-					if(y1 < 100) {
-						y2 = y1 + u.random(-60, 40);
+					if(y1 < 150) {
+						y2 = y1 + u.random(-50, 30);
 					}
 					else {
-						y2 = y1 + u.random(-40, 60);
+						y2 = y1 + u.random(-30, 50);
 					}
 				}
-				if(x2 < 490 && y2 > 10 && y2 < 190 && (x2 < 70 || x2 > 450 || (y2 < 80 && y1 < 80) || (y2 > 120 && y1 > 120))) {
+				if(x2 < 490 && y2 > 10 && y2 < 290 && (x2 < 70 || x2 > 450 || (y2 < 130 && y1 < 130) || (y2 > 170 && y1 > 170))) {
 					var line = u.svgShape(svg, {
 						"type": "line",
 						"x1": x1,
@@ -5606,15 +5622,16 @@ Util.Objects["article"] = new function() {
 				"type": "rect",
 				"class": "share",
 				"x": 0,
-				"y": 80,
+				"y": 130,
 				"width": 40,
 				"height": 40,
 				"fill": "transparent"
 			});
 			article.sharing.button._x1 = 22;
-			article.sharing.button._y1 = 100;
+			article.sharing.button._y1 = 150;
 			article.sharing.button.sharing = article.sharing;
 			article.sharing.button.over = function() {
+				u.t.resetTimer(this.t_hide);
 				u.ac(this.sharing, "hover");
 				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(this._x1, 70), this._y1 + u.random(-55, -40));
 				this.sharing.drawLine(article.sharing.svg, this._x1, this._y1, u.random(70, 120), this._y1 + u.random(-20, -15));

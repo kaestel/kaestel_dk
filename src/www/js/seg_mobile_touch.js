@@ -5001,9 +5001,9 @@ Util.Objects["articlelist"] = new function() {
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
 		var i, image;
-		article._images = u.qsa("div.image", article);
+		article._images = u.qsa("div.image,div.media", article);
 		for(i = 0; image = article._images[i]; i++) {
-			image._id = u.cv(image, "image_id");
+			image._id = u.cv(image, "item_id");
 			image._format = u.cv(image, "format");
 			image._variant = u.cv(image, "variant");
 			if(image._id && image._format) {
