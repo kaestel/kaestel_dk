@@ -37,3 +37,13 @@
 #content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
 #content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
+
+
+.cv #navigation,
+.cv #footer,
+.cv .servicenavigation {display: none;}
+#content .scene.cv h2+h3 {padding-top: 0;}
+#content .scene.cv h3 {padding-top: 20px;}
+#content .scene.cv .articlebody {padding-bottom: 280px;}
+
+#content .scene.cv div.break {page-break-before: always; padding-bottom: 80px;}
