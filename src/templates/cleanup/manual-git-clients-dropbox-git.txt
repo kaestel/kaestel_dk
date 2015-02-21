@@ -8,7 +8,7 @@ git push -u origin master
 
 
 git remote rm origin
-git remote add origin https://github.com/kaestel/teisbruno_com.git
+git remote add origin https://github.com/kaestel/dukkepartiet_dk.git
 git push -u origin master
 
 
