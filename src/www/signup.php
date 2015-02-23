@@ -26,13 +26,19 @@ if(is_array($action) && count($action)) {
 		exit();
 	}
 
-	// /signup/confirm/email|mobile/#email|mobile#
-	else if($action[0] == "confirm" && count($action) == 3) {
+	// /signup/confirm/email|mobile/#email|mobile#/#verification_code#
+	else if($action[0] == "confirm" && count($action) == 4) {
 
-		$model->confirmUser($action);
-		$page->page(array(
-			"templates" => "pages/signup_confirmed.php"
-		));
+		if($model->confirmUser($action)) {
+			$page->page(array(
+				"templates" => "pages/signup_confirmed.php"
+			));
+		}
+		else {
+			$page->page(array(
+				"templates" => "pages/signup_confirmed_failed.php"
+			));
+		}
 		exit();
 	}
 
@@ -58,12 +64,6 @@ if(is_array($action) && count($action)) {
 		else {
 			message()->addMessage("Sorry, server says NO!", array("type" => "error"));
 		}
-
-		// // show signup page again
-		// $page->page(array(
-		// 	"templates" => "pages/signup.php"
-		// ));
-		// exit();
 
 	}
 

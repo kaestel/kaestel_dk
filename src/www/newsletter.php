@@ -26,14 +26,13 @@ if(is_array($action) && count($action)) {
 		exit();
 	}
 
-	// /newsletter/signup
+	// /newsletter/subscribe
 	else if($action[0] == "subscribe" && $page->validateCsrfToken()) {
 
 		$user = $model->newUser(array("newUser"));
-		$newsletter = stringOr(getPost("newsletter"), "general");
 
 		// successful creation
-		if(isset($user["user_id"]) && $model->updateNewsletter(array("updateNewsletter", $newsletter, 1))) {
+		if(isset($user["user_id"])) {
 
 			// redirect to leave POST state
 			header("Location: receipt");
