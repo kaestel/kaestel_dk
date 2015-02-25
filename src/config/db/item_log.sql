@@ -10,8 +10,6 @@ CREATE TABLE `SITE_DB`.`item_log` (
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
 
-  `files` varchar(5) NULL,
-
   PRIMARY KEY  (`id`),
   KEY `item_id` (`item_id`),
   CONSTRAINT `item_log_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE

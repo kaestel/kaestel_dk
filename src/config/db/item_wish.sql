@@ -7,7 +7,6 @@ CREATE TABLE `SITE_DB`.`item_wish` (
   `link` varchar(255) NULL,
   `price` int(11) NOT NULL,
   `reserved` int(11) NOT NULL,
-  `files` varchar(5) NULL,
 
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
