@@ -6671,6 +6671,7 @@ Util.Objects["page"] = new function() {
 			page.style_tag.sheet.insertRule("#header a.logo {}", 0);
 			page.logo.css_rule = page.style_tag.sheet.cssRules[0];
 			page.resized = function() {
+				u.bug("page resized")
 				page.browser_h = u.browserH();
 				page.browser_w = u.browserW();
 				page.available_height = page.browser_h - page.hN.offsetHeight - page.fN.offsetHeight;
@@ -6743,7 +6744,7 @@ Util.Objects["page"] = new function() {
 					page.style_tag.sheet.insertRule("#navigation ul li {}", 0);
 					page.nN.list.css_rule = page.style_tag.sheet.cssRules[0];
 				}
-				this.hN.nodes = u.qsa("#navigation li,.servicenavigation li,a.logo", page.hN);
+				this.hN.nodes = u.qsa("#navigation li,a.logo", page.hN);
 				for(i = 0; node = this.hN.nodes[i]; i++) {
 				u.ce(node, {"type":"link"});
 					node._mousedover = function() {
