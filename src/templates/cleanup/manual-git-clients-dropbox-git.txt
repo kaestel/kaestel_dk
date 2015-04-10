@@ -19,3 +19,44 @@ git remote rm origin
 git remote add origin ~/Dropbox/hvadhedderde/git/yousee_onfone.git
 git push -u origin master
 
+
+git init --bare ~/Dropbox/git/oeo_dk.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/oeo_dk.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/e-types_com.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/e-types_com.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/tilbyen_dk.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/tilbyen_dk.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/demo_etypes_presentation.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/demo_etypes_presentation.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/soulland_com.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/soulland_com.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/webserver-e-types.conf.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/webserver-e-types.conf.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/landskabsarkitekter_dk.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/landskabsarkitekter_dk.git
+git push -u origin master
+
+git init --bare ~/Dropbox/git/sandbox.git
+git remote rm origin
+git remote add origin ~/Dropbox/git/sandbox.git
+git push -u origin master
+

@@ -1,0 +1,12 @@
+To list mail:
+
+$ mail
+
+To delete mail:
+
+$ mail
+
+returns: ?
+
+After ? type: d*
+

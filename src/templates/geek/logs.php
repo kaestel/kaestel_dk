@@ -72,7 +72,7 @@ if($pagination["range_items"]) {
 				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
 				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/logs/".$item["sindex"] ?>" target="_blank"><?= SITE_URL."/geek/logs/".$item["sindex"] ?></a></dd>
+				<dd class="hardlink" itemprop="url"><?= SITE_URL."/geek/logs/".$item["sindex"] ?></dd>
 			</dl>
 
 			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">

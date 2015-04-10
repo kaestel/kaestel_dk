@@ -60,7 +60,7 @@ if($pagination["range_items"]) {
 				<dt class="author">Author</dt>
 				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
 				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><a href="<?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"] ?>" target="_blank"><?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"] ?></a></dd>
+				<dd class="hardlink" itemprop="url"><?= SITE_URL."/geek/posts/tag/".$tag."/".$item["sindex"] ?></dd>
 			</dl>
 
 			<div class="articlebody" itemprop="articleBody">
