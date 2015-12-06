@@ -7325,7 +7325,6 @@ Util.Objects["defaultTags"] = new function() {
 		div.item_id = u.cv(div, "item_id");
 		div._tags_form = u.qs("form", div);
 		div._tags_form.div = div;
-		u.toggleHeader(div);
 		u.f.init(div._tags_form);
 		div.csrf_token = div._tags_form.fields["csrf-token"].value;
 		div.add_tag_url = div._tags_form.action;
