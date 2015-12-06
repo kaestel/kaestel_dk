@@ -12,7 +12,7 @@ if($wishlist) {
 	$model_wishlist = $IC->typeObject("wishlist");
 
 	// get wishes order
-	$items = $model_wishlist->getOrderedWishes($wishlist["item_id"]);
+	$items = $model_wishlist->getOrderedWishes($wishlist["item_id"], array("status" => 1));
 
 }
 else {
