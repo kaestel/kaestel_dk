@@ -1,5 +1,0 @@
-sudo ssh -i ~/.ssh/id_dsa -l __USERNAME__ -L 139:localhost:139 dev.peytz.dk
-
-smb://127.0.0.1/__USERNAME__
-
-set -o emacs

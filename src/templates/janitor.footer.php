@@ -4,7 +4,7 @@
 		<ul>
 			<?= $HTML->link("Logs", "/janitor/log/list", array("wrapper" => "li.log")) ?>
 
-			<?= $HTML->link("Wishes", "/janitor/wish/list", array("wrapper" => "li.wish")) ?>
+			<?= $HTML->link("Wishes", "/janitor/admin/wish/list", array("wrapper" => "li.wish")) ?>
 			<?= $HTML->link("Todos", "/janitor/admin/todo/list", array("wrapper" => "li.todo")) ?>
 
 			<?= $HTML->link("Posts", "/janitor/admin/post/list", array("wrapper" => "li.post")) ?>

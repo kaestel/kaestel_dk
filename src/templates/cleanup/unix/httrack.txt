@@ -1,6 +1,0 @@
-httrack "http://www.tuborg.dk/" -O "/Users/kaestel/Downloads/www.tuborg.dk" "+*.tuborg.dk/*" -v
-
-
-httrack "http://www.peoplegroup.dk/" -O "/Users/kaestel/Downloads/www.peoplegroup.dk" "+*.peoplegroup.dk/*" -v
-
-httrack "http://staging.netpeople.hvadhedderde.com/" -O "/Users/kaestel/Downloads/www.netpeople.dk" "+*.netpeople.hvadhedderde.com/*" -v

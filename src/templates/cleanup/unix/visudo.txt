@@ -1,7 +1,0 @@
-Visudo:
-
-As root
-visudo (/usr/sbin)
-
-Add row:
-__USERNAME__ ALL=(ALL) ALL

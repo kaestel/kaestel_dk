@@ -3,7 +3,7 @@
 
 /*seg_desktop_light_include.css*/
 
-/*s-page-desktop_light.css*/
+/*s-page.css*/
 * {font-family: "OpenSans", Verdana, Arial, sans-serif; color: #000000;}
 html {min-height: 100%;}
 body {background: #ffffff; margin: 0;}
@@ -51,7 +51,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 .terms_notification .details:hover {text-decoration: underline;}
 
 
-/*s-header-desktop_light.css*/
+/*s-header.css*/
 #header {position: relative; height: 100px;}
 #header .logo {font-size: 30px; padding: 20px 50px 20px; color: #888888; cursor: pointer; display: block; width: 200px;
 	font-family: "PT Serif", Times, serif;
@@ -72,11 +72,11 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #navigation ul li.front {display: none;}
 
 
-/*s-footer-desktop_light.css*/
+/*s-footer.css*/
 #footer {text-align: center; border-top: 1px solid #888888; margin: 0 50px;}
 #footer p {padding: 10px; cursor: pointer;}
 
-/*s-content-desktop_light.css*/
+/*s-content.css*/
 #content {position: relative; width: 600px; margin: 0 auto;}
 #content .scene {position: relative; padding: 50px 0;}
 #content .scene .link {cursor: pointer;}
@@ -150,6 +150,16 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene .pagination .next:hover,
 #content .scene .pagination .previous:hover {background-color: #313942;}
 #content .scene div.categories {padding-bottom: 20px;}
+#content .scene div.article ul.tags {padding-bottom: 10px;}
+#content .scene div.article ul.tags a {color: #cccccc;}
+#content .scene div.article ul.tags a:hover {color: #888888;}
+#content .scene ul.articles li.article {padding: 20px 0 0; border-top: 1px solid #dedede; position: relative;}
+#content .scene ul.articles li.article ul.tags {padding-bottom: 15px;}
+#content .scene ul.articles li.article h3 {font-size: 18px; line-height: 1em; padding-bottom: 5px;}
+#content .scene ul.articles li.article p {font-size: 13px; color: #888888;}
+#content .scene div.related {border-top: 1px solid #dedede; padding-top: 40px; position: relative; z-index: 1;}
+#content .scene div.comments {display: none;}
+#content .scene div.readstate {display: none;}
 #content .scene code {width: 480px; padding: 10px 10px; margin: 0 50px 15px; background-color: #ededed; color: #333333; font-size: 12px; display: block; white-space: pre-wrap; overflow: auto;
 	font-family: "Monaco", "Courier New", "Courier";
 	-webkit-tab-size: 4;
@@ -176,11 +186,26 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard .name {padding: 0 0 15px;}
 #content .scene div.vcard .tel,
 #content .scene div.vcard .email {font-size: 14px;}
+#content .scene .usedby {min-width: 600px; margin-top: 20px; margin-bottom: -50px; padding-top: 5px; border-top: 1px solid #cccccc;}
+#content .scene .usedby h2 {display: none; text-align: center; padding-bottom: 5px; font-size: 11px; width: auto; color: #bbbbbb; text-transform: uppercase;
+	font-family: "OpenSans", Verdana, Arial, sans-serif;
+}
+#content .scene .usedby ul {padding-bottom: 0;}
+#content .scene .usedby ul li {display: inline-block; width: 20%; background-position: center center; background-repeat: no-repeat; height: 150px; text-indent: -9999px;}
+#content .scene .usedby ul li.metro {background-image: url(/img/logos/metro.png); background-size: 70px auto;}
+#content .scene .usedby ul li.soulland {background-image: url(/img/logos/soulland.png); background-size: 70px auto;}
+#content .scene .usedby ul li.cphpix {background-image: url(/img/logos/cphpix.png);}
+#content .scene .usedby ul li.tuborg {background-image: url(/img/logos/tuborg.png);}
+#content .scene .usedby ul li.distortion {background-image: url(/img/logos/distortion.png);}
+#content .scene .usedby ul li.landskabsarkitekter {background-image: url(/img/logos/landskabsarkitekter.png);}
+#content .scene .usedby ul li.urbangreen {background-image: url(/img/logos/urbangreen.png);}
+#content .scene .usedby ul li.oeo {background-image: url(/img/logos/oeo.png);}
+#content .scene .usedby ul li.peoplegroup {background-image: url(/img/logos/peoplegroup.png);}
 #content .scene.login form {padding-bottom: 20px;}
 #content .errormessage {color: #df0000;}
 
 
-/*s-form-desktop_light.css*/
+/*s-form.css*/
 #content form {}
 #content fieldset {border: none; display: block;}
 #content .field {padding: 0 48px 15px; position: relative; font-size: 0;}
@@ -269,7 +294,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .field.focus div.hint {display: block;}
 
 
-/*s-itemtypes-desktop_light.css*/
+/*s-itemtypes.css*/
 #content .scene .articlebody ul,
 #content .scene .articlebody ol {list-style-position: outside; margin-left: 15px; width: 485px;}
 #content .scene .articlebody ul {list-style-type: disc;}
@@ -281,7 +306,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene ul.todos > li ul.actions {display: none;}
 
 
-/*s-documentation-desktop_light.css*/
+/*s-documentation.css*/
 #content .scene.docsindex {}
 #content .scene.docsindex ul.actions {display: none;}
 #content .scene.docsindex .notes {display: none;}
@@ -323,6 +348,8 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene div.functions .function .body .callbacks dt {width: auto; display: block; text-align: left;}
 #content .scene div.functions .function .body .callbacks dd {width: auto; display: block;}
 #content .scene div.functions .function .body .example {padding: 0 0 20px;}
+#content .scene div.functions .function .body .examples h4 {padding-bottom: 10px;}
+#content .scene div.functions .function .body .example h5 {padding-bottom: 10px; font-size: 13px;}
 #content .scene div.functions .function .body .example p {padding-bottom: 5px;}
 #content .scene div.functions .function .body .uses .javascript {padding: 5px 0 0 20px;}
 #content .scene div.functions .function .body .uses .manipulator {padding: 5px 0 0 20px;}
@@ -378,7 +405,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 }
 
 
-/*s-pages-desktop_light.css*/
+/*s-pages.css*/
 #header .logo {font-size: 20px; text-transform: uppercase;}
 #content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
 #content .scene.front > ul.actions li {padding-bottom: 0;}
@@ -391,7 +418,7 @@ dd {display: block; font-size: 13px; line-height: 1.25em;}
 #content .scene.wishes ul.items > li ul.actions {display: none;}
 
 
-/*s-colorscheme-desktop_light.css*/
+/*s-colorscheme.css*/
 * {color: #034769;}
 body {}
 #header .logo {color: #63add0;}

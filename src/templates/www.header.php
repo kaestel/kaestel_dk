@@ -11,7 +11,9 @@
 	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
 	<?= $this->sharingMetaData() ?>
+
 	<link rel="apple-touch-icon" href="touchicon.png">
 	<link rel="icon" href="favicon.png">
 
@@ -33,9 +35,10 @@
 			<li class="keynav navigation nofollow"><a href="#navigation">To navigation</a></li>
 <?		if(session()->value("user_id") && session()->value("user_group_id") > 1): ?>
 			<li class="keynav admin nofollow"><a href="/janitor" target="_blank">Janitor</a></li>
-			<li class="keynav user nofollow"><a href="?logoff=true">Logoff</a></li>
+			<li class="keynav profile nofollow"><a href="/janitor/admin/profile"><?= session()->value("user_nickname") ?></a></li>
+			<li class="keynav logoff nofollow"><a href="?logoff=true">Logoff</a></li>
 <?		else: ?>
-			<li class="keynav user nofollow"><a href="/login">Login</a></li>
+			<li class="keynav login nofollow"><a href="/login">Login</a></li>
 <?		endif; ?>
 		</ul>
 	</div>

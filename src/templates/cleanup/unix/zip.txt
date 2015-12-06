@@ -1,3 +1,0 @@
-ZIP all files in . except files containing "svn", ".DS", "test" and "temp"
-
-zip -r part . -x \*svn* \*temp* \*test* \*.DS*

@@ -1,9 +1,0 @@
-Add user:
-
-adduser kaestel (/usr/sbin)
-passwd kaestel
-
-
-Delete user:
-
-userdel martin (/usr/sbin)
