@@ -5,17 +5,19 @@ global $IC;
 global $model;
 global $itemtype;
 
-$wishlist = $IC->getItem(array("sindex" => $action[1], "extend" => array("tags" => true)));
+$wishlist = $IC->getItem(array("sindex" => $action[1], "extend" => true));
+$items = false;
 
-if($wishlist && $wishlist["tags"]):
+if($wishlist) {
+	$model_wishlist = $IC->typeObject("wishlist");
 
-	$tags = array();
-	foreach($wishlist["tags"] as $tag) {
-		array_push($tags, $tag["context"].":".$tag["value"]);
-	}
-	$items = $IC->getItems(array("status" => 1, "itemtype" => "wish", "tags" => implode($tags, ";"), "order" => "wish.name", "extend" => array("mediae" => true)));
+	// get wishes order
+	$items = $model_wishlist->getOrderedWishes($wishlist["item_id"]);
 
-endif;
+}
+else {
+	$wishlist["name"] = "Unknown wishlist";
+}
 
 ?>
 <div class="scene wishes i:wishes">
