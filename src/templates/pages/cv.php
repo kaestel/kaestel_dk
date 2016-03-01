@@ -10,7 +10,7 @@ global $model;
 
 		<dl class="info">
 			<dt class="published_at">Date published</dt>
-			<dd class="published_at" itemprop="datePublished" content="2015-02-12">Februar, 2015</dd>
+			<dd class="published_at" itemprop="datePublished" content="2015-02-12">Februar, 2016</dd>
 			<dt class="author">Author</dt>
 			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
 		</dl>
@@ -20,7 +20,7 @@ global $model;
 			<h2>SUMMARY</h2>
 
 			<p>
-				16 years of working professionally with cutting edge frontend technology and browsers. 
+				17 years of working professionally with cutting edge frontend technology and browsers. 
 				Teamleader or teamplayer as needed. I am gererally flexible but opinionated from experience when
 				it comes to frontend technology.
 			</p>
@@ -29,23 +29,22 @@ global $model;
 				screenreaders. If it interprets HTML, I've got something for it.
 			</p>
 			<p>
-				Defined, designed and authored several frameworks, a fully grown library, a SEO and crossplatform
+				Defined, designed and authored several frameworks, a fully grown JavaScript library, a SEO and crossplatform
 				markup model and a complete device detection and segmentation API.
 			</p>
 			<p>
 				Some of the brands I have worked for over the years: Lån &amp; Spar Bank, SCA/Libero, 
 				Electrolux, Nike, Carlsberg, Arla, Tuborg, 3F, Elsparefonden, Miljøstyrelsen, Københavns Lufthavn, 
-				TDC, Comwell, Toyota, Alfa Laval, Superbest, Amgen, Bayer, BIG, BR, Vestas, Metro, CPHPIX, Rockwool.
+				TDC, Comwell, Toyota, Alfa Laval, Superbest, Amgen, Bayer, BIG, BR, Vestas, Metro, CPHPIX, Rockwool and Distortion.
 			</p>
 			<p>
 				Acknowledged with multiple international awards and nominations.
 			</p>
 
-
 			<h2>SKILLS</h2>
 
 			<p>
-				HTML5, JavaScript, CSS, AJAX, Web Standards, Cross-browser Compatibility, MySQL, PHP, XML,
+				HTML(5), JavaScript, CSS(3), AJAX, Web Standards, Cross-browser Compatibility, MySQL, PHP, XML,
 				Accessibility, Apache, SEO, Mobile development, iPhone, Git, CMS, Interaction Design, User Experience and
 				Information Architecture.
 			</p>
@@ -58,15 +57,15 @@ global $model;
 
 
 			<h3>think.dk, 2011 - present</h3>
-			<p>Programmer and writer</p>
+			<p>Programmer, writer and ideolog</p>
 			<p>
-				Continuing my experimental work with my preferred platform (parentNode.dk).
+				Continuing my experimental work with my preferred platform: parentNode.dk.
 			</p>
 			<p>
 				Primary technologies: Imagination, JavaScript, PHP, HTML5, CSS.
 			</p>
 			<p>
-				Noticably achivements: Janitor v0.8, Manipulator v0.9, Modulator v1 and Detector v2.
+				Noticably achivements: Janitor v0.7.6, Manipulator v0.9.1, Modulator v1 and Detector v3.
 			</p>
 
 
@@ -88,9 +87,9 @@ global $model;
 			<h3>parentNode, 2009 - Present</h3>
 			<p>Founder and Idealist</p>
 			<p>
-				Developing a frontend optimized content management and distribution platform, including:<br />
+				Developing a full stack frontend optimized content management and distribution platform, including:<br />
 				Manipulator - a full JavaScript library and framework<br />
-				Janitor - a PHP Content Management Framework<br />
+				Janitor - a PHP Content Management Developer Toolkit<br />
 				Modulator - a Semantic markup model to support any HTML capable device<br />
 				Detector - a detection and segmentation model for HTML capable devices<br />
 			</p>
@@ -130,7 +129,11 @@ global $model;
 			<h3>Eurekarepublic, 2006 - 2008</h3>
 			<p>Co Founder and Developer</p>
 			<p>
-				Developing a mobile sales platform for digital content.
+				Developing a mobile sales platform for digital content (wallpapers, ringtones, apps and shortstories).
+			</p>
+			<p>Primary technologies: JavaScript, CSS, HTML, PHP.</p>
+			<p>
+				Noticably achivements: Developing a multi-region content distribution system.
 			</p>
 
 
@@ -154,6 +157,9 @@ global $model;
 				Finding new ways requires treading new paths.
 			</p>
 			<p>Primary technologies: Wind, curiosity.</p>
+			<p>
+				Noticably achivements: Crossing the Bay of Biscay.
+			</p>
 
 
 			<h3>Framfab, 1999 - 2002</h3>
@@ -191,6 +197,10 @@ global $model;
 				Sales Department, Financial advisor. Knowing I had a talent for numbers - not yet aware of
 				how to put it to use.
 			</p>
+
+
+			<h3>Den Danske Bank, 1994 - 1996</h3>
+			<p>Trainee</p>
 
 		</div>
 	</div>
