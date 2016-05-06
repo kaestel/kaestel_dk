@@ -15,9 +15,4 @@
 #content .scene.geek.lists div.posts {padding-top: 20px;}
 
 
-/* WISHLIST */
-#content .scene.wishlist {}
-
-/* WISH RESERVE / UN-RESERVE */
-#content .scene.wishes ul.items > li ul.actions {display: none;}
 

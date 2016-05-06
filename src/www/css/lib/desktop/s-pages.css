@@ -15,28 +15,6 @@
 /* GEEK FRONT */
 
 
-/* WISHLIST */
-#content .scene.wishlist ul.items.wishlists {padding-left: 50px; padding-right: 50px;}
-
-
-/* WISH */
-#content .scene.wishes ul.items.wishes {padding-left: 50px; padding-right: 50px;}
-#content .scene.wishes ul.items > li .image,
-#content .scene.wishes ul.items > li .text {display: inline-block; vertical-align: top;}
-#content .scene.wishes ul.items > li .image {width: 250px; height: 140px; background-position: center center; background-size: 100% auto; margin-bottom: 0px; cursor: default;}
-#content .scene.wishes ul.items > li h3 {padding: 0 25px 10px;}
-#content .scene.wishes ul.items > li div.description p {padding: 0 25px;}
-
-/* WISH PRICE */
-#content .scene.wishes ul.items dl.info {padding: 0 25px 20px;}
-#content .scene.wishes ul.items dl.info dd {font-size: 13px; display: block;}
-
-
-/* WISH RESERVE / UN-RESERVE */
-#content .scene.wishes ul.items > li ul.actions {padding: 0 25px;}
-#content .scene.wishes ul.items > li ul.actions.reserved .reserve {display: none;}
-#content .scene.wishes ul.items > li ul.actions .unreserve {display: none;}
-#content .scene.wishes ul.items > li ul.actions.reserved .unreserve {display: inline-block;}
 
 
 .cv #navigation,

@@ -12,8 +12,3 @@
 #content .scene.tag li.post {padding-top: 10px;}
 
 
-/* WISHLIST */
-#content .scene.wishlist {}
-
-/* WISH RESERVE / UN-RESERVE */
-#content .scene.wishes ul.items > li ul.actions {display: none;}
