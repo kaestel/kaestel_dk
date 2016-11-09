@@ -6,14 +6,36 @@ global $model;
 <div class="scene plain i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
-		<h1 itemprop="name">Plain as the Sun</h1>
+		<h1 itemprop="headline">Plain as the Sun</h1>
 
-		<dl class="info">
+		<ul class="info">
+			<li class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></li>
+			<li class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"></li>
+			<li class="author" itemprop="author">Martin Kæstel Nielsen</li>
+			<li class="main_entity" itemprop="mainEntityOfPage" content="<?= SITE_URL."/plain" ?>"></li>
+			<li class="publisher" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+				<ul class="publisher_info">
+					<li class="name" itemprop="name">kaestel.dk</li>
+					<li class="logo" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+						<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
+						<span class="image_width" itemprop="width" content="720"></span>
+						<span class="image_height" itemprop="height" content="405"></span>
+					</li>
+				</ul>
+			</li>
+			<li class="image_info" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+				<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
+				<span class="image_width" itemprop="width" content="720"></span>
+				<span class="image_height" itemprop="height" content="405"></span>
+			</li>
+		</ul>
+
+		<!--dl class="info">
 			<dt class="published_at">Date published</dt>
 			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
 			<dt class="author">Author</dt>
 			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
-		</dl>
+		</dl-->
 
 		<div class="articlebody" itemprop="articleBody">
 			<p>
@@ -21,8 +43,8 @@ global $model;
 				material. Don't scrape, it won't help. I am like that.
 			</p>
 			<p>
-				I am a part time revolutionary. I spend the other part serving the system I revolt against. Surely, 
-				one day this will lead to a breakdown. I wonder who will win.
+				I am a part time revolutionary. I spend the other part serving the system I revolt against. Ironically it's 
+				expensive to be a revolutionary nowwadays. Surely, one day this will lead to a breakdown. I wonder who will win.
 			</p>
 			<p>
 				I am a ideologist. I think someone has to be in order to save ourselves from reaching the end of our 
@@ -34,7 +56,7 @@ global $model;
 				things, but not this. 
 			</p>
 			<p>
-				I am a writer. I love the process of writing, the in depth reflection as well as the surprising result
+				I am a writer. I love the process of writing, the in-depth reflection as well as the surprising result
 				of letting the words flow.
 			</p>
 
@@ -54,7 +76,7 @@ global $model;
 				I scream at the sky, when overwhelmed by injustice. It happens too often to ignore, and it is being
 				ignored too often. What the fuck is wrong with you people. I am fighting back.
 			</p>
-			<p>
+			<!--p>
 				I love the sun, it warms me and lights my way.<br />
 				I love the sea, it never fails to embrace me.<br />
 				I love the sky, it never ends.<br />
@@ -65,7 +87,7 @@ global $model;
 			<p>
 				I try to love everything <br />
 				but sometimes I fail.
-			</p>
+			</p-->
 			<p>
 				I dream of things I can’t entirely explain.<br />
 				I feel an urge to make this world a better place.<br />
@@ -91,24 +113,39 @@ global $model;
 
 			<h2>Side projects</h2>
 			<ul>
-				<li><a href="http://think.dk" target="_blank">think.dk</a></li>
-				<li><a href="http://parentnode.dk" target="_blank">parentNode</a></li>
-				<li><a href="http://detector.parentnode.dk" target="_blank">Detector</a></li>
-				<li><a href="http://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>
-				<li><a href="http://janitor.parentnode.dk" target="_blank">Janitor</a></li>
-				<li><a href="http://modulator.parentnode.dk" target="_blank">Modulator</a></li>
+				<li><a href="https://think.dk" target="_blank">think.dk</a></li>
+				<li><a href="https://parentnode.dk" target="_blank">parentNode</a></li>
+				<li><a href="https://detector.parentnode.dk" target="_blank">Detector</a></li>
+				<li><a href="https://manipulator.parentnode.dk" target="_blank">Manipulator</a></li>
+				<li><a href="https://janitor.parentnode.dk" target="_blank">Janitor</a></li>
+				<li><a href="https://modulator.parentnode.dk" target="_blank">Modulator</a></li>
+				<li><a href="https://stopknappen.dk" target="_blank">Stopknappen.dk</a></li>
 			</ul>
 		</div>
 	</div>
 
-	<h2>Contact info (for those who dare)</h2>
 
-	<div class="vcard company" itemscope itemtype="http://schema.org/Person">
-		<h3 class="name fn" itemprop="name">Martin Kæstel Nielsen</h3>
-		<ul>
-			<li class="tel" itemprop="telephone"><a href="callto:+4520742819">+45 2074 2819</a></li>
-			<li class="email" itemprop="email"><a href="mailto:martin@kaestel.dk">martin@kaestel.dk</a></li>
-		</ul>
+	<div itemtype="http://schema.org/Person" itemscope class="vcard person">
+		<h2>Contact info (for those who dare)</h2>
+		<h3 class="name" itemprop="name">Martin Kæstel Nielsen</h3>
+
+		<dl class="info contact">
+			<dt class="contact">Contact</dt>
+			<dd class="contact">
+				<ul>
+					<li class="tel" itemprop="telephone" content="+4520742819">+45 2074 2819</li>
+					<li class="email"><a href="mailto:martin@kaestel.dk" itemprop="email" content="martin@kaestel.dk">martin@kaestel.dk</a></li>
+				</ul>
+			</dd>
+			<dt class="social">Social media</dt>
+			<dd class="social">
+				<ul>
+					<li class="facebook"><a href="https://facebook.com/kaestel">Facebook</a></li>
+					<li class="linkedin"><a href="https://www.linkedin.com/in/kaestel">LinkedIn</a></li>
+				</ul>
+			</dd>
+		</dl>
+
 	</div>
 
 	<!-- 

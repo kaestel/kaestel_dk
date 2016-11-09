@@ -207,12 +207,12 @@ Contributor Martin Kaestel Nielsen.
 
 #EXHIBIT B. Attribution Information
 
-Attribution Copyright Notice: Copyright 2013 Martin Kæstel Nielsen
+Attribution Copyright Notice: Martin Kæstel Nielsen
 
-Attribution Phrase (not exceeding 10 words): Copyright 2013 Martin Kæstel Nielsen
+Attribution Phrase (not exceeding 10 words): Martin Kæstel Nielsen
 
 Attribution URL: kaestel.dk
 
-Graphic Image as provided online: http://kaestel.dk/img/license_badge.png.
+Graphic Image as provided online: http://kaestel.dk/favicon.png.
 
 Display of Attribution Information is required in Larger Works which are defined in the CPAL as a work which combines Covered Code or portions thereof with code not governed by the terms of the CPAL.

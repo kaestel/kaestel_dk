@@ -52,16 +52,10 @@ if($pagination["range_items"]) {
 <?				endforeach; ?>
 <?			endif; ?>
 			</ul>
-			<h2 itemprop="name"><?= $item["name"] ?></h2>
+			<h2 itemprop="headline"><?= $item["name"] ?></h2>
 
-			<dl class="info">
-				<dt class="published_at">Date published</dt>
-				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
-				<dt class="hardlink">Hardlink</dt>
-				<dd class="hardlink" itemprop="url"><?= SITE_URL."/geek/logs/tag/".$tag."/".$item["sindex"] ?></dd>
-			</dl>
+
+			<?= $HTML->articleInfo($item, "/geek/logs/".$item["sindex"], $media, true) ?>
 
 			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
 <?			if($item["location"]): ?>

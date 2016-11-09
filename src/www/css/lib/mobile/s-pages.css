@@ -6,6 +6,12 @@
 	font-family: Times,serif;
 }
 
+/* PLAIN */
+#content .scene.terms ul.info,
+#content .scene.plain ul.info {display: none;}
+
+/* VCARD */
+#content .scene div.vcard.person h3 {display: none;}
 
 /* GEEK */
 #content .scene.tag li.log,

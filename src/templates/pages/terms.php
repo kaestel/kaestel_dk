@@ -1,14 +1,30 @@
 <div class="scene terms i:scene">
 
 	<div class="article" itemscope itemtype="http://schema.org/Article">
-		<h1 itemprop="name">Cookies, privacy and terms of use</h1>
+		<h1 itemprop="headline">Cookies, privacy and terms of use</h1>
 	
-		<dl class="info">
-			<dt class="published_at">Date published</dt>
-			<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></dd>
-			<dt class="author">Author</dt>
-			<dd class="author" itemprop="author">Martin Kæstel Nielsen</dd>
-		</dl>
+		<ul class="info">
+			<li class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"><?= date("Y-m-d, H:i", filemtime(__FILE__)) ?></li>
+			<li class="modified_at" itemprop="dateModified" content="<?= date("Y-m-d", filemtime(__FILE__)) ?>"></li>
+			<li class="author" itemprop="author">Martin Kæstel Nielsen</li>
+			<li class="main_entity" itemprop="mainEntityOfPage" content="<?= SITE_URL."/terms" ?>"></li>
+			<li class="publisher" itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+				<ul class="publisher_info">
+					<li class="name" itemprop="name">kaestel.dk</li>
+					<li class="logo" itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+						<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
+						<span class="image_width" itemprop="width" content="720"></span>
+						<span class="image_height" itemprop="height" content="405"></span>
+					</li>
+				</ul>
+			</li>
+			<li class="image_info" itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+				<span class="image_url" itemprop="url" content="<?= SITE_URL ?>/img/logo-large.png"></span>
+				<span class="image_width" itemprop="width" content="720"></span>
+				<span class="image_height" itemprop="height" content="405"></span>
+			</li>
+		</ul>
+
 
 		<div class="articlebody" itemprop="articleBody">
 			<p>
@@ -59,15 +75,26 @@
 				or any ideas posted on the website.
 			</p>
 			<p>
-				Everything you read on this website is protected
-				by copyright laws, but you can freely quote or reproduce any part of my content as long as you clearly state
-				its origin or provide a link to this website in direct conjonction with the reproduced text.
-			</p>
-			<p>
-				By contributing to this website, you accept the rules of copyright.
+				I do not include Facebook sharing or other external plugins, which could lead to compromising your privacy.
 			</p>
 			<p>
 				I maintain the right to update or change these terms as needed.
+			</p>
+
+			<h2>Licenses</h2>
+			<p>
+				The content of this website is licensed under a 
+				<a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
+			</p>
+			<p>
+				That means everything you read on this website is protected
+				by copyright laws, but you can freely quote or reproduce any part of our content as long as you clearly state
+				its origin or provide a link to this website in direct conjonction with the reproduced text.
+			</p>
+			<p>
+				The source code of this website is licensed under a 
+				<a rel="license" href="https://github.com/kaestel/kaestel_dk/blob/master/LICENSE-CPAL.md">CPAL-1.0 licence</a>, 
+				and available as an open source project on <a rel="license" href="https://github.com/kaestel/kaestel_dk">Github</a>.
 			</p>
 		</div>
 	</div>

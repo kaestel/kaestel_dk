@@ -14,7 +14,12 @@
 
 /* GEEK FRONT */
 
+/* VCARD */
+#content .scene div.vcard.person h3 {display: none;}
 
+/* PLAIN */
+#content .scene.terms ul.info,
+#content .scene.plain ul.info {display: none;}
 
 
 .cv #navigation,

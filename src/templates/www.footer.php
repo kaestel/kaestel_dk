@@ -1,13 +1,4 @@
-<?
-$navigation = session()->value("navigation_main");
-// or get complete structure from system
-if(!$navigation) {
-
-	$NC = new Navigation();
-	$navigation = $NC->getNavigations(array("handle" => "main"));
-	session()->value("navigation_main", $navigation);
-}
-?>
+<? $navigation = $this->navigation("main"); ?>
 	</div>
 
 	<div id="navigation">
@@ -21,7 +12,11 @@ if(!$navigation) {
 	</div>
 
 	<div id="footer">
-		<p>&lt;aliens&gt;we are all&lt;/aliens&gt;</p>
+		<ul class="servicenavigation">
+			<li class="terms"><a href="/terms">Terms</a></li>
+		</ul>
+
+		<p><a href="http://parentnode.dk">&lt;aliens&gt;we are all&lt;/aliens&gt;</a></p>
 	</div>
 
 </div>

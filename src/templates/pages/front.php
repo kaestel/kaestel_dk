@@ -48,14 +48,9 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?			endif; ?>
 			</ul>
 
-			<h3 itemprop="name"><a href="/geek/posts/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
+			<h3 itemprop="headline"><a href="/geek/posts/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
-			<dl class="info">
-				<dt class="published_at">Date published</dt>
-				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
-			</dl>
+			<?= $HTML->articleInfo($item, "/", $media) ?>
 
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">
@@ -101,14 +96,9 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?			endif; ?>
 			</ul>
 
-			<h3 itemprop="name"><a href="/geek/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
+			<h3 itemprop="headline"><a href="/geek/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
-			<dl class="info">
-				<dt class="published_at">Date published</dt>
-				<dd class="published_at" itemprop="datePublished" content="<?= date("Y-m-d", strtotime($item["published_at"])) ?>"><?= date("Y-m-d, H:i", strtotime($item["published_at"])) ?></dd>
-				<dt class="author">Author</dt>
-				<dd class="author" itemprop="author"><?= $item["user_nickname"] ?></dd>
-			</dl>
+			<?= $HTML->articleInfo($item, "/", $media) ?>
 
 			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
 <?			if($item["location"]): ?>

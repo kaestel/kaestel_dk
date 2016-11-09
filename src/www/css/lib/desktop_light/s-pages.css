@@ -9,6 +9,13 @@
 	font-family: "PT Serif", Times, serif;
 }
 
+/* PLAIN */
+#content .scene.terms ul.info,
+#content .scene.plain ul.info {display: none;}
+
+/* VCARD */
+#content .scene div.vcard.person h3 {display: none;}
+
 
 /* GEEK FRONT */
 #content .scene.geek.lists div.logbooks,
