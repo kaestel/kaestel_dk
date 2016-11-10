@@ -54,6 +54,7 @@ if($pagination["range_items"]) {
 			</ul>
 			<h2 itemprop="headline"><?= $item["name"] ?></h2>
 
+
 			<?= $HTML->articleInfo($item, "/geek/posts/".$item["sindex"], $media, true) ?>
 
 
