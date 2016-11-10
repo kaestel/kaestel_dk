@@ -28,7 +28,7 @@ Util.Objects["articlelist"] = new function() {
 			// scroll handler
 			// loads next/prev and initializes focused articles
 			list.scrolled = function() {
-				u.bug("list scrolled:" + u.scrollY());
+//				u.bug("list scrolled:" + u.scrollY());
 
 				// reset article load-timer
 				u.t.resetTimer(this.t_init);

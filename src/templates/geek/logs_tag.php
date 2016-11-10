@@ -57,16 +57,6 @@ if($pagination["range_items"]) {
 
 			<?= $HTML->articleInfo($item, "/geek/logs/".$item["sindex"], $media, true) ?>
 
-			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
-<?			if($item["location"]): ?>
-				<dt class="location">location</dt>
-				<dd class="location" itemprop="name"><?= $item["location"] ?></dd>
-<?			endif; ?>
-				<dt class="latitude">&phi;</dt>
-				<dd class="latitude" itemprop="latitude"><?= round($item["latitude"], 5) ?>°</dd>
-				<dt class="longitude">&lambda;</dt>
-				<dd class="longitude" itemprop="longitude"><?= round($item["longitude"], 5) ?>°</dd>
-			</dl>
 
 			<div class="articlebody" itemprop="articleBody">
 				<?= $item["html"] ?>

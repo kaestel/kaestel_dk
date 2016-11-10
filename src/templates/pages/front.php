@@ -100,17 +100,6 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 
 			<?= $HTML->articleInfo($item, "/", $media) ?>
 
-			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
-<?			if($item["location"]): ?>
-				<dt class="location">location</dt>
-				<dd class="location" itemprop="name"><?= $item["location"] ?></dd>
-<?			endif; ?>
-				<dt class="latitude">&phi;</dt>
-				<dd class="latitude" itemprop="latitude"><?= round($item["latitude"], 5) ?>°</dd>
-				<dt class="longitude">&lambda;</dt>
-				<dd class="longitude" itemprop="longitude"><?= round($item["longitude"], 5) ?>°</dd>
-			</dl>
-
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">
 				<p><?= nl2br($item["description"]) ?></p>

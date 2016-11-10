@@ -38,9 +38,8 @@ class HTML extends HTMLCore {
 
 	function articleInfo($item, $url, $media = false, $sharing = false) {
 
-		
 		$_ = '';
-		
+
 		$_ .= '<ul class="info">';
 		$_ .= '	<li class="published_at" itemprop="datePublished" content="'. date("Y-m-d", strtotime($item["published_at"])) .'">'. date("Y-m-d, H:i", strtotime($item["published_at"])) .'</li>';
 		$_ .= '	<li class="modified_at" itemprop="dateModified" content="'. date("Y-m-d", strtotime($item["modified_at"])) .'"></li>';
@@ -69,12 +68,22 @@ class HTML extends HTMLCore {
 		endif;
 
 		$_ .= '	</li>';
+
+		if(isset($item["location"]) && $item["location"] && $item["latitude"] && $item["longitude"]):
+			$_ .= '	<li class="place" itemprop="contentLocation" itemscope itemtype="http://schema.org/Place">';
+			$_ .= '		<ul class="geo" itemprop="geo" itemscope itemtype="http://schema.org/GeoCoordinates">';
+			$_ .= '			<li class="location" itemprop="name">'.$item["location"].'</li>';
+			$_ .= '			<li class="latitude" itemprop="latitude" content="'.round($item["latitude"], 5).'"></li>';
+			$_ .= '			<li class="longitude" itemprop="longitude" content="'.round($item["longitude"], 5).'"></li>';
+			$_ .= '		</ul>';
+			$_ .= '	</li>';
+		endif;
+
 		$_ .= '</ul>';
 
 		return $_;
 
 	}
-
 
 }
 

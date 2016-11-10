@@ -69,24 +69,13 @@ if($pagination["range_items"]) {
 			<?= $HTML->articleInfo($item, "/geek/logs/".$item["sindex"], $media, true) ?>
 
 
-			<dl class="geo" itemprop="contentLocation" itemscope itemtype="http://schema.org/GeoCoordinates">
-<?			if($item["location"]): ?>
-				<dt class="location">location</dt>
-				<dd class="location" itemprop="name"><?= $item["location"] ?></dd>
-<?			endif; ?>
-				<dt class="latitude">&phi;</dt>
-				<dd class="latitude" itemprop="latitude"><?= round($item["latitude"], 5) ?>°</dd>
-				<dt class="longitude">&lambda;</dt>
-				<dd class="longitude" itemprop="longitude"><?= round($item["longitude"], 5) ?>°</dd>
-			</dl>
-
 			<div class="articlebody" itemprop="articleBody">
 				<?= $item["html"] ?>
 			</div>
 
 <?			if($item["mediae"]):
 				foreach($item["mediae"] as $media): ?>
-			<div class="image _id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
+			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
 			</div>
 <? 				endforeach;
