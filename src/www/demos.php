@@ -1,3 +1,11 @@
+<?php
+$access_item = false;
+if(isset($read_access) && $read_access) {
+	return;
+
+}
+exit();
+?>
 <?php $body_class = "demos" ?>
 <?php $page_description = "Demos" ?>
 <?php $page_title = "Demos" ?>
