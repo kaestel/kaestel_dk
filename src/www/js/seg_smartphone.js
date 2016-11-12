@@ -6331,59 +6331,61 @@ Util.Objects["page"] = new function() {
 		page.initNavigation = function() {
 			page.nN.list = u.qs("ul.navigation", page.nN);
 			this.bn_nav = u.qs(".servicenavigation li.navigation", this.hN);
-			u.ae(this.bn_nav, "div");
-			u.ae(this.bn_nav, "div");
-			u.ae(this.bn_nav, "div");
-			u.ce(this.bn_nav);
-			this.bn_nav.clicked = function(event) {
-				if(u.hc(this, "open")) {
-					u.rc(this, "open");
-					var i, node;
-					for(i = 0; node = page.nN.nodes[i]; i++) {
-						u.a.transition(node, "all 0.2s ease-in "+(i*100)+"ms");
-						u.ass(node, {
-							"opacity": 0,
-							"transform":"translate(0, -30px)"
+			if(this.bn_nav) {
+				u.ae(this.bn_nav, "div");
+				u.ae(this.bn_nav, "div");
+				u.ae(this.bn_nav, "div");
+				u.ce(this.bn_nav);
+				this.bn_nav.clicked = function(event) {
+					if(u.hc(this, "open")) {
+						u.rc(this, "open");
+						var i, node;
+						for(i = 0; node = page.nN.nodes[i]; i++) {
+							u.a.transition(node, "all 0.2s ease-in "+(i*100)+"ms");
+							u.ass(node, {
+								"opacity": 0,
+								"transform":"translate(0, -30px)"
+							});
+						}
+						page.hN.transitioned = function() {
+							u.ass(page.nN, {
+								"display": "none"
+							});
+						}
+						u.a.transition(page.hN, "all 0.3s ease-in "+(page.nN.nodes.length*100)+"ms");
+						u.ass(page.hN, {
+							"height": "60px"
 						});
 					}
-					page.hN.transitioned = function() {
+					else {
+						u.ac(this, "open");
+						var i, node;
+						for(i = 0; node = page.nN.nodes[i]; i++) {
+							u.ass(node, {
+								"opacity": 0,
+								"transform":"translate(0, 30px)"
+							});
+						}
+						u.a.transition(page.hN, "all 0.3s ease-in");
+						u.ass(page.hN, {
+							"height": window.innerHeight+"px",
+						});
 						u.ass(page.nN, {
-							"display": "none"
+							"display": "block"
 						});
+						for(i = 0; node = page.nN.nodes[i]; i++) {
+							u.a.transition(node, "all 0.3s ease-in "+(100 + (i*100))+"ms");
+							u.ass(node, {
+								"opacity": 1,
+								"transform":"translate(0, 0)"
+							});
+						}
 					}
-					u.a.transition(page.hN, "all 0.3s ease-in "+(page.nN.nodes.length*100)+"ms");
-					u.ass(page.hN, {
-						"height": "60px"
-					});
+					page.nN.start_drag_y = (window.innerHeight - 100) - page.nN.offsetHeight;
+					page.nN.end_drag_y = page.nN.offsetHeight;
 				}
-				else {
-					u.ac(this, "open");
-					var i, node;
-					for(i = 0; node = page.nN.nodes[i]; i++) {
-						u.ass(node, {
-							"opacity": 0,
-							"transform":"translate(0, 30px)"
-						});
-					}
-					u.a.transition(page.hN, "all 0.3s ease-in");
-					u.ass(page.hN, {
-						"height": window.innerHeight+"px",
-					});
-					u.ass(page.nN, {
-						"display": "block"
-					});
-					for(i = 0; node = page.nN.nodes[i]; i++) {
-						u.a.transition(node, "all 0.3s ease-in "+(100 + (i*100))+"ms");
-						u.ass(node, {
-							"opacity": 1,
-							"transform":"translate(0, 0)"
-						});
-					}
-				}
-				page.nN.start_drag_y = (window.innerHeight - 100) - page.nN.offsetHeight;
-				page.nN.end_drag_y = page.nN.offsetHeight;
+				u.e.drag(this.nN, [0, (window.innerHeight - 100) - this.nN.offsetHeight, this.hN.offsetWidth, this.nN.offsetHeight], {"strict":false, "elastica":200, "vertical_lock":true});
 			}
-			u.e.drag(this.nN, [0, (window.innerHeight - 100) - this.nN.offsetHeight, this.hN.offsetWidth, this.nN.offsetHeight], {"strict":false, "elastica":200, "vertical_lock":true});
 			if(page.fN.service) {
 				nodes = u.qsa("li", page.fN.service);
 				for(i = 0; node = nodes[i]; i++) {
@@ -6426,9 +6428,11 @@ Util.Objects["page"] = new function() {
 				}
 			}
 			page.nN.nodes = u.qsa("li", page.nN.list);
-			u.ass(page.hN.service, {
-				"opacity":1
-			})
+			if(page.hN.service) {
+				u.ass(page.hN.service, {
+					"opacity":1
+				});
+			}
 		}
 		page.ready();
 	}
@@ -6527,7 +6531,7 @@ Util.Objects["newsletter"] = new function() {
 /*i-article.js*/
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
-		u.bug("article init:" + u.nodeId(article) + "," + u.qs("h1,h2,h3", article).innerHTML)
+		u.bug("article init:" + u.nodeId(article));
 		article.csrf_token = article.getAttribute("data-csrf-token");
 		article.header = u.qs("h1,h2,h3", article);
 		article.header.article = article;
@@ -6660,31 +6664,20 @@ Util.Objects["articlelist"] = new function() {
 	}
 }
 
-/*i-wishlist.js*/
-Util.Objects["wishlist"] = new function() {
-	this.init = function(scene) {
-		scene.resized = function() {
-		}
-		scene.scrolled = function() {
-		}
-		scene.ready = function() {
-			page.cN.scene = this;
-			page.resized();
-		}
-		scene.ready();
-	}
-}
+/*i-wishes.js*/
 Util.Objects["wishes"] = new function() {
 	this.init = function(scene) {
 		scene.image_width = 100;
 		scene.resized = function() {
-			if(this.nodes.length) {
-				var text_width = this.nodes[0].offsetWidth - this.image_width;
+			if(this.nodes && this.nodes.length) {
 				for(i = 0; node = this.nodes[i]; i++) {
-					u.as(node.text_mask, "width", text_width+"px", false);
+					if(node.image_mask) {
+						u.ass(node.image_mask, {
+							"height":Math.floor(node.image_mask.offsetWidth / (250/140)) + "px"
+						});
+					}
 				}
 			}
-			this.offsetHeight;
 		}
 		scene.scrolled = function() {
 		}
@@ -6697,19 +6690,10 @@ Util.Objects["wishes"] = new function() {
 					node.item_id = u.cv(node, "id");
 					node.image_format = u.cv(node, "format");
 					node.image_variant = u.cv(node, "variant");
-					node.image_mask = u.ae(node, "div", {"class":"image"});
-					node.text_mask = u.ae(node, "div", {"class":"text"});
-					u.as(node.text_mask, "width", text_width+"px", false);
-					if(node.image_format) {
-						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+node.image_variant+"/"+this.image_width+"x."+node.image_format+")");
+					if(node.item_id && node.image_format && node.image_variant) {
+						node.image_mask = u.ie(node, "div", {"class":"image"});
+						u.as(node.image_mask, "backgroundImage", "url(/images/"+node.item_id+"/"+node.image_variant+"/540x."+node.image_format+")");
 					}
-					else {
-						u.as(node.image_mask, "backgroundImage", "url(/images/0/missing/"+this.image_width+"x.png)");
-					}
-					u.ae(node.text_mask, u.qs("h3", node));
-					u.ae(node.text_mask, u.qs("dl", node));
-					node.actions = u.ae(node.text_mask, u.qs("ul.actions", node));
-					u.ae(node.text_mask, u.qs("div.description", node));
 					node.reserve_form = u.qs("li.reserve form", node);
 					if(node.reserve_form) {
 						u.f.init(node.reserve_form);

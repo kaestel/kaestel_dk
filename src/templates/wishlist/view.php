@@ -37,7 +37,7 @@ else {
 <?			endif; ?>
 
 			<dl class="info">
-				<dt class="price">Pris</dt>
+				<dt class="price">Set til</dt>
 				<dd class="price">DKK <?= $item["price"] ?></dd>
 <?			if($item["link"]): ?>
 				<dt class="link">Link</dt>

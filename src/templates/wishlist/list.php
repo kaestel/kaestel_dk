@@ -5,7 +5,7 @@ global $model;
 
 $items = $IC->getItems(array("status" => 1, "itemtype" => "wishlist", "extend" => true));
 ?>
-<div class="scene wishlist i:wishlist">
+<div class="scene wishlist i:scene">
 	<h1>Ønskesedler</h1>
 	<p>Input til gavmildhed.</p>
 

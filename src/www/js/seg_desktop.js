@@ -6943,6 +6943,44 @@ Util.svgShape = function(svg, svg_object) {
 }
 
 
+/*u-date.js*/
+Util.date = function(format, timestamp, months) {
+	var date = timestamp ? new Date(timestamp) : new Date();
+	if(isNaN(date.getTime())) {
+		if(new Date(timestamp.replace(/ /, "T"))) {
+			date = new Date(timestamp.replace(/ /, "T"));
+		}
+		else {
+			if(!timestamp.match(/[A-Z]{3}\+[0-9]{4}/)) {
+				if(timestamp.match(/ \+[0-9]{4}/)) {
+					date = new Date(timestamp.replace(/ (\+[0-9]{4})/, " GMT$1"));
+				}
+			}
+		}
+		if(isNaN(date.getTime())) {
+			date = new Date();
+		}
+	}
+	var tokens = /d|j|m|n|F|Y|G|H|i|s/g;
+	var chars = new Object();
+	chars.j = date.getDate();
+	chars.d = (chars.j > 9 ? "" : "0") + chars.j;
+	chars.n = date.getMonth()+1;
+	chars.m = (chars.n > 9 ? "" : "0") + chars.n;
+	chars.F = months ? months[date.getMonth()] : "";
+	chars.Y = date.getFullYear();
+	chars.G = date.getHours();
+	chars.H = (chars.G > 9 ? "" : "0") + chars.G;
+	var i = date.getMinutes();
+	chars.i = (i > 9 ? "" : "0") + i;
+	var s = date.getSeconds();
+	chars.s = (s > 9 ? "" : "0") + s;
+	return format.replace(tokens, function (_) {
+		return _ in chars ? chars[_] : _.slice(1, _.length - 1);
+	});
+};
+
+
 /*i-page.js*/
 u.bug_console_only = true;
 Util.Objects["page"] = new function() {
@@ -7232,7 +7270,7 @@ Util.Objects["newsletter"] = new function() {
 /*i-article.js*/
 Util.Objects["article"] = new function() {
 	this.init = function(article) {
-		u.bug("article init:" + u.nodeId(article) + "," + u.qs("h1,h2,h3", article).innerHTML)
+		u.bug("article init:" + u.nodeId(article));
 		article.csrf_token = article.getAttribute("data-csrf-token");
 		article.header = u.qs("h1,h2,h3", article);
 		article.header.article = article;
@@ -7311,20 +7349,20 @@ Util.Objects["article"] = new function() {
 			u.injectSharing(article);
 		}
 		article.header.current_readstate = article.getAttribute("data-readstate");
-		article.update_readstate_url = article.getAttribute("data-readstate-update");
+		article.add_readstate_url = article.getAttribute("data-readstate-add");
 		article.delete_readstate_url = article.getAttribute("data-readstate-delete");
-		if(article.header.current_readstate || (article.update_readstate_url && article.delete_readstate_url)) {
-			u.bug("add readstate:" + article.header.current_readstate)
+		if(article.header.current_readstate || (article.add_readstate_url && article.delete_readstate_url)) {
 			u.addCheckmark(article.header);
 			u.ce(article.header.checkmark);
-			article.header.checkmark.clicked = function() {
+			article.header.checkmark.clicked = function(event) {
+				this.out(event);
 				if(this.node.current_readstate) {
 					this.response = function(response) {
 						if(response.cms_status == "success" && response.cms_object) {
 							this.setAttribute("class", "checkmark not_read");
 							this.node.current_readstate = false;
 							this.node.article.setAttribute("data-readstate", "");
-							this.setAttribute("title", u.txt["readstate-not_read"]);
+							this.hint_txt = u.txt["readstate-not_read"];
 						}
 					}
 					u.request(this, this.node.article.delete_readstate_url, {"method":"post", "params":"csrf-token="+this.node.article.csrf_token+"&item_id"});
@@ -7335,10 +7373,10 @@ Util.Objects["article"] = new function() {
 							this.setAttribute("class", "checkmark read");
 							this.node.current_readstate = new Date();
 							this.node.article.setAttribute("data-readstate", this.node.current_readstate);
-							this.setAttribute("title", u.txt["readstate-read"] + ", " + u.date("Y-m-d H:i:s", this.node.current_readstate));
+							this.hint_txt = u.txt["readstate-read"] + ", " + u.date("Y-m-d H:i:s", this.node.current_readstate);
 						}
 					}
-					u.request(this, this.node.article.update_readstate_url, {"method":"post", "params":"csrf-token="+this.node.article.csrf_token});
+					u.request(this, this.node.article.add_readstate_url, {"method":"post", "params":"csrf-token="+this.node.article.csrf_token});
 				}
 			}
 		}
@@ -7582,20 +7620,7 @@ Util.Objects["articlelist"] = new function() {
 	}
 }
 
-/*i-wishlist.js*/
-Util.Objects["wishlist"] = new function() {
-	this.init = function(scene) {
-		scene.resized = function() {
-		}
-		scene.scrolled = function() {
-		}
-		scene.ready = function() {
-			page.cN.scene = this;
-			page.resized();
-		}
-		scene.ready();
-	}
-}
+/*i-wishes.js*/
 Util.Objects["wishes"] = new function() {
 	this.init = function(scene) {
 		scene.image_width = 250;
@@ -7611,6 +7636,7 @@ Util.Objects["wishes"] = new function() {
 		scene.scrolled = function() {
 		}
 		scene.ready = function() {
+			page.cN.scene = this;
 			this.nodes = u.qsa("li.item", this);
 			if(this.nodes.length) {
 				var text_width = this.nodes[0].offsetWidth - this.image_width;
@@ -7628,10 +7654,22 @@ Util.Objects["wishes"] = new function() {
 					else {
 						u.as(node.image_mask, "backgroundImage", "url(/images/0/missing/"+this.image_width+"x.png)");
 					}
-					u.ae(node.text_mask, u.qs("h3", node));
-					u.ae(node.text_mask, u.qs("dl", node));
-					node.actions = u.ae(node.text_mask, u.qs("ul.actions", node));
-					u.ae(node.text_mask, u.qs("div.description", node));
+					node._header = u.qs("h3", node);
+					if(node._header) {
+						u.ae(node.text_mask, node._header);
+					}
+					node._info = u.qs("dl.info", node);
+					if(node._info) {
+						u.ae(node.text_mask, node._info);
+					}
+					node._actions = u.qs("ul.actions", node);
+					if(node._actions) {
+						u.ae(node.text_mask, node._actions);
+					}
+					node._description = u.qs("div.description", node);
+					if(node._description) {
+						u.ae(node.text_mask, node._description);
+					}
 					node.reserve_form = u.qs("li.reserve form", node);
 					if(node.reserve_form) {
 						u.f.init(node.reserve_form);
@@ -7651,7 +7689,7 @@ Util.Objects["wishes"] = new function() {
 							u.e.kill(event);
 							this.response = function(response) {
 								if(response.cms_status == "success") {
-									u.ac(this.node.actions, "reserved");
+									u.ac(this.node._actions, "reserved");
 								}
 								else {
 								}
@@ -7678,7 +7716,7 @@ Util.Objects["wishes"] = new function() {
 							u.e.kill(event);
 							this.response = function(response) {
 								if(response.cms_status == "success") {
-									u.rc(this.node.actions, "reserved");
+									u.rc(this.node._actions, "reserved");
 								}
 								else {
 								}
@@ -7688,7 +7726,6 @@ Util.Objects["wishes"] = new function() {
 					}
 				}
 			}
-			page.cN.scene = this;
 			page.resized();
 		}
 		scene.ready();
@@ -7743,7 +7780,6 @@ u.injectGeolocation = function(node) {
 
 /*u-sharing.js*/
 u.injectSharing = function(node) {
-	u.bug("sharing")
 	node.sharing = u.ae(node, "div", {"class":"sharing"});
 	node.sharing.node = node;
 	var ref_point = u.qs("div.comments", node);

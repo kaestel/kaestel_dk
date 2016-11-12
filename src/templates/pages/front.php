@@ -34,23 +34,22 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 			</div>
 <?			endif; ?>
 
-			<ul class="tags">
-<?			if($item["tags"]): ?>
-<?				if(arrayKeyValue($item["tags"], "context", "editing")): ?>
-				<li class="editing" title="This post is work in progress">Still editing</li>
-<?				endif; ?>
-				<li><a href="/geek/posts">Posts</a></li>
-<?				foreach($item["tags"] as $item_tag): ?>
-<?	 				if($item_tag["context"] == "post"): ?>
-				<li><a href="/geek/posts/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
-<?					endif; ?>
-<?				endforeach; ?>
-<?			endif; ?>
-			</ul>
+
+
+			<?= $HTML->articleTags($item, [
+				"context" => ["post"],
+				"url" => "/geek/posts/tag",
+				"default" => ["/geek/posts", "Posts"]
+			]) ?>
+
 
 			<h3 itemprop="headline"><a href="/geek/posts/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
-			<?= $HTML->articleInfo($item, "/", $media) ?>
+
+			<?= $HTML->articleInfo($item, "/", [
+				"media" => $media
+			]) ?>
+
 
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">
@@ -82,23 +81,21 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 			</div>
 <?			endif; ?>
 
-			<ul class="tags">
-<?			if($item["tags"]): ?>
-<?				if(arrayKeyValue($item["tags"], "context", "editing")): ?>
-				<li class="editing" title="This post is work in progress">Still editing</li>
-<?				endif; ?>
-				<li><a href="/geek/logs">Logs</a></li>
-<?				foreach($item["tags"] as $item_tag): ?>
-<?	 				if($item_tag["context"] == "log"): ?>
-				<li><a href="/geek/logs/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
-<?					endif; ?>
-<?				endforeach; ?>
-<?			endif; ?>
-			</ul>
+
+			<?= $HTML->articleTags($item, [
+				"context" => ["log"],
+				"url" => "/geek/logs/tag",
+				"default" => ["/geek/logs", "Logs"]
+			]) ?>
+
 
 			<h3 itemprop="headline"><a href="/geek/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
-			<?= $HTML->articleInfo($item, "/", $media) ?>
+
+			<?= $HTML->articleInfo($item, "/", [
+				"media" => $media
+			]) ?>
+
 
 <?			if($item["description"]): ?>
 			<div class="description" itemprop="description">

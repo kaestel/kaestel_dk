@@ -36,26 +36,21 @@ if($pagination["range_items"]) {
 			</div>
 <?			endif; ?>
 
-			<ul class="tags">
-<?			if($item["tags"]): ?>
-<?				if(arrayKeyValue($item["tags"], "context", "editing")): ?>
-					<li class="editing" title="This post is work in progress">Still editing</li>
-<?				endif; ?>
-<?			endif; ?>
 
-				<li><a href="/geek/posts">Posts</a></li>
-<?			if($item["tags"]): ?>
-<?				foreach($item["tags"] as $item_tag): ?>
-<?	 				if($item_tag["context"] == $itemtype): ?>
-				<li><a href="/geek/posts/tag/<?= urlencode($item_tag["value"]) ?>" itemprop="articleSection"><?= $item_tag["value"] ?></a></li>
-<?					endif; ?>
-<?				endforeach; ?>
-<?			endif; ?>
-			</ul>
+			<?= $HTML->articleTags($item, [
+				"context" => ["post"],
+				"url" => "/geek/posts/tag",
+				"default" => ["/geek/posts", "Posts"]
+			]) ?>
+
+
 			<h2 itemprop="headline"><?= $item["name"] ?></h2>
 
 
-			<?= $HTML->articleInfo($item, "/geek/posts/".$item["sindex"], $media, true) ?>
+			<?= $HTML->articleInfo($item, "/geek/posts/".$item["sindex"], [
+				"media" => $media, 
+				"sharing" => true
+			]) ?>
 
 
 			<div class="articlebody" itemprop="articleBody">
