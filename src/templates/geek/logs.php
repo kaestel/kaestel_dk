@@ -21,7 +21,7 @@ if($pagination["range_items"]) {
 }
 ?>
 
-<div class="scene geek logs i:generic">
+<div class="scene geek logs i:scene">
 	<h1>I'd stay home if I could <br />... but I can't</h1>
 
 	<div class="categories">

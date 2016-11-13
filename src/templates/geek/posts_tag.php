@@ -22,7 +22,7 @@ if($pagination["range_items"]) {
 }
 ?>
 
-<div class="scene geek posts tag i:generic">
+<div class="scene geek posts tag i:scene">
 	<h1><?= $tag ?></h1>
 
 <? if($pagination["range_items"]): ?>

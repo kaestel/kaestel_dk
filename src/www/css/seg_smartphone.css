@@ -236,7 +236,7 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard dl.info {padding: 0 20px 20px; display: block;}
 #content .scene div.vcard dl.info dt,
 #content .scene div.vcard dl.info dd {display: block; width: auto; text-align: left;}
-#content .scene div.vcard dl.info dd {padding-bottom: 10px;}
+#content .scene div.vcard dl.info dd {padding-bottom: 10px; padding-left: 0;}
 #content .scene div.vcard dl.info dd ul {padding: 0;}
 #content .scene div.vcard dl.info dd li {font-size: 12px; color: #cccccc;}
 #content .scene div.vcard dl.info dd li a {padding-bottom: 10px; display: inline-block;}
@@ -636,6 +636,8 @@ body {}
 #header .servicenavigation li.navigation div {background: #63add0;}
 #header .servicenavigation li.navigation.open div {background: #034769;}
 #navigation ul li {color: #63add0;}
+#navigation ul li.admin,
+#navigation ul li.user {border-color: #034769}
 #content .scene a,
 #content .scene ul.geo.active li.location {color: #63add0;}
 #content .scene hr {border-color: #cccccc;}
@@ -643,10 +645,13 @@ body {}
 #content ul.actions a.button.primary {background-color: #63add0;}
 #content ul.actions input.button.primary:active,
 #content ul.actions a.button.primary:active {background-color: #034769;}
+#content .scene div.article ul.tags li a:active,
+#content .scene ul.articles li.article ul.tags li a:active {color: #63add0;}
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #034769;}
 #footer {border-color: #cccccc;}
-.terms_notification .accept,
-.terms_notification .details {color: #63add0;}
-.terms_notification {border-color: #034769;}
+#footer a {color: #63add0;}
+.terms_notification {background: #034769;}
 .front #header .logo,
 .plain #navigation ul li.plain,
 .geek #navigation ul li.geek {color: #034769;}

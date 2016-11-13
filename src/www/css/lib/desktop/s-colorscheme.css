@@ -18,11 +18,14 @@ body {}
 #content ul.actions input.button.primary,
 #content ul.actions a.button.primary {background-color: #63add0;}
 
-#footer {border-color: #cccccc;}
+#content .scene div.categories ul.tags li.selected a,
+#content .scene div.categories ul.tags li.selected:before {color: #034769;}
+#content .scene div.comments.open h2 {color: #63add0;}
 
-.terms_notification .accept,
-.terms_notification .details {color: #63add0;}
-.terms_notification {border-color: #034769;}
+#footer {border-color: #cccccc;}
+#footer a {color: #63add0;}
+
+.terms_notification {background-color: #034769;}
 
 
 /* LOCAL */

@@ -456,10 +456,11 @@ body {}
 #content ul.actions a.button.primary:hover,
 #content .scene .pagination .next:hover,
 #content .scene .pagination .previous:hover {background-color: #034769;}
+#content .scene div.categories ul.tags li.selected a {color: #034769;}
+#content .scene ul.tags a:hover {color: #63add0;}
 #footer {border-color: #cccccc;}
-.terms_notification .accept,
-.terms_notification .details {color: #63add0;}
-.terms_notification {border-color: #034769;}
+#footer a {color: #63add0;}
+.terms_notification {background-color: #034769;}
 .front #header .logo,
 .plain #navigation ul li.plain a,
 .geek #navigation ul li.geek a {color: #034769;}
