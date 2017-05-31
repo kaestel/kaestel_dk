@@ -15,8 +15,9 @@ body {}
 #content .scene ul.geo.active li.location {color: #63add0;}
 #content .scene hr {border-color: #cccccc;}
 
-#content ul.actions input.button.primary,
-#content ul.actions a.button.primary {background-color: #63add0;}
+ul.actions input.button.primary,
+ul.actions a.button.primary,
+#content ul.actions a.button.primary {background-color: #63add0; color: #ffffff;}
 
 #content .scene div.categories ul.tags li.selected a,
 #content .scene div.categories ul.tags li.selected:before {color: #034769;}

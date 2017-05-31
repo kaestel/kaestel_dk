@@ -24,7 +24,7 @@ else {
 	<h1><?= $wishlist["name"] ?></h1>
 
 <?	if($items): ?>
-	<ul class="items wishes">
+	<ul class="items wishes images">
 <?		foreach($items as $item):
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
@@ -33,6 +33,9 @@ else {
 <?			if($item["description"]): ?>
 			<div class="description">
 				<p><?= $item["description"] ?></p>
+
+				<p class="<?= ($item["reserved"] ? "reserved" : "available") ?>">Reserved by: <span><?= $item["reserved"] ? ($item["reserved"] == 1 ? "Anonym" : $item["reserved"]) : "Dig?" ?></span></p>
+
 			</div>
 <?			endif; ?>
 
@@ -45,17 +48,24 @@ else {
 <?			endif; ?>
 			</dl>
 
+
+
 			<ul class="actions <?= ($item["reserved"] == 1 ? "reserved" : "") ?>">
+				<? if(!$item["reserved"]): ?>
 				<li class="reserve">
 					<?= $model->formStart("reserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
-						<?= $model->submit("Available", array("class" => "primary")) ?>
+						<?= $model->input("reserved", array("label" => "Your name?", "value" => ($item["reserved"] ? $item["reserved"] : ((session()->value("user_id") && session()->value("user_group_id") > 1) ? session()->value("user_nickname") : "")))) ?>
+						<?= $model->submit("Reserve this item", array("class" => "primary", "name" => "reserve")) ?>
 					<?= $model->formEnd() ?>
 				</li>
-				<li class="unreserve">
-					<?= $model->formStart("unreserve/".$item["id"], array("class" => "labelstyle:inject")) ?>
-						<?= $model->submit("Reserved", array("class" => "secondary")) ?>
-					<?= $model->formEnd() ?>
-				</li>
+				<? else: ?>
+				<?= $JML->oneButtonForm("Ups, I didn't mean it", "/elos-buffet/unreserve/".$item["id"], array(
+					"confirm-value" => "Are you sure?",
+					"class" => "secondary",
+					"name" => "unreserve",
+					"wrapper" => "li.unreserve",
+				)) ?>
+				<? endif; ?>
 			</ul>
 		 </li>
 <?		endforeach; ?>

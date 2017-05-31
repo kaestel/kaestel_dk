@@ -68,7 +68,7 @@ global $model;
 			</p>
 			<p>
 				I scream at the sky, when overwhelmed by injustice. It happens too often to ignore, and it is being
-				ignored too often. What the fuck is wrong with you people. I am fighting back.
+				ignored too often. What the fk is wrong with you people. I am fighting back.
 			</p>
 			<!--p>
 				I love the sun, it warms me and lights my way.<br />
