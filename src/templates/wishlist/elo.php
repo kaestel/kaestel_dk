@@ -48,7 +48,7 @@ else {
 		<? endif; ?>
 
 
-		<?= $HTML->articleInfo($page_item, "/contact", [
+		<?= $HTML->articleInfo($page_item, "/elos-buffet", [
 			"media" => $media,
 			"sharing" => false
 		]) ?>
@@ -72,12 +72,12 @@ else {
 		<li class="item id:<?= $item["id"] ?>">
 			<h3><?= $item["name"] ?></h3>
 
-			<? if($item["description"]): ?>
 			<div class="description">
+			<? if($item["description"]): ?>
 				<p><?= $item["description"] ?></p>
+			<? endif; ?>
 				<p class="<?= ($item["reserved"] ? "reserved" : "available") ?>">Medbringes af: <span><?= $item["reserved"] ? ($item["reserved"] == 1 ? "Anonym" : $item["reserved"]) : "Dig?" ?></span></p>
 			</div>
-			<? endif; ?>
 
 			<ul class="actions <?= ($item["reserved"] ? "reserved" : "") ?>">
 				<? if(!$item["reserved"]): ?>
