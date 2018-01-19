@@ -18,3 +18,7 @@
 #content .scene.tag li.post {padding-top: 10px;}
 
 
+/* DEMOS */
+#content .demos {}
+#content .demos div.article div.articlebody ul.demos {list-style: none; padding: 20px 0 0; margin: 0;}
+#content .demos div.article div.articlebody ul.demos > li {padding-bottom: 20px;}

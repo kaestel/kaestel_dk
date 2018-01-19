@@ -31,3 +31,8 @@
 
 #content .scene.cv div.break {page-break-before: always; padding-bottom: 80px;}
 
+
+/* DEMOS */
+#content .scene.demos {}
+#content .scene.demos div.article div.articlebody ul.demos {list-style: none; padding: 40px 0 0; margin: 0;}
+#content .scene.demos div.article div.articlebody ul.demos > li {padding-bottom: 40px;}
