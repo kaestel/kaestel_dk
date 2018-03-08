@@ -185,6 +185,34 @@ global $model;
 					</div>
 				</li>
 				<li>
+					<h2>e-Types.com - Website</h2>
+					<ul class="actions">
+						<li><a href="http://e-types.kaestel.dk" target="_blank" class="hardlink">http://e-types.kaestel.dk</a></li>
+					</ul>
+
+					<div class="info">
+						<p>
+							Corporate website for the design and identity agency, e-Types. Made for all browser segments (desktop, 
+							desktop_light, smartphone, tablet, mobile), so it works in anything from the newest 
+							Chrome to Internet Explorer 6, from the newest iPhones to the oldest Nokia feature
+							phones.
+						</p>
+						<p>
+							In the desktop version the frontpage contains a scalable pixel perfect custom grid, with 3 intervals,
+							which was particularly difficult to make due to it's non-gridish nature. The rest of the
+							pages are also highly customized, with complex scaling rules.
+						</p>
+						<p>
+							There is a backend for frontpage curation, journals and articles. 
+						</p>
+						<p>
+							Produced in 2013 in collaboration with and for e-Types.<br />
+							Technologies: JavaScript, HTML5, CSS3, PHP, MySQL, Apache, Dedicated hosting on Linux.
+						</p>
+						<p class="note">Built using Manipulator v0.8, Janitor v0.7, Templator v1.0 and Detector v1.0.</p>
+					</div>
+				</li>
+				<li>
 					<h2>HTML5 WebApp</h2>
 					<ul class="actions">
 						<li><a href="http://html5-app.kaestel.dk" target="_blank" class="hardlink">http://html5-app.kaestel.dk</a></li>
@@ -778,6 +806,43 @@ global $model;
 						</p>
 						<p class="note">Built using Manipulator 0.3.</p>
 					</div>
+				</li>
+				<li>
+					<h2>mst.dk</h2>
+					<ul class="actions">
+						<li><a href="http://mst.kaestel.dk" target="_blank" class="hardlink">http://mst.kaestel.dk</a></li>
+					</ul>
+
+					<div class="info">
+						<?php
+							if(
+								$this->segment() == "seo" ||
+								$this->segment() == "smartphone" ||
+								$this->segment() == "mobile" ||
+								$this->segment() == "mobile_light"
+							) {
+								print '<p class="invaliddevice">Your current browser cannot show this demo.</p>';
+							}
+						?>
+						<p>
+							Official site for Miljøstyrelsen (The Danish Environmental Protection Agency), a government institution for the
+							protection of the environment.
+							Desktop only. Support for IE6+, Firefox, Safari and Chrome.
+						</p>
+						<p>
+							Public websites from this era had to conform to very strict validation and accessibility rules. The site
+							is fully WAI, AAA and W3C validated and fully accessible via Screen Readers, so even blind people 
+							could use it.
+						</p>
+						<p>
+							The HTML still works in modern browsers 9 years later, without any modifications made to the 
+							original codebase.
+						</p>
+						<p>
+							Produced in 2009 in collaboration with 1508 A/S.<br />
+							Technologies: HTML and CSS.
+						</p>
+					</div>
 
 				</li>
 				<li>
@@ -816,7 +881,6 @@ global $model;
 							Technologies: HTML, CSS, JavaScript.
 						</p>
 					</div>
-
 				</li>
 			</ul>
 
