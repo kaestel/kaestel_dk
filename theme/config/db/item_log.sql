@@ -3,12 +3,12 @@ CREATE TABLE `SITE_DB`.`item_log` (
   `item_id` int(11) NOT NULL,
 
   `name` varchar(100) NOT NULL,
-  `description` text NOT NULL,
-  `html` text NOT NULL,
+  `description` text NOT NULL DEFAULT '',
+  `html` text NOT NULL DEFAULT '',
 
-  `location` varchar(255) NOT NULL,
-  `latitude` double NOT NULL,
-  `longitude` double NOT NULL,
+  `location` varchar(255) NOT NULL DEFAULT '',
+  `latitude` double NOT NULL DEFAULT 0,
+  `longitude` double NOT NULL DEFAULT 0,
 
   PRIMARY KEY  (`id`),
   KEY `item_id` (`item_id`),
