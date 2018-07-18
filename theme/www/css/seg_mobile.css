@@ -365,7 +365,9 @@ dd {display: block; vertical-align: top; font-size: 13px; line-height: 1.25em;}
 #content .scene div.vcard.person h3 {display: none;}
 #content .scene.tag li.log,
 #content .scene.tag li.post {padding-top: 10px;}
-
+#content .demos {}
+#content .demos div.article div.articlebody ul.demos {list-style: none; padding: 20px 0 0; margin: 0;}
+#content .demos div.article div.articlebody ul.demos > li {padding-bottom: 20px;}
 
 /*s-colorscheme.css*/
 * {color: #034769;}
