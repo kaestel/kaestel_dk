@@ -347,7 +347,7 @@ Util.Objects["articlelist"] = new function() {
 
 
 			// set specific scroll handler for list
-			u.e.addWindowScrollEvent(list, list.scrolled);
+			u.e.addWindowEvent(list, "scroll", list.scrolled);
 
 		}
 	}
