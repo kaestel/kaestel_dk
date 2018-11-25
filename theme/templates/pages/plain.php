@@ -45,6 +45,27 @@ if($page_item) {
 
 	</div>
 
+	<div itemtype="http://schema.org/Person" itemscope class="person">
+		<h2>Contact info (for those who dare)</h2>
+		<h3 class="name" itemprop="name">Martin Kæstel Nielsen</h3>
+
+		<dl class="info contact">
+			<dt class="contact">Contact</dt>
+			<dd class="contact">
+				<ul>
+					<li class="tel" itemprop="telephone" content="+4520742819">+45 2074 2819</li>
+					<li class="email"><a href="mailto:martin@kaestel.dk" itemprop="email" content="martin@kaestel.dk">martin@kaestel.dk</a></li>
+				</ul>
+			</dd>
+			<dt class="social">Social media</dt>
+			<dd class="social">
+				<ul>
+					<li class="facebook"><a href="https://facebook.com/kaestel">Facebook</a></li>
+					<li class="linkedin"><a href="https://www.linkedin.com/in/kaestel">LinkedIn</a></li>
+				</ul>
+			</dd>
+		</dl>
+	</div>
 
 
 <? else:?>
