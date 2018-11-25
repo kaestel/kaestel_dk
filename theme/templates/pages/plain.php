@@ -45,7 +45,7 @@ if($page_item) {
 
 	</div>
 
-	<div itemtype="http://schema.org/Person" itemscope class="person">
+	<div itemtype="http://schema.org/Person" itemscope class="vcard person">
 		<h2>Contact info (for those who dare)</h2>
 		<h3 class="name" itemprop="name">Martin Kæstel Nielsen</h3>
 
