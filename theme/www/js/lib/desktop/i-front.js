@@ -25,6 +25,8 @@ Util.Objects["front"] = new function() {
 				}
 			}
 
+			u.showScene(this);
+
 			// accept cookies?
 			page.acceptCookies();
 

@@ -1,4 +1,5 @@
 @import url(../../assets/parentnode-skin-default/css/seg_desktop_light.css);
+@import url(../../assets/parentnode-skin-default/css/lib/desktop_light/s-form.css);
 
 @import url(desktop_light/s-pages.css);
 @import url(desktop_light/s-colorscheme.css);
