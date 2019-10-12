@@ -14,7 +14,7 @@ $items = $IC->getItems(array("itemtype" => $itemtype, "order" => "position ASC",
 		<?= $HTML->link("Wishes", "/janitor/wish/list", array("class" => "button", "wrapper" => "li.wish")) ?>
 	</ul>
 
-	<div class="all_items i:defaultList taggable filters sortable"<?= $JML->jsData() ?>>
+	<div class="all_items i:defaultList taggable filters sortable"<?= $JML->jsData(["tags", "search"]) ?>>
 <?		if($items): ?>
 		<ul class="items">
 <?			foreach($items as $item): ?>

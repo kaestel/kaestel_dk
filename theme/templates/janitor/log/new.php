@@ -18,7 +18,7 @@ global $itemtype;
 			<?= $model->input("description", array("class" => "autoexpand short")) ?>
 			<?= $model->inputLocation("location", "latitude", "longitude") ?>
 
-			<?= $model->inputHTML("html") ?>
+			<?= $model->input("html") ?>
 		</fieldset>
 
 		<?= $JML->newActions() ?>
