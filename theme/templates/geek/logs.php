@@ -39,7 +39,7 @@ if($pagination["range_items"]) {
 <? if($pagination["range_items"]): ?>
 	<ul class="items postings i:articlelist">
 <?		foreach($pagination["range_items"] as $item):
-			$media = $IC->sliceMedia($item); ?>
+			$media = $IC->sliceMediae($item); ?>
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>

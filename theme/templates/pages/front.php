@@ -25,7 +25,7 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 	<h2>Recent postings</h2>
 	<ul class="items postings i:articlelist">
 <?		foreach($post_items as $item):
-			$media = $IC->sliceMedia($item); ?>
+			$media = $IC->sliceMediae($item); ?>
 		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($media): ?>
@@ -72,7 +72,7 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 	<h2>Recents log entries</h2>
 	<ul class="items logs i:articlelist">
 <?		foreach($log_items as $item):
-			$media = $IC->sliceMedia($item); ?>
+			$media = $IC->sliceMediae($item); ?>
 		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
