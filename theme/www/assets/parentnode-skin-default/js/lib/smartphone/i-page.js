@@ -32,6 +32,7 @@ Util.Objects["page"] = new function() {
 		// navigation reference
 		page.nN = u.qs("#navigation", page);
 		page.nN = u.ie(page.hN, page.nN);
+		page.nN.nav = u.qs("ul.navigation", page.nN)
 
 
 		// footer reference
@@ -39,9 +40,9 @@ Util.Objects["page"] = new function() {
 		page.fN.service = u.qs(".servicenavigation", page.fN);
 
 
-		// global resize handler 
+		// global resize handler
 		page.resized = function() {
-//			u.bug("page resized")
+//			u.bug("page resized");
 
 			this.browser_h = u.browserH();
 			this.browser_w = u.browserW();
@@ -59,9 +60,28 @@ Util.Objects["page"] = new function() {
 			}
 
 			this.offsetHeight;
+
+			if(this.bn_nav) {
+				// Update navigation if open
+				if (this.bn_nav.is_open) {
+					// Update heights
+					u.ass(page.hN, {
+						"height":window.innerHeight + "px"
+					});
+
+					u.ass(page.nN, {
+						"height":(window.innerHeight - page.hN.service.offsetHeight) + "px"
+					});
+
+					// Update drag coordinates
+					u.e.setDragPosition(page.nN.nav, 0, 0);
+					u.e.setDragBoundaries(page.nN.nav, page.nN);
+				}
+			}
+
 		}
 
-		// iOS scroll fix 
+		// iOS scroll fix
 		page.fixiOSScroll = function() {
 
 			u.ass(this.hN, {
@@ -75,7 +95,7 @@ Util.Objects["page"] = new function() {
 
 		}
 
-		// global scroll handler 
+		// global scroll handler
 		page.scrolled = function() {
 
 			// Fix issue with fixed element after scroll
@@ -95,22 +115,17 @@ Util.Objects["page"] = new function() {
 		// global orientationchange handler
 		page.orientationchanged = function() {
 
-			// resize navigation if it is open
-			if(u.hc(page.bn_nav, "open")) {
-				u.as(page.hN, "height", window.innerHeight + "px");
-			}
-
 			// forward scroll event to current scene
 			if(page.cN && page.cN.scene && typeof(page.cN.scene.orientationchanged) == "function") {
 				page.cN.scene.orientationchanged();
 			}
 		}
-		
+
 
 
 		// Page is ready - called from several places, evaluates when page is ready to be shown
 		page.ready = function() {
-//			u.bug("page ready")
+//			u.bug("page ready");
 
 			// page is ready to be shown - only initalize if not already shown
 			if(!this.is_ready) {
@@ -206,7 +221,9 @@ Util.Objects["page"] = new function() {
 				this.bn_nav.clicked = function(event) {
 
 					// close navigation
-					if(u.hc(this, "open")) {
+					if(this.is_open) {
+						// Update open state
+						this.is_open = false;
 						u.rc(this, "open");
 
 						var i, node;
@@ -233,10 +250,25 @@ Util.Objects["page"] = new function() {
 							"height": "60px"
 						});
 
+						// Disable nav scroll 
+						u.ass(page.nN, {
+							"overflow-y":"hidden"
+						});
+
+						// Enable body scroll
+						u.ass(page.parentNode, {
+							"overflow-y":"scroll"
+						});
+
 					}
 					// open navigation
 					else {
+						// Update open state
+						this.is_open = true;
 						u.ac(this, "open");
+
+						// Clear hN transitioned, in order to prevent bugs
+						delete page.hN.transitioned;
 
 						var i, node;
 						// set initial animation state for nav nodes
@@ -249,9 +281,17 @@ Util.Objects["page"] = new function() {
 
 						// set animation for header
 						u.a.transition(page.hN, "all 0.3s ease-in");
+
+						// Set height of hN
 						u.ass(page.hN, {
 							"height": window.innerHeight+"px",
 						});
+
+						// Set height on navigation
+						u.ass(page.nN, {
+							"height":(window.innerHeight - page.hN.service.offsetHeight) + "px"
+						});
+
 						u.ass(page.nN, {
 							"display": "block"
 						});
@@ -265,15 +305,25 @@ Util.Objects["page"] = new function() {
 								"transform":"translate(0, 0)"
 							});
 						}
+						
+						// Enable nav scroll 
+						u.ass(page.nN, {
+							"overflow-y":"scroll"
+						});
+
+						// Disable body scroll
+						u.ass(page.parentNode, {
+							"overflow-y":"hidden"
+						});
 					}
 
-					// update drag coordinates
-					page.nN.start_drag_y = (window.innerHeight - 100) - page.nN.offsetHeight;
-					page.nN.end_drag_y = page.nN.offsetHeight;
+					// Update drag coordinates
+					u.e.setDragPosition(page.nN.nav, 0, 0);
+					u.e.setDragBoundaries(page.nN.nav, page.nN);
 
 				}
 				// enable dragging on navigation
-				u.e.drag(this.nN, [0, (window.innerHeight - 100) - this.nN.offsetHeight, this.hN.offsetWidth, this.nN.offsetHeight], {"strict":false, "elastica":200, "vertical_lock":true});
+				u.e.drag(this.nN.nav, this.nN, {"strict":false, "elastica":200, "vertical_lock":true, "overflow":"scroll"});
 			}
 
 
@@ -355,4 +405,3 @@ Util.Objects["page"] = new function() {
 }
 
 u.e.addDOMReadyEvent(u.init);
-

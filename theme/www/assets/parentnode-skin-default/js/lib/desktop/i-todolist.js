@@ -1,11 +1,11 @@
 Util.Objects["todolist"] = new function() {
 	this.init = function(scene) {
-//		u.bug("scene init:" + u.nodeId(scene))
+//		u.bug("scene init:", scene);
 
 
 
 		scene.resized = function() {
-//			u.bug("scene.resized:" + u.nodeId(this));
+//			u.bug("scene.resized:", this);
 
 
 			// resize text nodes
@@ -19,11 +19,11 @@ Util.Objects["todolist"] = new function() {
 		}
 
 		scene.scrolled = function() {
-//			u.bug("scrolled")
+//			u.bug("scrolled");
 		}
 
 		scene.ready = function() {
-			u.bug("scene.ready:" + u.nodeId(this));
+			u.bug("scene.ready:", this);
 
 			this.nodes = u.qsa("li.item", this);
 			if(this.nodes.length) {
@@ -62,7 +62,7 @@ Util.Objects["todolist"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+						u.request(this, this.form.action, {"method":this.form.method, "data":this.form.getData()});
 					}
 
 					node.open_form = u.qs("li.open form", node);
@@ -83,7 +83,7 @@ Util.Objects["todolist"] = new function() {
 //								alert("server communication failed");
 							}
 						}
-						u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+						u.request(this, this.form.action, {"method":this.form.method, "data":this.form.getData()});
 					}
 				}
 			}

@@ -24,7 +24,7 @@ TODO: Calculate processtime based on element size
 
 
 u.e.resetDragEvents = function(node) {
-//	u.bug("reset drag events:" + u.nodeId(node));
+	// u.bug("reset drag events:", node);
 
 	node._moves_pick = 0;
 
@@ -37,11 +37,16 @@ u.e.resetDragEvents = function(node) {
 	this.removeEvent(node, "mouseup", this._drop);
 	this.removeEvent(node, "touchend", this._drop);
 
-//	this.removeEvent(node, "mouseout", this._snapback);
-//	this.removeEvent(node, "mouseout", this._drop);
-//	this.removeEvent(node, "mouseout", this._drop_mouse);
-	this.removeEvent(node, "mouseout", this._drop_out);
-	this.removeEvent(node, "mouseover", this._drop_over);
+	//	this.removeEvent(node, "mouseout", this._snapback);
+	//	this.removeEvent(node, "mouseout", this._drop);
+	//	this.removeEvent(node, "mouseout", this._drop_mouse);
+
+	this.removeEvent(node, "mouseup", this._cancelPick);
+	this.removeEvent(node, "touchend", this._cancelPick);
+
+
+	this.removeEvent(node, "mouseout", this._dropOut);
+	// this.removeEvent(node, "mouseover", this._drop_over);
 
 
 
@@ -155,7 +160,7 @@ Optional parameters
 // it is important to do as many calculation beforehand to make event handling as fast as possible
 // if you do too many calculations on each event dragging will be lagging and ... well crappy.
 u.e.drag = function(node, boundaries, _options) {
-//	u.bug("set drag:"+u.nodeId(node))
+	// u.bug("set drag:", node);
 
 	node.e_drag_options = _options ? _options : {};
 
@@ -177,6 +182,7 @@ u.e.drag = function(node, boundaries, _options) {
 
 	// default values
 	node.drag_strict = true;
+	node.drag_overflow = false;
 //	node.drag_projection = false;
 	node.drag_elastica = 0;
 	node.drag_dropout = true;
@@ -186,6 +192,7 @@ u.e.drag = function(node, boundaries, _options) {
 	node.show_bounds = false;
 
 	// default callbacks
+	node.callback_ready = "ready";
 	node.callback_picked = "picked";
 	node.callback_moved = "moved";
 	node.callback_dropped = "dropped";
@@ -198,6 +205,7 @@ u.e.drag = function(node, boundaries, _options) {
 
 			switch(_argument) {
 				case "strict"			: node.drag_strict			= _options[_argument]; break;
+				case "overflow"			: node.drag_overflow		= _options[_argument]; break;
 //				case "projection"		: node.drag_projection		= _options[_argument]; break;
 				case "elastica"			: node.drag_elastica		= Number(_options[_argument]); break;
 				case "dropout"			: node.drag_dropout			= _options[_argument]; break;
@@ -218,126 +226,15 @@ u.e.drag = function(node, boundaries, _options) {
 
 //	node.process_time = process_time ? process_time : 0;
 
-
-//	u.bug("boundaries:" + typeof(boundaries) + "::" + boundaries.constructor.toString());
-//	u.xInObject(boundaries);
-//	alert(boundaries.constructor);
-//	u.bug(boundaries.scopeName + "," + typeof(boundaries))
-	// use scopeName for old IE
-//	if(boundaries.constructor.toString().match("Array")) {
-	if((boundaries.constructor && boundaries.constructor.toString().match("Array")) || (boundaries.scopeName && boundaries.scopeName != "HTML")) {
-
-//		u.bug("boundaries are array")
-
-		node.start_drag_x = Number(boundaries[0]);
-		node.start_drag_y = Number(boundaries[1]);
-		node.end_drag_x = Number(boundaries[2]);
-		node.end_drag_y = Number(boundaries[3]);
-
-
-		// position node absolute top/left in parentNode
-		// if node is already positioned, make sure it is to top/left
-
-	}
-	// boundaries is node
-//	else if(boundaries.constructor.toString().match("HTML")) {
-	else if((boundaries.constructor && boundaries.constructor.toString().match("HTML")) || (boundaries.scopeName && boundaries.scopeName == "HTML")) {
-
-//		u.bug("boundaries are node")
-
-		// TODO: if we need to compensate for padding and absolute positioning, do it here
-
-
-		node.start_drag_x = u.absX(boundaries) - u.absX(node);
-		node.start_drag_y = u.absY(boundaries) - u.absY(node);
-		node.end_drag_x = node.start_drag_x + boundaries.offsetWidth;
-		node.end_drag_y = node.start_drag_y + boundaries.offsetHeight;
-
-
-		// position node top/left absolute in boundary node
-		// if node is already positioned, make sure it is to top/left
-
-		// only change position to absolute on node
-		// - never change on other nodes, to avoid other content changing place
-
-
-		// TODO: should only be required if translate is not supported
-
-		// node is not positioned - change to absolute position
-		// if(u.gcs(node, "position").match(/absolute/) == null) {
-		// 
-		// 	// var relativeParent = u.relativeTo(node);
-		// 	// var top = u.absY(node) - u.absY(relativeParent);
-		// 	// var left = u.absX(node) - u.absX(relativeParent);
-		// 
-		// 	var top = u.absY(node) - u.absY(node.offsetParent);
-		// 	var left = u.absX(node) - u.absX(node.offsetParent);
-		// 
-		// 	u.as(node, "position", "absolute");
-		// 	u.as(node, "top", top + "px");
-		// 	u.as(node, "left", left + "px");
-		// }
-		// else {
-		// 
-		// 	// TODO: test correct for right positioning
-		// 	// change right to left
-		// 	if(u.gcs(node, "right")) {
-		// 
-		// 		var left = u.absX(node) - u.absX(node.offsetParent);
-		// 		u.as(node, "left", left + "px");
-		// 		u.as(node, "right", "auto");
-		// 	}
-		// 	// TODO: test correct for bottom positioning
-		// 	// change bottom to top
-		// 	if(u.gcs(node, "bottom")) {
-		// 
-		// 		var top = u.absY(node) - u.absY(node.offsetParent);
-		// 		u.as(node, "top", top + "px");
-		// 		u.as(node, "bottom", "auto");
-		// 	}
-		// 	
-		// }
-
-
-	}
-
-	// debug tool - shows boundaries
-	if(node.show_bounds) {
-		var debug_bounds = u.ae(document.body, "div", {"class":"debug_bounds"})
-		debug_bounds.style.position = "absolute";
-		debug_bounds.style.background = "red"
-		debug_bounds.style.left = (u.absX(node) + node.start_drag_x - 1) + "px";
-		debug_bounds.style.top = (u.absY(node) + node.start_drag_y - 1) + "px";
-		debug_bounds.style.width = (node.end_drag_x - node.start_drag_x) + "px";
-		debug_bounds.style.height = (node.end_drag_y - node.start_drag_y) + "px";
-		debug_bounds.style.border = "1px solid white";
-		debug_bounds.style.zIndex = 9999;
-		debug_bounds.style.opacity = .5;
-		if(document.readyState && document.readyState == "interactive") {
-			debug_bounds.innerHTML = "WARNING - injected on DOMLoaded"; 
-		}
-		u.bug("node: "+u.nodeId(node)+" in (" + u.absX(node) + "," + u.absY(node) + "), (" + (u.absX(node)+node.offsetWidth) + "," + (u.absY(node)+node.offsetHeight) +")");
-		u.bug("boundaries: (" + node.start_drag_x + "," + node.start_drag_y + "), (" + node.end_drag_x + ", " + node.end_drag_y + ")");
-	}
-
-
-
-	node._x = node._x ? node._x : 0;
-	node._y = node._y ? node._y : 0;
-
-	// offsetHeight and Width may change during a rotation, so better to save starting point values
-	// dragging locked (only event catching)
-	node.locked = ((node.end_drag_x - node.start_drag_x == node.offsetWidth) && (node.end_drag_y - node.start_drag_y == node.offsetHeight));
-
-	// is the drag one-dimentional
-//	node.only_vertical = (!node.locked && node.end_drag_x - node.start_drag_x == node.offsetWidth);
-//	node.only_horizontal = (!node.locked && node.end_drag_y - node.start_drag_y == node.offsetHeight);
-
-	node.only_vertical = (node.vertical_lock || (!node.locked && node.end_drag_x - node.start_drag_x == node.offsetWidth));
-	node.only_horizontal = (node.horizontal_lock || (!node.locked && node.end_drag_y - node.start_drag_y == node.offsetHeight));
-
+	u.e.setDragBoundaries(node, boundaries);
 
 	u.e.addStartEvent(node, this._inputStart);
+
+
+	// notify of movement
+	if(fun(node[node.callback_ready])) {
+		node[node.callback_ready]();
+	}
 }
 
 
@@ -348,7 +245,7 @@ u.e.drag = function(node, boundaries, _options) {
 * Calls return function element.picked to notify of event
 */
 u.e._pick = function(event) {
-//	u.bug("_pick:" + u.nodeId(this) + ":" + this._x + " x " + this._y + ", " + this.only_horizontal + ", " + this.only_vertical);
+	// u.bug("_pick:", this, this._x + " x " + this._y + ", " + this.only_horizontal + ", " + this.only_vertical);
 
 
 	// reset inital events to avoid unintended bubbling - only reset if pick makes sense
@@ -396,7 +293,7 @@ y: 3 -> -2 = 5 (3 - -2)
 		(init_speed_x < init_speed_y && this.only_vertical) ||
 		(!this.only_vertical && !this.only_horizontal)) {
 
-//		u.bug("valid pick:" + u.nodeId(this) + ", " + this._moves_counted + ", " + this._moves_required)
+		// u.bug("valid pick:", this, this._moves_counted + ", " + this._moves_required);
 
 //		if(this._moves_counted >= this._moves_required) {
 		if((init_speed_x > this.distance_to_pick || init_speed_y > this.distance_to_pick)) {
@@ -404,7 +301,7 @@ y: 3 -> -2 = 5 (3 - -2)
 			// reset moves count
 //			this._moves_counted = 0;
 
-//			u.bug("actual pick:" + u.nodeId(this))
+//			u.bug("actual pick:", this);
 
 			// reset inital events to avoid unintended bubbling if pick direction makes sense
 			u.e.resetNestedEvents(this);
@@ -458,16 +355,16 @@ y: 3 -> -2 = 5 (3 - -2)
 
 			// Undesired effect when sliding the presentation, could be enabled for small elements in large scopes using mouse
 			if(this.drag_dropout && event.type.match(/mouse/)) {
-//				u.bug("set mouseout event cancel:" + u.nodeId(this))
+				// u.bug("set mouseout event cancel:", this);
 	//			u.e.addEvent(this, "mouseout", u.e._drop_mouse);
 
 				// u.e._drop_over = function(event) {
 				// 	u.t.resetTimer(this.t_drop_out);
-				// 	u.bug("_drop_over:" + u.nodeId(this) + ", " + u.nodeId(event.target))
+				// 	u.bug("_drop_over:", this, event.target);
 				// }
 				// this.__out = function(event) {
 				//
-				// 	u.bug("_drop_out:" + u.nodeId(this) + ", " + u.nodeId(event.target))
+					// 	u.bug("_drop_out:", this, event.target);
 				//
 				// 	// if(event.target == this) {
 				// 	// 	this._drop = u.e._drop;
@@ -481,7 +378,7 @@ y: 3 -> -2 = 5 (3 - -2)
 				// }
 				// this.__out = function(event) {
 				//
-				// 	u.bug("_drop_out_is_real:" + u.nodeId(this) + ", " + u.nodeId(event.target));
+				// 	u.bug("_drop_out_is_real:", this, event.target);
 				//
 				// 	this._drop = u.e._drop;
 				// 	this._drop({"type":"mouseout", "target":this});
@@ -494,7 +391,7 @@ y: 3 -> -2 = 5 (3 - -2)
 				this._dropOutDrop = u.e._drop;
 
 //				u.e.addOverEvent(this, u.e._drop_over);
-				u.e.addOutEvent(this, u.e._drop_out);
+				u.e.addOutEvent(this, u.e._dropOut);
 			}
 
 		}
@@ -508,7 +405,7 @@ y: 3 -> -2 = 5 (3 - -2)
 
 	// Undesired effect when sliding the presentation, could be enabled for small elements in large scopes using mouse
 	// if(this.drag_dropout && u.e.event_pref == "mouse") {
-	// 	u.bug("set mouseout event cancel:" + u.nodeId(this))
+		// 	u.bug("set mouseout event cancel:", this);
 	// 	u.e.addEvent(this, "mouseout", u.e._drop_mouse);
 	// }
 
@@ -519,7 +416,7 @@ y: 3 -> -2 = 5 (3 - -2)
 * Calls return function element.moved to notify of event
 */
 u.e._drag = function(event) {
-//	u.bug("_drag:" + u.nodeId(this) + ", " + event.timeStamp + ", " + Date.now());
+//	u.bug("_drag:", this, event.timeStamp, Date.now());
 
 	// Get current input coordinates relative to starting point
 //	if(u.hasFixedParent(this)) {
@@ -543,6 +440,11 @@ u.e._drag = function(event) {
 //	u.bug(this.current_x + ":" + this.move_last_x + ":" + event.timeStamp + ":" + this.move_timestamp)
 //	u.bug("this.current_xps:" + this.current_xps + " x " + "this.current_yps:" + this.current_yps)
 
+
+	// Get an idea of the direction, even when acceleration has stopped
+	this.last_x_distance_travelled = (this.current_xps) ? this.current_x - this.move_last_x : this.last_x_distance_travelled;
+	this.last_y_distance_travelled = (this.current_yps) ? this.current_y - this.move_last_y : this.last_y_distance_travelled;
+	// u.bug("last_x_distance_travelled:" + this.last_x_distance_travelled, "last_y_distance_travelled:" + this.last_y_distance_travelled);
 
 	// remember current move time for next event
 	this.move_timestamp = event.timeStamp;
@@ -568,12 +470,13 @@ u.e._drag = function(event) {
 //	u.bug("locked:" + this.locked + ", " + this.only_horizontal + ", " + this.only_vertical);
 
 	if(this.e_swipe) {
-//		u.bug("swiping:" + this.locked + ", " + this.only_horizontal + ", " + this.only_vertical + ", " + Math.abs(this.current_xps) + ":" + Math.abs(this.current_yps));
+		// u.bug("swiping:" + this.locked + ", " + this.only_horizontal + ", " + this.only_vertical + ", " + Math.abs(this.current_xps) + ":" + Math.abs(this.current_yps));
+		// u.bug(this, this.current_x, this.current_xps, this.move_last_x);
 
 		if(this.only_horizontal) {
 
 //			u.bug("only_horizontal")
-			if(this.current_xps < 0) {
+			if(this.current_xps < 0 || this.current_xps === 0 && this.last_x_distance_travelled < 0) {
 				this.swiped = "left";
 //				u.bug("id swiped left")
 			}
@@ -585,7 +488,7 @@ u.e._drag = function(event) {
 		}
 		else if(this.only_vertical) {
 
-			if(this.current_yps < 0) {
+			if(this.current_yps < 0 || this.current_yps === 0 && this.last_y_distance_travelled < 0) {
 				this.swiped = "up";
 //				u.bug("id swiped up")
 			}
@@ -772,7 +675,7 @@ u.e._drag = function(event) {
 * Calls return function element.dropped to notify of event
 */
 u.e._drop = function(event) {
-//	u.bug("_drop:" + ":" + u.nodeId(this) + ", " + event.type + ":" + this.swiped);
+//	u.bug("_drop:", this, event.type, this.swiped);
 
 	// reset events to prepare for new drag
 	u.e.resetEvents(this);
@@ -842,8 +745,8 @@ u.e._drop = function(event) {
 
 		// callback for projection
 		this.transitioned = function() {
-			this.transitioned = null;
-			u.a.transition(this, "none");
+			// this.transitioned = null;
+			// u.a.transition(this, "none");
 
 			if(fun(this.projected)) {
 				this.projected(event);
@@ -856,11 +759,12 @@ u.e._drop = function(event) {
 //			u.bug("speed")
 			u.a.transition(this, "all 1s cubic-bezier(0,0,0.25,1)");
 		}
-		// so speed, no transition
+		// no speed, no transition
 		else {
 //			u.bug("no speed")
-			u.a.transition(this, "all 0.2s cubic-bezier(0,0,0.25,1)");
-//			u.a.transition(this, "none");
+//			u.a.transition(this, "all 0.2s cubic-bezier(0,0,0.25,1)");
+			u.a.transition(this, "none");
+			// console.log(this.transitioned);
 		}
 
 		// execute projection
@@ -893,8 +797,8 @@ u.e._drop = function(event) {
 // enhanced drop out function attempting to catch up to mouse on mouseout
 // start a document move listener loop to pass mouse coords back to _drag - until mouseover is invoked again, which
 // means element has caught up with mouse (or mouseup occurs on document)
-u.e._drop_out = function(event) {
-//	u.bug("_drop_out:" + u.nodeId(this) + ", " + u.nodeId(event.target) + ", " + event.timeStamp + ", " + this.move_timestamp)
+u.e._dropOut = function(event) {
+	//	u.bug("_drop_out:", this, event.target, event.timeStamp, this.move_timestamp);
 
 	this._drop_out_id = u.randomString();
 //		u.ac(node, id);
@@ -908,6 +812,155 @@ u.e._drop_out = function(event) {
 
 }
 
+
+u.e._cancelPick = function(event) {
+	// u.bug("_cancelPick:", this);
+
+
+	u.e.resetDragEvents(this);
+
+	// new event
+	if(fun(this.pickCancelled)) {
+		this.pickCancelled(event);
+	}
+
+}
+
+
+u.e.setDragBoundaries = function(node, boundaries) {
+	// u.bug("initDragBoundaries", node, boundaries);
+
+//	u.bug("boundaries:" + typeof(boundaries) + "::" + boundaries.constructor.toString());
+//	u.xInObject(boundaries);
+//	alert(boundaries.constructor);
+//	u.bug(boundaries.scopeName + "," + typeof(boundaries))
+	// use scopeName for old IE
+//	if(boundaries.constructor.toString().match("Array")) {
+	if((boundaries.constructor && boundaries.constructor.toString().match("Array")) || (boundaries.scopeName && boundaries.scopeName != "HTML")) {
+
+//		u.bug("boundaries are array")
+
+		node.start_drag_x = Number(boundaries[0]);
+		node.start_drag_y = Number(boundaries[1]);
+		node.end_drag_x = Number(boundaries[2]);
+		node.end_drag_y = Number(boundaries[3]);
+
+
+		// position node absolute top/left in parentNode
+		// if node is already positioned, make sure it is to top/left
+
+	}
+	// boundaries is node
+//	else if(boundaries.constructor.toString().match("HTML")) {
+	else if((boundaries.constructor && boundaries.constructor.toString().match("HTML")) || (boundaries.scopeName && boundaries.scopeName == "HTML")) {
+
+//		u.bug("boundaries are node")
+
+		// TODO: if we need to compensate for padding and absolute positioning, do it here
+
+		if(node.drag_overflow == "scroll") {
+
+			node.start_drag_x = node.offsetWidth > boundaries.offsetWidth ? boundaries.offsetWidth - node.offsetWidth : 0;
+			node.start_drag_y = node.offsetHeight > boundaries.offsetHeight ? boundaries.offsetHeight - node.offsetHeight : 0;
+			node.end_drag_x = node.offsetWidth > boundaries.offsetWidth ? node.offsetWidth : boundaries.offsetWidth;
+			node.end_drag_y = node.offsetHeight > boundaries.offsetHeight ? node.offsetHeight : boundaries.offsetHeight;
+
+		}
+		else {
+
+			node.start_drag_x = u.absX(boundaries) - u.absX(node);
+			node.start_drag_y = u.absY(boundaries) - u.absY(node);
+			node.end_drag_x = node.start_drag_x + boundaries.offsetWidth;
+			node.end_drag_y = node.start_drag_y + boundaries.offsetHeight;
+
+		}
+
+
+		// position node top/left absolute in boundary node
+		// if node is already positioned, make sure it is to top/left
+
+		// only change position to absolute on node
+		// - never change on other nodes, to avoid other content changing place
+
+
+	}
+
+	// debug tool - shows boundaries
+	if(node.show_bounds) {
+		var debug_bounds = u.ae(document.body, "div", {"class":"debug_bounds"})
+		debug_bounds.style.position = "absolute";
+		debug_bounds.style.background = "red"
+		debug_bounds.style.left = (u.absX(node) + node.start_drag_x - 1) + "px";
+		debug_bounds.style.top = (u.absY(node) + node.start_drag_y - 1) + "px";
+		debug_bounds.style.width = (node.end_drag_x - node.start_drag_x) + "px";
+		debug_bounds.style.height = (node.end_drag_y - node.start_drag_y) + "px";
+		debug_bounds.style.border = "1px solid white";
+		debug_bounds.style.zIndex = 9999;
+		debug_bounds.style.opacity = .5;
+		if(document.readyState && document.readyState == "interactive") {
+			debug_bounds.innerHTML = "WARNING - injected on DOMLoaded"; 
+		}
+		u.bug("node: ", node, " in (" + u.absX(node) + "," + u.absY(node) + "), (" + (u.absX(node)+node.offsetWidth) + "," + (u.absY(node)+node.offsetHeight) +")");
+		u.bug("boundaries: (" + node.start_drag_x + "," + node.start_drag_y + "), (" + node.end_drag_x + ", " + node.end_drag_y + ")");
+	}
+
+
+	node._x = node._x ? node._x : 0;
+	node._y = node._y ? node._y : 0;
+
+
+	// If in overflow scroll mode
+	// – make calculations to only apply scrolling if dragged node is bigger than container boundary
+	if(node.drag_overflow == "scroll" && (boundaries.constructor && boundaries.constructor.toString().match("HTML")) || (boundaries.scopeName && boundaries.scopeName == "HTML")) {
+
+		// u.bug("start_drag_x:"+ node.start_drag_x, "end_drag_x:" + node.end_drag_x, "start_drag_y:" + node.start_drag_y, "end_drag_y:" + node.end_drag_y, "node.offsetWidth:" + node.offsetWidth, "node.offsetHeight:" + node.offsetHeight, "boundaries.offsetWidth:" + boundaries.offsetWidth, "boundaries.offsetHeight:" + boundaries.offsetHeight)
+
+		node.locked = ((node.end_drag_x - node.start_drag_x <= boundaries.offsetWidth) && (node.end_drag_y - node.start_drag_y <= boundaries.offsetHeight));
+
+		node.only_vertical = (node.vertical_lock || (!node.locked && node.end_drag_x - node.start_drag_x <= boundaries.offsetWidth));
+		node.only_horizontal = (node.horizontal_lock || (!node.locked && node.end_drag_y - node.start_drag_y <= boundaries.offsetHeight));
+
+		// console.log("LOCKED:" + node.locked);
+		// console.log("LOCKED only_vertical:" + node.only_vertical);
+		// console.log("LOCKED only_horizontal:" + node.only_horizontal);
+	}
+	// offsetHeight and Width may change during a rotation, so better to save starting point values
+	// dragging locked (only event catching)
+	else {
+
+		node.locked = ((node.end_drag_x - node.start_drag_x == node.offsetWidth) && (node.end_drag_y - node.start_drag_y == node.offsetHeight));
+
+		// is the drag one-dimentional
+	//	node.only_vertical = (!node.locked && node.end_drag_x - node.start_drag_x == node.offsetWidth);
+	//	node.only_horizontal = (!node.locked && node.end_drag_y - node.start_drag_y == node.offsetHeight);
+
+		node.only_vertical = (node.vertical_lock || (!node.locked && node.end_drag_x - node.start_drag_x == node.offsetWidth));
+		node.only_horizontal = (node.horizontal_lock || (!node.locked && node.end_drag_y - node.start_drag_y == node.offsetHeight));
+		
+	}
+
+
+}
+
+
+u.e.setDragPosition = function(node, x, y) {
+	
+	node.current_xps = 0;
+	node.current_yps = 0;
+	node._x = x;
+	node._y = y;
+
+
+	// set corrected values
+	u.a.translate(node, node._x, node._y);
+
+
+	// notify of movement
+	if(fun(node[node.callback_moved])) {
+		node[node.callback_moved](event);
+	}
+
+}
 
 
 /**

@@ -33,7 +33,7 @@ Util.Animation = u.a = new function() {
 	* Apply CSS transition to node
 	*/
 	this.transition = function(node, transition, callback) {
-//		u.bug("add transition:" + u.nodeId(node) + ", " + transition + ", " + callback);
+		// u.bug("add transition:", node, transition, callback);
 
 		try {
 
@@ -61,13 +61,13 @@ Util.Animation = u.a = new function() {
 								var key = u.randomString(4);
 								node[key] = callback;
 								node[key](event);
-								node[key] = null;
+								delete node[key];
 								callback = null;
 							}
 							else if(fun(this[callback])) {
 //								u.bug("callback to: " + callback + ", " + this[callback])
 								this[callback](event);
-								this[callback] = null;
+								// this[callback] = null;
 							}
 
 
@@ -89,11 +89,6 @@ Util.Animation = u.a = new function() {
 			}
 			else {
 				node.duration = false;
-
-				// delete transitioned callback when "none" transition is set (cleanup)
-				// if(transition.match(/none/i)) {
-				// 	node.transitioned = null;
-				// }
 			}
 
 			u.as(node, "transition", transition);
@@ -138,22 +133,29 @@ Util.Animation = u.a = new function() {
 	// transition end handler
 	// not for chained transitions - will reset node.transitioned and remove transition
 	this._transitioned = function(event) {
+		// u.bug("default transitioned:", this);
 
-//		u.bug("default transitioned:" + u.nodeId(this))
-//		u.bug("transitioned: " + u.nodeId(event.target) + ", " + u.nodeId(this) + ", " + typeof(this.transitioned))
+		// Do not remove event listener and transition unless callback stems from correct node
+		if(event.target == this) {
 
-		// remove event listener - it's job is done
-		u.e.removeEvent(event.target, u.a.transitionEndEventName(), u.a._transitioned);
+			u.e.removeEvent(event.target, u.a.transitionEndEventName(), u.a._transitioned);
 
-		// transition should be removed here to be cleared before callback
-		u.a.transition(event.target, "none");
+			// transition should be removed here to be cleared before callback
+			u.a.transition(event.target, "none");
 
-		// only do callback to correct targets
-		if(event.target == this && fun(this.transitioned)) {
 
-			this.transitioned(event);
+			// only do callback to correct targets
+			if(fun(this.transitioned)) {
+				this.transitioned_before = this.transitioned;
 
-			this.transitioned = null;
+				this.transitioned(event);
+
+				// Unless transition callback has changed
+				if(this.transitioned === this.transitioned_before) {
+					delete this.transitioned;
+				}
+
+			}
 
 		}
 
@@ -164,10 +166,10 @@ Util.Animation = u.a = new function() {
 
 	// EXPERIMENTAL: remove transform, because Firefox 23 makes render-error, when returning to 0 in translates
 	// DEPRECATED: excess code to replicate one-liner
-	this.removeTransform = function(node) {
-		u.as(node, "transform", "none");
-
-	}
+	// this.removeTransform = function(node) {
+	// 	u.as(node, "transform", "none");
+	//
+	// }
 
 
 	/**
@@ -188,7 +190,7 @@ Util.Animation = u.a = new function() {
 		node._y = y;
 
 		// update dom
-//		node.offsetHeight;
+		node.offsetHeight;
 	}
 
 
@@ -199,7 +201,7 @@ Util.Animation = u.a = new function() {
 		node._rotation = deg;
 
 		// update dom
-//		node.offsetHeight;
+		node.offsetHeight;
 	}
 
 	this.scale = function(node, scale) {
@@ -209,7 +211,7 @@ Util.Animation = u.a = new function() {
 		node._scale = scale;
 
 		// update dom
-//		node.offsetHeight;
+		node.offsetHeight;
 	}
 
 
@@ -220,7 +222,7 @@ Util.Animation = u.a = new function() {
 		node._opacity = opacity;
 
 		// update dom
-//		node.offsetHeight;
+		node.offsetHeight;
 	}
 
 	this.setWidth = this.width = function(node, width) {
