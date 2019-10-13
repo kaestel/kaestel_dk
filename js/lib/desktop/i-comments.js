@@ -1,6 +1,6 @@
 Util.Objects["comments"] = new function() {
 	this.init = function(div) {
-//		u.bug("comment init:" + u.nodeId(div))
+//		u.bug("comment init:", div);
 
 
 		div.item_id = u.cv(div, "item_id");
@@ -18,13 +18,13 @@ Util.Objects["comments"] = new function() {
 
 				u.rc(this.div, "open");
 				u.addExpandArrow(this);
-				u.saveCookie("comments_open_state", 0, {"path":"/"})
+				u.saveCookie("comments_open_state", 0, {"path":"/"});
 			}
 			else {
 
 				u.ac(this.div, "open");
 				u.addCollapseArrow(this);
-				u.saveCookie("comments_open_state", 1, {"path":"/"})
+				u.saveCookie("comments_open_state", 1, {"path":"/"});
 			}
 		}
 
@@ -109,7 +109,7 @@ Util.Objects["comments"] = new function() {
 							u.as(this.div.actions, "display", "");
 						}
 					}
-					u.request(this, this.action, {"method":"post", "params":u.f.getParams(this)});
+					u.request(this, this.action, {"method":"post", "data":this.getData()});
 
 				}
 

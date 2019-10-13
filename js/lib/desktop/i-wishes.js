@@ -1,13 +1,13 @@
 Util.Objects["wishes"] = new function() {
 	this.init = function(scene) {
-//		u.bug("scene init:" + u.nodeId(scene))
+//		u.bug("scene init:", scene);
 
 
 		scene.image_width = 250;
 
 
 		scene.resized = function() {
-//			u.bug("scene.resized:" + u.nodeId(this));
+//			u.bug("scene.resized:", this);
 
 
 			// resize text nodes
@@ -23,11 +23,11 @@ Util.Objects["wishes"] = new function() {
 		}
 
 		scene.scrolled = function() {
-//			u.bug("scrolled")
+//			u.bug("scrolled");
 		}
 
 		scene.ready = function() {
-//			u.bug("scene.ready:" + u.nodeId(this));
+//			u.bug("scene.ready:", this);
 
 			page.cN.scene = this;
 
@@ -106,14 +106,14 @@ Util.Objects["wishes"] = new function() {
 										location.reload(true);
 									}
 								}
-								u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
+								u.request(this, this.action, {"method":this.method, "data":this.getData()});
 
 							}
 							else {
 
 								this.actions["reserve"].value = this.node.scene.confirm_reserve_text;
 
-								u.ass(this.fields["reserved"], {
+								u.ass(this.inputs["reserved"], {
 									"display":"block"
 								});
 
@@ -138,12 +138,16 @@ Util.Objects["wishes"] = new function() {
 									location.reload(true);
 								}
 							}
-							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+							u.request(this, this.form.action, {"method":this.form.method, "data":this.form.getData()});
 						}
 					}
 
 				}
 			}
+
+			u.showScene(this);
+			// accept cookies?
+			page.acceptCookies();
 
 			page.resized();
 		}

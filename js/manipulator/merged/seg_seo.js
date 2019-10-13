@@ -1,6 +1,6 @@
 /*
-Manipulator v0.9.2-full Copyright 2017 http://manipulator.parentnode.dk
-js-merged @ 2018-11-15 11:13:03
+Manipulator v0.9.3-parentnode-skin-default Copyright 2019 https://manipulator.parentnode.dk
+js-merged @ 2019-10-13 18:55:07
 */
 
 /*seg_seo_include.js*/
@@ -8,9 +8,10 @@ js-merged @ 2018-11-15 11:13:03
 /*u.js*/
 if(!u || !Util) {
 	var u, Util = u = new function() {};
-	u.version = "0.9.2";
+	u.version = "0.9.3";
 	u.bug = u.nodeId = u.exception = function() {};
 	u.stats = new function() {this.pageView = function(){};this.event = function(){};}
+	u.txt = function(index) {return index;}
 }
 function fun(v) {return (typeof(v) === "function")}
 function obj(v) {return (typeof(v) === "object")}

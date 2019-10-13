@@ -1,13 +1,13 @@
 Util.Objects["wishes"] = new function() {
 	this.init = function(scene) {
-//		u.bug("scene init:" + u.nodeId(scene))
+//		u.bug("scene init:", scene);
 
 
 		scene.image_width = 480;
 
 
 		scene.resized = function() {
-//			u.bug("scene.resized:" + u.nodeId(this));
+//			u.bug("scene.resized:", this);
 
 
 			// resize text nodes
@@ -23,11 +23,11 @@ Util.Objects["wishes"] = new function() {
 		}
 
 		scene.scrolled = function() {
-//			u.bug("scrolled")
+//			u.bug("scrolled");
 		}
 
 		scene.ready = function() {
-//			u.bug("scene.ready:" + u.nodeId(this));
+//			u.bug("scene.ready:", this);
 
 			page.cN.scene = this;
 
@@ -107,14 +107,14 @@ Util.Objects["wishes"] = new function() {
 										location.reload(true);
 									}
 								}
-								u.request(this, this.action, {"method":this.method, "params":u.f.getParams(this)});
+								u.request(this, this.action, {"method":this.method, "data":this.getData()});
 
 							}
 							else {
 
 								this.actions["reserve"].value = this.node.scene.confirm_reserve_text;
 
-								u.ass(this.fields["reserved"].field, {
+								u.ass(this.inputs["reserved"].field, {
 									"display":"block"
 								});
 
@@ -139,14 +139,20 @@ Util.Objects["wishes"] = new function() {
 									location.reload(true);
 								}
 							}
-							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+							u.request(this, this.form.action, {"method":this.form.method, "data":this.getData()});
 						}
 					}
 
 				}
 			}
 
+			u.showScene(this);
+
+			// accept cookies?
+			page.acceptCookies();
+
 			page.resized();
+
 		}
 
 		// scene is ready
@@ -157,14 +163,14 @@ Util.Objects["wishes"] = new function() {
 //
 // Util.Objects["wishes"] = new function() {
 // 	this.init = function(scene) {
-// //		u.bug("scene init:" + u.nodeId(scene))
+// //		u.bug("scene init:", scene);
 //
 //
 // 		scene.image_width = 100;
 //
 //
 // 		scene.resized = function() {
-// //			u.bug("scene.resized:" + u.nodeId(this));
+// //			u.bug("scene.resized:", this);
 //
 //
 // 			if(this.nodes && this.nodes.length) {
@@ -180,11 +186,11 @@ Util.Objects["wishes"] = new function() {
 // 		}
 //
 // 		scene.scrolled = function() {
-// //			u.bug("scrolled")
+// //			u.bug("scrolled");
 // 		}
 //
 // 		scene.ready = function() {
-// //			u.bug("scene.ready:" + u.nodeId(this));
+// //			u.bug("scene.ready:", this);
 //
 // 			this.nodes = u.qsa("li.item", this);
 // 			if(this.nodes.length) {
@@ -221,7 +227,7 @@ Util.Objects["wishes"] = new function() {
 // 						u.e.addEvent(node.bn_reserve, "mouseover", node.bn_reserve.over);
 // 						u.e.addEvent(node.bn_reserve, "mouseout", node.bn_reserve.out);
 //
-// 						u.e.click(node.bn_reserve)
+// 						u.e.click(node.bn_reserve);
 // 						node.bn_reserve.clicked = function(event) {
 // 							u.e.kill(event);
 //
@@ -233,7 +239,7 @@ Util.Objects["wishes"] = new function() {
 // 	//								alert("server communication failed");
 // 								}
 // 							}
-// 							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+// 							u.request(this, this.form.action, {"method":this.form.method, "data":this.form.getData()});
 // 						}
 // 					}
 //
@@ -254,7 +260,7 @@ Util.Objects["wishes"] = new function() {
 // 						u.e.addEvent(node.bn_unreserve, "mouseover", node.bn_unreserve.over);
 // 						u.e.addEvent(node.bn_unreserve, "mouseout", node.bn_unreserve.out);
 //
-// 						u.e.click(node.bn_unreserve)
+// 						u.e.click(node.bn_unreserve);
 // 						node.bn_unreserve.clicked = function(event) {
 // 							u.e.kill(event);
 //
@@ -266,7 +272,7 @@ Util.Objects["wishes"] = new function() {
 // 	//								alert("server communication failed");
 // 								}
 // 							}
-// 							u.request(this, this.form.action, {"method":this.form.method, "params":u.f.getParams(this.form)});
+// 							u.request(this, this.form.action, {"method":this.form.method, "data":this.form.getData()});
 // 						}
 // 					}
 //
