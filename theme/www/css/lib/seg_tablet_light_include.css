@@ -1,4 +1,4 @@
-@import url(/assets/parentnode-skin-default/css/seg_desktop_light.css);
+@import url(/assets/parentnode-skin-default/css/seg_tablet_light.css);
 
 @import url(/assets/parentnode-skin-default/css/optionals/lib/desktop_light/s-articles.css);
 @import url(/assets/parentnode-skin-default/css/optionals/lib/desktop_light/s-pagination.css);
@@ -8,4 +8,4 @@
 
 @import url(/css/lib/desktop_light/s-pages.css);
 @import url(/css/lib/desktop_light/s-colorscheme.css);
-@import url(/css/lib/desktop_light/s-pages-hovers.css);
+@import url(/css/lib/tablet_light/s-pages-active.css);

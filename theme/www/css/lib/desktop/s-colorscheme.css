@@ -10,27 +10,31 @@ body {}
 
 #header .logo {color: #63add0;}
 #navigation ul li {color: #63add0;}
+.front #header .logo,
+#navigation ul li.selected,
+#navigation ul li.path {color: #034769;}
 
 #content .scene a,
-#content .scene ul.geo.active li.location {color: #63add0;}
+#content .scene ul.geo.active li.name {color: #63add0;}
 #content .scene hr {border-color: #cccccc;}
 
 ul.actions input.button.primary,
 ul.actions a.button.primary,
-#content ul.actions a.button.primary {background-color: #63add0; color: #ffffff;}
+#content ul.actions a.button.primary,
+#content .scene .pagination li.next a,
+#content .scene .pagination li.previous a {background-color: #63add0; color: #ffffff;}
 
-#content .scene div.categories ul.tags li.selected a,
-#content .scene div.categories ul.tags li.selected:before {color: #034769;}
+#content .scene div.categories ul.tags li.selected a {background-color: #034769;}
 #content .scene div.comments.open h2 {color: #63add0;}
 
 #footer {border-color: #cccccc;}
 #footer a {color: #63add0;}
 
 .terms_notification {background-color: #034769;}
+.terms_notification a.accept {background-color: #63add0;}
 
-
-/* LOCAL */
-
-.front #header .logo,
-.plain #navigation ul li.plain,
-.geek #navigation ul li.geek {color: #034769;}
+body > div.pagination li.next > svg.arrow line,
+body > div.pagination li.previous > svg.arrow line {stroke: #ffffff;}
+body > div.pagination li.previous,
+body > div.pagination li.next {border-color: #63add0; background-color: #63add0;}
+body > div.pagination li a {color: #ffffff;}

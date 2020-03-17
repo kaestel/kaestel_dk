@@ -10,20 +10,20 @@ body {}
 
 #header .logo {color: #63add0;}
 #navigation ul li a {color: #63add0;}
+.front #header .logo,
+#navigation ul li.selected {color: #034769;}
 
 #content .scene a {color: #63add0;}
 #content .scene hr {border-color: #cccccc;}
 
-#content ul.actions input.button.primary,
+ul.actions input.button.primary,
+ul.actions a.button.primary,
 #content ul.actions a.button.primary,
-#content .scene .pagination .next,
-#content .scene .pagination .previous {background-color: #63add0;}
-#content ul.actions input.button.primary:hover,
-#content ul.actions a.button.primary:hover,
-#content .scene .pagination .next:hover,
-#content .scene .pagination .previous:hover {background-color: #034769;}
-#content .scene div.categories ul.tags li.selected a {color: #034769;}
-#content .scene ul.tags a:hover {color: #63add0;}
+#content .scene .pagination .next a,
+#content .scene .pagination .previous a {background-color: #63add0; color: #ffffff;}
+
+
+#content .scene div.categories ul.tags li.selected {background-color: #034769;}
 
 #footer {border-color: #cccccc;}
 #footer a {color: #63add0;}
@@ -31,8 +31,3 @@ body {}
 .terms_notification {background-color: #034769;}
 
 
-/* LOCAL */
-
-.front #header .logo,
-.plain #navigation ul li.plain a,
-.geek #navigation ul li.geek a {color: #034769;}

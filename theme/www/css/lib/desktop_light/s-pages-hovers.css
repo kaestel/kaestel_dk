@@ -1,0 +1,7 @@
+ul.actions input.button.primary:hover,
+ul.actions a.button.primary:hover,
+#content ul.actions a.button.primary:hover,
+#content .scene .pagination .next:hover a,
+#content .scene .pagination .previous:hover a {background-color: #034769;}
+
+#content .scene ul.tags a:hover {color: #63add0;}

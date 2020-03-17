@@ -5,5 +5,22 @@ document.write('<script type="text/javascript" src="/js/lib/u-settings.js"></scr
 document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/manipulator/src/u-googleanalytics.js"></script>');
 
 
-document.write('<script type="text/javascript" src="/js/lib/desktop/i-front.js"></script>');
-document.write('<script type="text/javascript" src="/js/lib/desktop/i-articlelist.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/manipulator/src/beta-u-animation-to.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/manipulator/src/beta-u-columns.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/manipulator/src/u-form-builder.js"></script>');
+
+
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/u-expandarrow.js"></script>');
+
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-article_list.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-article_preview_list.js"></script>');
+
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-pagination.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/u-sharing.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-comments.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-wishes.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-front.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-columns.js"></script>');
+document.write('<script type="text/javascript" src="/assets/parentnode-skin-default/js/optionals/lib/desktop/m-search.js"></script>');
+
+document.write('<script type="text/javascript" src="/js/lib/desktop/m-details.js"></script>');

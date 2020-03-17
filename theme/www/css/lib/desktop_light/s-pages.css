@@ -1,12 +1,11 @@
 /* LOGO */
-#header .logo {font-size: 20px; text-transform: uppercase;}
+#header .logo {font-size: 20px; text-transform: lowercase;}
 
 
 /* FRONT */
-#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
-#content .scene.front > ul.actions li {padding-bottom: 0;}
-#content .scene.front > ul.items li.item h3 {font-size: 24px; padding-top: 5px; padding-bottom: 20px;
-	font-family: "PT Serif", Times, serif;
+#content .scene.front > h2 {padding-top: 10px;}
+#content .scene.front > h2 a {font-size: 13px; display: inline; vertical-align: baseline;
+	font-family: "OpenSans";
 }
 
 /* PLAIN */
@@ -17,9 +16,9 @@
 #content .scene div.vcard.person h3 {display: none;}
 
 
-/* GEEK FRONT */
-#content .scene.geek.lists div.logbooks,
-#content .scene.geek.lists div.posts {padding-top: 20px;}
+/* DETAILS FRONT */
+#content .scene.details.lists div.logbooks,
+#content .scene.details.lists div.posts {padding-top: 20px;}
 
 
 

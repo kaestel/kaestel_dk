@@ -1,38 +1,40 @@
 /* LOGO */
-#header .logo {font-size: 20px; text-transform: uppercase;}
+#header .logo {font-size: 56px; text-transform: lowercase;}
 
 
 /* FRONT */
 #content .scene.front > h2 {padding-top: 50px; padding-bottom: 20px;}
-/*#content .scene.front > ul.actions {padding: 15px 0; margin: 0 50px 20px; border-top: 1px solid #dedede;}*/
-#content .scene.front > ul.actions li {padding-bottom: 0;}
-#content .scene.front ul.tags {padding-bottom: 15px;}
-#content .scene.front > ul.items li.item h3 {font-size: 24px; padding-top: 5px; padding-bottom: 20px;
-	font-family: "PT Serif", Times, serif;
+#content .scene.front > h2 a {font-size: 12px; display: inline-block; vertical-align: middle;
+	font-family: "OpenSans";
 }
 
 
-/* GEEK FRONT */
+/* DETAILS FRONT */
+#content .scene.details div.logs ul.books li {display: block;}
+#content .scene.details div.logs ul.books h3 {padding: 0 0 2px; font-size: 18px;
+	font-family: "PT Serif", Times, serif;
+}
 
-/* VCARD */
-#content .scene div.vcard.person h3 {display: none;}
+#content .scene.details div.logs ul.books p {padding: 0 0 15px;}
+
 
 /* PLAIN */
 #content .scene.terms ul.info,
 #content .scene.plain ul.info {display: none;}
 
 
+/* CV */
 .cv #navigation,
 .cv #footer,
 .cv .servicenavigation {display: none;}
 #content .scene.cv h2+h3 {padding-top: 0;}
 #content .scene.cv h3 {padding-top: 20px;}
 #content .scene.cv .articlebody {padding-bottom: 280px;}
-
 #content .scene.cv div.break {page-break-before: always; padding-bottom: 80px;}
 
 
-/* DEMOS */
-#content .scene.demos {}
-#content .scene.demos div.article div.articlebody ul.demos {list-style: none; padding: 40px 0 0; margin: 0;}
-#content .scene.demos div.article div.articlebody ul.demos > li {padding-bottom: 40px;}
+#content .scene.wishes ul.wishes li.item div.priority {position: absolute; top: -10px; left: -10px; width: 30px; height: 30px; border-radius: 15px;
+	background: #ffffff;
+	border: 2px solid #034769;
+
+}

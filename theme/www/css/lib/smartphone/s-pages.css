@@ -1,21 +1,30 @@
 /* LOGO */
-#header .logo {text-transform: uppercase;}
+#header .logo {text-transform: lowercase;}
 
 
 /* FRONT */
-#content .scene.front > ul.actions {padding: 15px 20px; margin: 20px 0; border-top: 1px solid #dedede; border-bottom: 1px solid #dedede;}
-#content .scene.front > ul.actions li {padding-bottom: 0;}
-#content .scene.front > ul.items li.item h3 {font-size: 24px; padding-top: 5px; padding-bottom: 20px;
-	font-family: "PT Serif", Times, serif;
+#content .scene.front > h2 {padding-top: 50px; padding-bottom: 20px;}
+#content .scene.front > h2 a {font-size: 12px; display: inline-block; vertical-align: middle;
+	font-family: "OpenSans";
 }
+
 
 /* PLAIN */
 #content .scene.terms ul.info,
 #content .scene.plain ul.info {display: none;}
 
-/* VCARD */
-#content .scene div.vcard.person h3 {display: none;}
 
+/* DETAILS FRONT */
+#content .scene.details div.logs ul.books li {display: block;}
+#content .scene.details div.logs ul.books h3 {padding: 0 0 2px; font-size: 18px;
+	font-family: "PT Serif", Times, serif;
+}
+#content .scene.details div.logs ul.books p {padding: 0 0 15px;}
+
+
+/* VCARD */
+/*#content .scene div.vcard.person h3 {display: none;}
+*/
 
 /* DEMOS */
 #content .scene.demos {}
