@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="<?= $this->language() ?>">
 <head>
-	<!-- (c) & (p) parentNode.dk 2009-2016 //-->
+	<!-- (c) & (p) parentNode.dk 2009-2019 //-->
 	<!-- All material protected by copyrightlaws, as if you didnt know //-->
-	<!-- If you want to help build the ultimate frontend-centered platform, visit parentnode.dk -->
+	<!-- If you want to help build the ultimate frontend-centered platform, visit https://parentnode.dk -->
 	<title><?= SITE_URL ?> - <?= $this->pageTitle() ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="keywords" content="think for yourself live free get in trouble" />
 	<meta name="description" content="<?= $this->pageDescription() ?>" />
-	<meta name="viewport" content="initial-scale=1, user-scalable=no" />
+	<meta name="viewport" content="initial-scale=1" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 

@@ -45,8 +45,11 @@ global $model;
 
 			<p>
 				HTML(5), JavaScript, CSS(3), AJAX, Web Standards, Cross-browser Compatibility, MySQL, PHP, XML,
-				Accessibility, Apache, SEO, Mobile development, iPhone, Git, CMS, Interaction Design, User Experience and
+				Accessibility, Apache, SEO, Mobile web development, iPhone, Git, CMS, Interaction Design, User Experience and
 				Information Architecture.
+			</p>
+			<p>
+				Critical thinking, ...
 			</p>
 
 
@@ -56,16 +59,27 @@ global $model;
 			<h2>EXPERIENCE</h2>
 
 
-			<h3>think.dk, 2011 - present</h3>
-			<p>Programmer, writer and ideolog</p>
+			<h3>parentNode, 2018 - Present</h3>
+			<p>Founder and Idealist</p>
 			<p>
-				Continuing my experimental work with my preferred platform: parentNode.dk.
+				Developing a full stack frontend optimized content management and distribution platform, including:<br />
+				Manipulator - a full JavaScript library and framework<br />
+				Janitor - a PHP Content Management Developer Toolkit<br />
+				Modulator - a Semantic markup model to support any HTML capable device<br />
+				Detector - a detection and segmentation model for HTML capable devices<br />
 			</p>
 			<p>
 				Primary technologies: Imagination, JavaScript, PHP, HTML5, CSS.
 			</p>
 			<p>
 				Noticably achivements: Janitor v0.7.6, Manipulator v0.9.1, Modulator v1 and Detector v3.
+			</p>
+
+
+			<h3>think.dk, 2011 - present</h3>
+			<p>Programmer, writer and ideolog</p>
+			<p>
+				Continuing my experimental work with my preferred platform: parentNode.dk.
 			</p>
 
 
@@ -84,7 +98,7 @@ global $model;
 			</p>
 
 
-			<h3>parentNode, 2009 - Present</h3>
+			<h3>parentNode, 2009 - 2013</h3>
 			<p>Founder and Idealist</p>
 			<p>
 				Developing a full stack frontend optimized content management and distribution platform, including:<br />
@@ -116,6 +130,10 @@ global $model;
 			</p>
 			<p>
 				Primary technologies: JavaScript, PHP, CSS, HTML5.
+			</p>
+			<p>
+				Noticably achivements: Developing the core architecture for what is later to become Manipulator, Janitor,
+				Detector and Templator.
 			</p>
 
 

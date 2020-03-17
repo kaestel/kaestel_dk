@@ -25,10 +25,12 @@ else {
 
 <?	if($items): ?>
 	<ul class="items wishes images">
-<?		foreach($items as $item):
+<?		foreach($items as $index => $item):
 			$media = $item["mediae"] ? array_shift($item["mediae"]) : false; ?>
 		<li class="item id:<?= $item["id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
 			<h3><?= $item["name"] ?></h3>
+
+			<div class="priority"><?= ($index+1) ?></div>
 
 <?			if($item["description"]): ?>
 			<div class="description">
@@ -59,7 +61,7 @@ else {
 					<?= $model->formEnd() ?>
 				</li>
 				<? else: ?>
-				<?= $JML->oneButtonForm("Ups, I didn't mean it", "/elos-buffet/unreserve/".$item["id"], array(
+				<?= $HTML->oneButtonForm("Ups, I didn't mean it", "/elos-buffet/unreserve/".$item["id"], array(
 					"confirm-value" => "Are you sure?",
 					"class" => "secondary",
 					"name" => "unreserve",

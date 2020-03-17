@@ -10,40 +10,33 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 
 ?>
 <div class="scene front i:front">
-	<h1>The plain geek</h1>
+	<h1>The plain details</h1>
 	<p>
-		Geeks are passionate people. We are curious. We are having fun in our own way. Our excessive passion grants 
-		us the geek label and our passion and curiosity drives us to dig further and further into our subjects, 
-		whatever it might be without any concern for profit. 
-		If you don't get it, perhaps you are just not smart enough and I urge you to try a little harder, because
-		geeks will either save the world or destroy it. It all depends on how you treat them.
+		
 	</p>
-	<p>No <a href="/geek">geek</a> is <a href="/plain">plain</a>. Normal is weird. This is personal.</p>
+	<p>No <a href="/details">detail</a> is <a href="/plain">plain</a>. Normal is weird. This is personal.</p>
 
 <? if($post_items): ?>
 
-	<h2>Recent postings</h2>
-	<ul class="items postings i:articlelist">
+	<h2>Recent postings <a href="/details/posts">(see all posts)</a></h2>
+	<ul class="items articles postings articlePreviewList i:articlePreviewList">
 <?		foreach($post_items as $item):
-			$media = $IC->sliceMediae($item); ?>
-		<li class="item post id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
+			$media = $IC->sliceMediae($item, "mediae"); ?>
+		<li class="item post article id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/Article">
 
 <?			if($media): ?>
-			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
-				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
-			</div>
+			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 <?			endif; ?>
-
 
 
 			<?= $HTML->articleTags($item, [
 				"context" => ["post"],
-				"url" => "/geek/posts/tag",
-				"default" => ["/geek/posts", "Posts"]
+				"url" => "/details/posts/tag",
+				"default" => ["/details/posts", "Posts"]
 			]) ?>
 
 
-			<h3 itemprop="headline"><a href="/geek/posts/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
+			<h3 itemprop="headline"><a href="/details/posts/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
 
 			<?= $HTML->articleInfo($item, "/", [
@@ -61,35 +54,30 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?		endforeach; ?>
 	</ul>
 
-	<!--ul class="actions">
-		<li class="more"><a href="/geek">More postings</a></li>
-	</ul-->
 <? endif; ?>
 
 
 <? if($log_items): ?>
 
-	<h2>Recents log entries</h2>
-	<ul class="items logs i:articlelist">
+	<h2>Recents log entries <a href="/details/logs">(see all logs)</a></h2>
+	<ul class="items articles logs articlePreviewList i:articlePreviewList">
 <?		foreach($log_items as $item):
-			$media = $IC->sliceMediae($item); ?>
-		<li class="item log id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
+			$media = $IC->sliceMediae($item, "mediae"); ?>
+		<li class="item log article id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
-			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
-				<p>Image: <a href="/images/<?= $item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
-			</div>
+			<div class="image item_id:<?= $item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 <?			endif; ?>
 
 
 			<?= $HTML->articleTags($item, [
 				"context" => ["log"],
-				"url" => "/geek/logs/tag",
-				"default" => ["/geek/logs", "Logs"]
+				"url" => "/details/logs/tag",
+				"default" => ["/details/logs", "Logs"]
 			]) ?>
 
 
-			<h3 itemprop="headline"><a href="/geek/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
+			<h3 itemprop="headline"><a href="/details/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
 
 
 			<?= $HTML->articleInfo($item, "/", [
@@ -107,9 +95,6 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 <?		endforeach; ?>
 	</ul>
 
-	<!--ul class="actions">
-		<li class="more"><a href="/geek">More log entries</a></li>
-	</ul-->
 <?	endif; ?>
 
 </div>

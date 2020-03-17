@@ -35,14 +35,14 @@ print '<?xml version="1.0" encoding="UTF-8"?>';
 	// LOG ITEMS
 	$items = $IC->getItems(array("itemtype" => "log", "status" => 1)); ?>
 	<url>
-		<loc><?= SITE_URL ?>/geek/logs</loc>
+		<loc><?= SITE_URL ?>/details/logs</loc>
 		<lastmod><?= date("Y-m-d", strtotime($items[0]["modified_at"])) ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1</priority>
 	</url>
 <? foreach($items as $item): ?>
 	<url>
-		<loc><?= SITE_URL ?>/geek/logs/<?= $item["sindex"] ?></loc>
+		<loc><?= SITE_URL ?>/details/logs/<?= $item["sindex"] ?></loc>
 		<lastmod><?= date("Y-m-d", strtotime($item["modified_at"])) ?></lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.9</priority>
@@ -53,14 +53,14 @@ print '<?xml version="1.0" encoding="UTF-8"?>';
 	// POST ITEMS
 	$items = $IC->getItems(array("itemtype" => "post", "status" => 1)); ?>
 	<url>
-		<loc><?= SITE_URL ?>/geek/posts</loc>
+		<loc><?= SITE_URL ?>/details/posts</loc>
 		<lastmod><?= date("Y-m-d", strtotime($items[0]["modified_at"])) ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>1</priority>
 	</url>
 <? foreach($items as $item): ?>
 	<url>
-		<loc><?= SITE_URL ?>/geek/posts/<?= $item["sindex"] ?></loc>
+		<loc><?= SITE_URL ?>/details/posts/<?= $item["sindex"] ?></loc>
 		<lastmod><?= date("Y-m-d", strtotime($item["modified_at"])) ?></lastmod>
 		<changefreq>weekly</changefreq>
 		<priority>0.9</priority>
