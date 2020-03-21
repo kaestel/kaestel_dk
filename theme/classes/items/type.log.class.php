@@ -35,10 +35,10 @@ class TypeLog extends Itemtype {
 		// description
 		$this->addToModel("description", array(
 			"type" => "text",
-			"label" => "Short description",
-			"required" => true,
-			"hint_message" => "Write a short description of the log entry",
-			"error_message" => "A short description without any words? How weird."
+			"label" => "Short SEO description",
+			"max" => 155,
+			"hint_message" => "Write a short description of the log entry for SEO and listings.",
+			"error_message" => "Your log entry needs a description – max 155 characters."
 		));
 
 		// HTML
