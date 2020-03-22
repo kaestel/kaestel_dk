@@ -16,6 +16,7 @@ body {}
 
 #content .scene a,
 #content .scene ul.geo.active li.name {color: #63add0;}
+
 #content .scene hr {border-color: #cccccc;}
 
 ul.actions input.button.primary,

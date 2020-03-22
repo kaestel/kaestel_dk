@@ -11,7 +11,8 @@ body {}
 #header .logo {color: #63add0;}
 #navigation ul li a {color: #63add0;}
 .front #header .logo,
-#navigation ul li.selected {color: #034769;}
+#navigation ul li.selected,
+#navigation ul li.path {color: #034769;}
 
 #content .scene a {color: #63add0;}
 #content .scene hr {border-color: #cccccc;}
