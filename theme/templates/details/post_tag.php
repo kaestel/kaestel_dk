@@ -128,11 +128,11 @@ $categories = $IC->getTags(array("context" => $itemtype, "order" => "value"));
 
 <? else: ?>
 
-
-	<h1>Technology clearly doesn't solve everything on it's own.</h1>
-	<h2>Technology needs humanity.</h2>
-	<p>We could not find the specified post.</p>
-
+	<div class="article">
+		<h1>Technology clearly doesn't solve everything on it's own.</h1>
+		<h2>Technology needs humanity.</h2>
+		<p>We could not find the specified post.</p>
+	</div>
 
 <? endif; ?>
 

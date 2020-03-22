@@ -28,12 +28,9 @@ $pagination_pattern = [
 $pagination_items = $IC->paginate($pagination_pattern);
 
 
-// $item = $IC->getItem(array("sindex" => $sindex, "extend" => array("tags" => true, "user" => true, "mediae" => true, "comments" => true, "readstate" => true)));
 if($pagination_items && $pagination_items["range_items"]) {
 	$item = $pagination_items["range_items"][0];
 	$this->sharingMetaData($item);
-
-
 
 	// set related pattern
 	$related_pattern = array("itemtype" => $item["itemtype"], "tags" => $item["tags"], "exclude" => $item["id"]);
@@ -128,11 +125,11 @@ $categories = $IC->getTags(array("context" => $itemtype, "order" => "value"));
 
 <? else: ?>
 
-
-	<h1>Technology clearly doesn't solve everything on it's own.</h1>
-	<h2>Technology needs humanity.</h2>
-	<p>We could not find the specified post.</p>
-
+	<div class="article">
+		<h1>Technology clearly doesn't solve everything on it's own.</h1>
+		<h2>Technology needs humanity.</h2>
+		<p>We could not find the specified post.</p>
+	</div>
 
 <? endif; ?>
 
@@ -149,9 +146,7 @@ $categories = $IC->getTags(array("context" => $itemtype, "order" => "value"));
 				>
 
 <?				if($media): ?>
-				<div class="image item_id:<?= $related_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>">
-					<p>Image: <a href="/images/<?= $related_item["item_id"] ?>/<?= $media["variant"] ?>/500x.<?= $media["format"] ?>"><?= $media["name"] ?></a></p>
-				</div>
+				<div class="image item_id:<?= $related_item["item_id"] ?> format:<?= $media["format"] ?> variant:<?= $media["variant"] ?>"></div>
 <?				endif; ?>
 
 
