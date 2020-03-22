@@ -173,6 +173,9 @@ class HTML extends HTMLCore {
 	}
 
 
+	/**
+	* Create search input HTML snippet
+	*/
 	function search($url, $_options = false) {
 
 		$headline = "Search";
