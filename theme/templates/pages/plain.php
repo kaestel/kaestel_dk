@@ -45,6 +45,15 @@ if($page_item) {
 
 	</div>
 
+<? else:?>
+
+	<div class="article">
+		<h1>Plain enough?</h1>
+		<p>Shoot. You caught us in the middle of an update. Try again later.</p>
+	</div>
+
+<? endif; ?>
+
 	<div itemtype="http://schema.org/Person" itemscope class="vcard person">
 		<h2>Contact info (for those who dare)</h2>
 		<h3 class="name" itemprop="name">Martin Kæstel Nielsen</h3>
@@ -60,19 +69,12 @@ if($page_item) {
 			<dt class="social">Social media</dt>
 			<dd class="social">
 				<ul>
-					<li class="facebook"><a href="https://facebook.com/kaestel">Facebook</a></li>
-					<li class="linkedin"><a href="https://www.linkedin.com/in/kaestel">LinkedIn</a></li>
+					<li class="facebook"><a itemprop="sameAs" href="https://facebook.com/kaestel" target="_blank">Facebook</a></li>
+					<li class="linkedin"><a itemprop="sameAs" href="https://www.linkedin.com/in/kaestel" target="_blank">LinkedIn</a></li>
 				</ul>
 			</dd>
 		</dl>
+
 	</div>
-
-
-<? else:?>
-
-	<h1>Plain enough?</h1>
-	<p>Shoot. You caught us in the middle of an update. Try again later.</p>
-
-<? endif; ?>
 
 </div>
