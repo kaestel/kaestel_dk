@@ -20,7 +20,10 @@ class TypeLog extends Itemtype {
 
 		// Published
 		$this->addToModel("published_at", array(
+			"type" => "datetime",
+			"label" => "Published at",
 			"hint_message" => "Date of the log entry. Leave empty for current time", 
+			"error_message" => "Date of the log entry must be a valid date. Leave empty for current time", 
 		));
 
 		// Name
