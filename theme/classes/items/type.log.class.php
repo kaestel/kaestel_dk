@@ -6,6 +6,10 @@
 
 class TypeLog extends Itemtype {
 
+
+	public $db;
+
+
 	/**
 	* Init, set varnames, validation rules
 	*/
@@ -31,7 +35,7 @@ class TypeLog extends Itemtype {
 			"type" => "string",
 			"label" => "Name",
 			"required" => true,
-			"hint_message" => "Name your log entry", 
+			"hint_message" => "Name your log entry.", 
 			"error_message" => "Name must be filled out."
 		));
 
@@ -49,7 +53,8 @@ class TypeLog extends Itemtype {
 			"type" => "html",
 			"label" => "HTML",
 			"required" => true,
-			"hint_message" => "Write the log entry",
+			"allowed_tags" => "p,h3,h4,download",
+			"hint_message" => "Write the log entry.",
 			"error_message" => "A log without any words? How weird."
 		));
 
@@ -59,18 +64,22 @@ class TypeLog extends Itemtype {
 			"type" => "string",
 			"label" => "Location",
 			"required" => true,
-			"hint_message" => "Name and Geo coordinates of location",
-			"error_message" => "Name and Geo coordinates must be filled out"
+			"hint_message" => "Name and Geo coordinates of location.",
+			"error_message" => "Name and Geo coordinates must be filled out."
 		));
 		// latitude
 		$this->addToModel("latitude", array(
 			"type" => "number",
-			"label" => "Latitude"
+			"label" => "Latitude",
+			"hint_message" => "Latitude of location.", 
+			"error_message" => "Latitude of location."
 		));
 		// longitude
 		$this->addToModel("longitude", array(
 			"type" => "number",
-			"label" => "Longitude"
+			"label" => "Longitude",
+			"hint_message" => "Longitude of location.", 
+			"error_message" => "Longitude of location."
 		));
 
 		// Mediae
@@ -78,7 +87,9 @@ class TypeLog extends Itemtype {
 			"type" => "files",
 			"label" => "Drag image here",
 			"allowed_formats" => "png,jpg",
-			"hint_message" => "Add image here. Use png or jpg in any proportion."
+			"max" => 20,
+			"hint_message" => "Add image here. Use png or jpg in any proportion.",
+			"error_message" => "Media does not fit requirements.",
 		));
 
 	}

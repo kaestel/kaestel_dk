@@ -44,7 +44,7 @@ $items = $IC->search(["pattern" => $pattern, "query" => $query]);
 	</div>
 
 
-	<?= $HTML->search("/details/posts/search", [
+	<?= $HTML->searchBox("/details/posts/search", [
 		"headline" => "Search posts",
 		"pattern" => $pattern,
 		"query" => $query

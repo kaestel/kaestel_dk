@@ -27,7 +27,7 @@ $post_tags = $IC->getTags(array("context" => "post"));
 
 <? if($post_tags): ?>
 	<div class="categories">
-		<h2>Postings</h2>
+		<h2>Posts and pieces</h2>
 		<ul class="tags">
 <?		foreach($post_tags as $tag): ?>
 			<li><a href="/details/posts/tag/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></li>
@@ -40,11 +40,11 @@ $post_tags = $IC->getTags(array("context" => "post"));
 
 <? if($tag_list && $tag_list["tags"]): ?>
 	<div class="logs categories">
-		<h2>Logbooks</h2>
+		<h2>Travel logbooks</h2>
 		<ul class="tags books">
 <?		foreach($tag_list["tags"] as $tag): ?>
 			<li class="">
-				<h3><a href="/details/logs/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a></h3>
+				<a href="/details/logs/<?= urlencode($tag["value"]) ?>"><?= $tag["value"] ?></a>
 <?
 			$log_blog = $IC->getItem(["itemtype" => "blog", "tags" => "blog:".$tag["value"], "extend" => true]);
 			if($log_blog): ?>

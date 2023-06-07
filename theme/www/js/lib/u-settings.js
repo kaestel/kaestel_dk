@@ -5,3 +5,4 @@ u.ga_account = 'G-J8YSKFWL76';
 u.ga_domain = 'kaestel.dk';
 u.gapi_key = "AIzaSyCrwT53aMp7GdH-GmgplFris4rAJzKGP3o";
 
+u.txt["terms-headline"] = "I love <br />cookies and privacy";

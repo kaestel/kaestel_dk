@@ -112,7 +112,7 @@ $items = $IC->paginate($pagination_pattern);
 <? endif; ?>
 
 
-	<?= $HTML->search("/details/posts/search", [
+	<?= $HTML->searchBox("/details/posts/search", [
 		"headline" => "Search posts",
 		"pattern" => $pagination_pattern["pattern"]
 	]) ?>
