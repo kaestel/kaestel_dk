@@ -164,7 +164,8 @@ $items = $IC->paginate($pagination_pattern);
 
 	<?= $HTML->searchBox("/details/posts/search", [
 		"headline" => "Search posts",
-		"pattern" => $pagination_pattern["pattern"]
+		"pattern" => $pagination_pattern["pattern"],
+		"tag" => $itemtype.":".$selected_tag
 	]) ?>
 
 

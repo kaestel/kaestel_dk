@@ -186,6 +186,7 @@ $categories = $IC->getTags(array("context" => $itemtype, "order" => "value"));
 	<?= $HTML->searchBox("/details/posts/search", [
 		"headline" => "Search posts",
 		"pattern" => $pagination_pattern["pattern"],
+		"tag" => $itemtype.":".$selected_tag
 	]) ?>
 
 
