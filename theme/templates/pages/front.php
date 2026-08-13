@@ -62,7 +62,10 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 	<h2>Recents log entries <a href="/details/logs">(see all logs)</a></h2>
 	<ul class="items articles logs articlePreviewList i:articlePreviewList">
 <?		foreach($log_items as $item):
-			$media = $IC->sliceMediae($item, "mediae"); ?>
+			$media = $IC->sliceMediae($item, "mediae");
+			$log_index = arrayKeyValue($item["tags"], "context", "log");
+			$tag = $item["tags"][$log_index];
+		?>
 		<li class="item log article id:<?= $item["item_id"] ?>" itemscope itemtype="http://schema.org/BlogPosting">
 
 <?			if($media): ?>
@@ -72,12 +75,12 @@ $post_items = $IC->getItems(array("itemtype" => "post", "limit" => 2, "status" =
 
 			<?= $HTML->articleTags($item, [
 				"context" => ["log"],
-				"url" => "/details/logs/tag",
+				"url" => "/details/logs",
 				"default" => ["/details/logs", "Logs"]
 			]) ?>
 
 
-			<h3 itemprop="headline"><a href="/details/logs/<?= $item["sindex"] ?>"><?= $item["name"] ?></a></h3>
+			<h3 itemprop="headline"><a href="/details/logs/<?= $tag["value"] ?>"><?= $item["name"] ?></a></h3>
 
 
 			<?= $HTML->articleInfo($item, "/", [
